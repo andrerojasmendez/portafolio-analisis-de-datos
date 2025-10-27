@@ -1,5 +1,3 @@
-# portafolio-analisis-de-datos
-Portafolio profesional de Andrea Rojas | Proyectos de análisis de datos con SQL, Power BI y Python.
 # 👩‍💻 Portafolio de Análisis de Datos — Andrea Rojas
 
 Bienvenida/o a mi portafolio de proyectos de análisis de datos.  
