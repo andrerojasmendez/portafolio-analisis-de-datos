@@ -11,10 +11,8 @@ Me apasiona descubrir patrones ocultos en los datos y transformarlos en informac
 
 Soy una persona **curiosa, adaptable y en constante aprendizaje**, abierta a trabajar con datos de distintos sectores —educación, tecnología, consumo, sostenibilidad, recursos humanos, entre otros— porque creo que cada conjunto de datos es una oportunidad para entender mejor el mundo y tomar decisiones informadas.  
 
-Mis herramientas principales son:
-- **SQL** para la exploración y extracción de datos.  
-- **Power BI** para la visualización interactiva y análisis de negocio.  
-- **Python** y **Excel avanzado** para el análisis exploratorio y limpieza de datos.  
+🔧 **Herramientas principales:**  
+`SQL` · `Power BI` · `Python` · `Excel Avanzado`
 
 📫 **Contacto:** [LinkedIn](https://www.linkedin.com/in/andrea-rojas-mendez)  
 🌐 **Ubicación:** Terrassa, España  
@@ -50,4 +48,3 @@ Mi estilo analítico se caracteriza por:
 ---
 
 > “Los datos cuentan historias; mi trabajo es ayudar a que puedan ser escuchadas.”
-
