@@ -26,6 +26,20 @@ El análisis combina consultas SQL para la exploración inicial con visualizacio
    - Comprobar el número de filas, columnas y tipo de datos.  
    - Detectar valores nulos, inconsistencias o duplicados.  
    - Identificar variables relevantes para el análisis.
+### 🔎 Exploración inicial de los datos (Excel)
+
+- El dataset contiene **1000 registros** y **6 variables**.
+- Las columnas principales son: `User_ID`, `App`, `Daily_Minutes_Spent`, `Post_Per_Day`, `Likes_Per_Day`, `Follows_Per_Day`, `Self_Esteem`
+
+📊 **Principales hallazgos de la exploración:**
+
+1️⃣ Las plataformas con **mayor tiempo medio de uso** son **Snapchat** e **Instagram**, lo que sugiere una alta permanencia de los usuarios en estas redes.  
+
+2️⃣ En cuanto al **número de publicaciones diarias**, se observó que **Snapchat** y **LinkedIn** concentran la mayor actividad, seguidas por TikTok, mientras que las demás redes mantienen niveles similares. Esto podría indicar un mayor nivel de interacción diaria en estas plataformas.  
+
+3️⃣ Al analizar la interacción medida por “likes”, se observó una distribución relativamente uniforme entre todas las plataformas, lo que sugiere que el nivel de participación de los usuarios es similar, sin diferencias significativas entre redes.
+
+🧠 Estas observaciones constituyen la base para el desarrollo de las visualizaciones en Power BI, donde se profundizará en los patrones identificados durante la exploración.
 
 2. **Limpieza y transformación de datos**  
    - Estandarizar nombres de columnas y formatos.  
