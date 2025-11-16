@@ -1,50 +1,35 @@
-# 👩‍💻 Portafolio de Análisis de Datos — Andrea Rojas
+---
 
-Bienvenida/o a mi portafolio de proyectos de análisis de datos.  
-Aquí comparto los proyectos en los que aplico herramientas como **SQL, Power BI, Python y Excel**, combinando el análisis técnico con la interpretación narrativa de los datos.
+## 📊 Análisis y visualización (Power BI)
+
+![Vista previa del dashboard](./dashboard_preview.png)
+
+**🎯 Objetivo visual:**  
+Mostrar de forma clara y atractiva los patrones de uso, actividad e interacción en redes sociales, a partir del análisis del dataset *Social Media Usage Dataset*.
+
+**🧩 Herramientas utilizadas:**  
+- Excel → Exploración y limpieza inicial de datos.  
+- Power BI → Creación del modelo, medidas DAX y dashboard interactivo.  
 
 ---
 
-## 🎯 Sobre mí
-Soy **profesional con sólida experiencia en mediación, docencia e investigación**, actualmente enfocada en el **Análisis de Datos y Big Data**.  
-Me apasiona descubrir patrones ocultos en los datos y transformarlos en información clara, visual y útil para la toma de decisiones.  
-
-Soy una persona **curiosa, adaptable y en constante aprendizaje**, abierta a trabajar con datos de distintos sectores —educación, tecnología, consumo, sostenibilidad, recursos humanos, entre otros— porque creo que cada conjunto de datos es una oportunidad para entender mejor el mundo y tomar decisiones informadas.  
-
-🔧 **Herramientas principales:**  
-`SQL` · `Power BI` · `Python` · `Excel Avanzado`
-
-📫 **Contacto:** [LinkedIn](https://www.linkedin.com/in/andrea-rojas-mendez)  
-🌐 **Ubicación:** Terrassa, España  
+### 📈 Principales visualizaciones
+- **KPIs principales:** total de usuarios, promedio de minutos, publicaciones y likes por día.  
+- **Gráficos comparativos:** barras horizontales y verticales para analizar minutos, posts y likes por aplicación.  
+- **Tabla resumen:** métricas combinadas de tiempo, actividad e interacción para cada red social.
 
 ---
 
-## 📊 Proyectos destacados
+### 💡 Conclusiones visuales
+- Las plataformas con **mayor tiempo promedio de uso** son **Instagram** y **Twitter**.  
+- **Snapchat** y **LinkedIn** presentan **mayor frecuencia de publicaciones**.  
+- La **interacción medida por “likes por día”** se mantiene equilibrada entre plataformas, con ligera ventaja de **Instagram** y **LinkedIn**.  
 
-### 1️⃣ Uso de redes sociales y rendimiento académico  
-**Herramientas:** SQL + Power BI  
-- Extracción y limpieza de datos.  
-- Análisis exploratorio y correlaciones.  
-- Dashboard interactivo y visualización de patrones.  
-📁 [Ver proyecto](#) *(enlace al repositorio o dashboard)*
+Estas observaciones reflejan un comportamiento digital diverso, donde las redes visuales y profesionales concentran la mayor participación diaria.
 
 ---
 
-### 2️⃣ Hábitos de consumo digital y tendencias de comportamiento  
-**Herramientas:** Python + Excel  
-- Limpieza y exploración de dataset público.  
-- Análisis descriptivo y visualización con gráficos.  
-- Identificación de patrones y posibles implicaciones prácticas.  
-📁 [Ver proyecto](#)
+📁 **Archivo Power BI:** [Descargar](./analisis_comportamiento_digital_andrea_rojas.pbix)
 
----
-
-## 🧠 Enfoque de trabajo
-Mi estilo analítico se caracteriza por:
-- **Rigor técnico**, combinando lógica y claridad en cada paso.  
-- **Curiosidad y pensamiento crítico**, buscando siempre el *por qué* detrás de los números.  
-- **Comunicación visual**, para que los datos hablen por sí mismos.  
-
----
-
-> “Los datos cuentan historias; mi trabajo es ayudar a que puedan ser escuchadas.”
+> 🪶 *Dashboard creado por Andrea Rojas — 2025.*
+ser escuchadas.”
