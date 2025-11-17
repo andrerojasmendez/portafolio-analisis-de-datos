@@ -19,7 +19,7 @@ Me defino como una persona **curiosa, analítica y en aprendizaje continuo**, ca
 ![Markdown](https://img.shields.io/badge/Markdown-000000?logo=markdown&style=flat)
 
 📍 **Ubicación:** Terrassa, España  
-🔗 [Mi LinkedIn](https://www.linkedin.com/in/andrea-rojas-mendez)
+🔗 [Mi LinkedIn](https://www.linkedin.com/in/andrearojasmendez/)
 
 ---
 
