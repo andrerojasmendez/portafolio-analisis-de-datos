@@ -1,15 +1,16 @@
 # 👩‍💻 Portafolio de Análisis de Datos — Andrea Rojas
 
 Bienvenida/o a mi portafolio profesional.  
-Aquí comparto mis proyectos de análisis de datos desarrollados con **Power BI, Excel, SQL y Python**, combinando exploración técnica, visualización y narrativa analítica.
+Aquí reúno proyectos desarrollados con **Excel, Power BI, SQL y Python**, integrando análisis técnico, visualización y comunicación clara de resultados.
 
 ---
 
 ## 🧭 Sobre mí
 
-Soy **Andrea Rojas**, profesional con experiencia en docencia, mediación e investigación, actualmente enfocada en el **Análisis de Datos y Business Intelligence**.
+Soy **Andrea Rojas**, profesional con experiencia en docencia, mediación e investigación, actualmente enfocada en el **Análisis de Datos y Business Intelligence**.  
+Me caracteriza una combinación de pensamiento analítico, atención al detalle y sensibilidad visual.
 
-Me defino como una persona **curiosa, analítica y en aprendizaje continuo**, capaz de transformar datos en información clara y de valor para la toma de decisiones.
+Disfruto transformar datos en información útil y accionable, aplicando rigor técnico y narrativa clara.
 
 🔧 **Herramientas principales:**  
 ![Excel](https://img.shields.io/badge/Excel-217346?logo=microsoft-excel&logoColor=white&style=flat)
@@ -19,44 +20,47 @@ Me defino como una persona **curiosa, analítica y en aprendizaje continuo**, ca
 ![Markdown](https://img.shields.io/badge/Markdown-000000?logo=markdown&style=flat)
 
 📍 **Ubicación:** Terrassa, España  
-🔗 [Mi LinkedIn](https://www.linkedin.com/in/andrearojasmendez/)
+🔗 [Mi LinkedIn](https://www.linkedin.com/in/andrea-rojas-mendez)
 
 ---
 
 ## 📁 Proyectos destacados
 
 ### 🔹 1. **Análisis de comportamiento digital**
-📊 *Exploración del uso, actividad e interacción en distintas plataformas de redes sociales.*
+📊 *Exploración del uso, actividad e interacción en distintas plataformas de redes sociales.*  
+Incluye exploración en Excel, construcción de KPIs en DAX y dashboard en Power BI.
 
-**Herramientas:**  
+🔧 **Herramientas:**  
 ![Excel](https://img.shields.io/badge/Excel-217346?logo=microsoft-excel&logoColor=white&style=flat)
 ![Power BI](https://img.shields.io/badge/Power_BI-F2C811?logo=powerbi&logoColor=black&style=flat)
 
-📎 **Proyecto completo:**  
-➡️ [Ver carpeta del proyecto](./proyecto1_redes_rendimiento/README.md)
+📎 **Ver proyecto completo:**  
+➡️ [Click aquí](./proyecto1_redes_rendimiento/README.md)
 
 ---
 
 ## 🎯 Enfoque de trabajo
 
-Mi estilo analítico se caracteriza por:
+Mi forma de trabajar se basa en:
 
-- **Rigor técnico**, cuidando cada paso del proceso de análisis.  
-- **Curiosidad crítica**, preguntando siempre qué historia cuentan los datos.  
-- **Comunicación visual**, creando dashboards claros, elegantes y funcionales.  
-- **Documentación cuidada**, para que cualquier persona pueda seguir el proceso.  
+- **Rigor técnico:** limpieza, estructuración y análisis claro.  
+- **Pensamiento crítico:** identificar patrones y formular preguntas relevantes.  
+- **Business Intelligence:** creación de visualizaciones orientadas a decisiones.  
+- **Storytelling con datos:** comunicar insights de manera precisa y accesible.  
+- **Criterio estético:** dashboards coherentes y visualmente cuidados.
 
 ---
 
 ## 🌿 Objetivo del portafolio
 
-Este espacio reúne mis proyectos en mi transición hacia una carrera en **Análisis de Datos**.  
-Mi meta es seguir desarrollando dashboards, casos de estudio y análisis que demuestren:
+Este portafolio reúne los proyectos de mi transición hacia el **Análisis de Datos y Business Intelligence**.  
+Mi objetivo es seguir desarrollando análisis y dashboards que demuestren mi capacidad para:
 
-- capacidad técnica  
-- pensamiento analítico  
-- sensibilidad visual  
-- narrativa basada en datos  
+- entender datos  
+- construir métricas  
+- sintetizar información  
+- comunicar resultados  
+- aportar valor a equipos y organizaciones  
 
 ---
 
@@ -65,5 +69,5 @@ Mi meta es seguir desarrollando dashboards, casos de estudio y análisis que dem
 ---
 
 📬 **Contacto:**  
-Si quieres conocer más sobre mi trabajo o colaborar:  
-👉 *Envíame un mensaje por LinkedIn*  
+Si deseas conocer más sobre mi trabajo o colaborar:  
+👉 *Puedes escribirme a través de LinkedIn.*
