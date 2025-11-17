@@ -27,6 +27,18 @@ Mostrar de forma clara y atractiva los patrones de uso, actividad e interacción
 
 Estas observaciones reflejan un comportamiento digital diverso, donde las redes visuales y profesionales concentran la mayor participación diaria.
 
+### 🧩 Nota sobre el concepto de *engagement*
+
+En este análisis, el **engagement** se entiende como el nivel de interacción de los usuarios con cada plataforma.  
+Para medirlo, se combinaron tres indicadores presentes en el dataset:
+
+- **Likes por día**
+- **Publicaciones diarias**
+- **Tiempo promedio de uso**
+
+> Esta combinación permite identificar qué redes generan una participación más activa, no solo en términos de permanencia, sino también de interacción y actividad del usuario.
+
+
 ---
 
 📁 **Archivo Power BI:** [Descargar](./analisis_comportamiento_digital_andrea_rojas.pbix)
