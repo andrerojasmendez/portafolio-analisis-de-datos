@@ -33,17 +33,6 @@ Categorías
 
 Ventas en formato REAL (decimales)
 
-## 📝 Columnas principales:
-Columna	Descripción
-Order ID	Identificador del pedido
-Order Date	Fecha de pedido
-Customer ID	Cliente
-Segment	Tipo de cliente
-City / State / Region	Geografía
-Category / Sub-Category	Tipo de producto
-Sales	Valor monetario de la venta
-🔍 3. Exploración inicial del dataset (EDA)
-
 # 📘 1. Exploración inicial del dataset (EDA)
 
 ## 🔹 1.1. Total de registros en el dataset
