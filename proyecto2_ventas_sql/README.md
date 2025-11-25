@@ -44,4 +44,35 @@ Category / Sub-Category	Tipo de producto
 Sales	Valor monetario de la venta
 🔍 3. Exploración inicial del dataset (EDA)
 
-v
+# 📘 1. Exploración inicial del dataset (EDA)
+
+## 🔹 1.1. Total de registros en el dataset
+
+```sql
+SELECT COUNT(*) 
+FROM sales_superstore;
+```
+
+**Resultado:** 9800 registros  
+
+**Interpretación:**  
+Esta consulta cuenta todas las filas del dataset.  
+Permite validar que la importación se realizó correctamente y conocer la magnitud total de datos disponibles para el análisis.
+
+---
+
+## 🔹 1.2. Total de pedidos únicos
+
+```sql
+SELECT COUNT(DISTINCT "Order ID")
+FROM sales_superstore;
+```
+
+**Resultado:** 4922 pedidos únicos  
+
+**Interpretación:**  
+Cada pedido puede aparecer en varias filas si incluye varios productos.  
+`COUNT(DISTINCT "Order ID")` permite identificar el número real de transacciones únicas y es fundamental para entender el volumen de ventas.
+
+---
+
