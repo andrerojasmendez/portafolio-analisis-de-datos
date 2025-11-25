@@ -3,24 +3,21 @@
 Análisis exploratorio y consultas avanzadas en SQL sobre un dataset de ventas del sector retail.
 El objetivo es utilizar SQL puro para identificar patrones por región, categoría, segmento y cliente, además de aplicar CTEs y funciones analíticas (window functions) para producir insights relevantes del negocio.
 
-🎯 1. Objetivo del proyecto
+## 🎯 1. Objetivo del proyecto
 
 Este proyecto tiene como propósito reforzar mis habilidades en SQL a través del análisis de datos de ventas.
-Los objetivos específicos incluyen:
+Los **objetivos específicos** incluyen:
 
 Realizar un EDA (Exploratory Data Analysis) utilizando SQL.
 
-Comprender la estructura del dataset y la calidad de los datos.
+1. Comprender la estructura del dataset e identificar información clave.
+2. Realizar un EDA completo utilizando SQL.
+3. Analizar ventas por región, cliente, categoría y subcategoría.
+4. Identificar los clientes y productos con mayor impacto en ventas.
+5. Aplicar CTEs y funciones avanzadas como RANK().
+6. Documentar de forma clara y replicable cada consulta.
 
-Analizar ventas por región, segmento, categoría y producto.
-
-Identificar clientes y productos de mayor impacto.
-
-Aplicar consultas avanzadas como GROUP BY, CTEs, RANK(), y ORDER BY.
-
-Documentar de forma clara y replicable cada paso del análisis.
-
-🗂️ 2. Dataset
+## 🗂️ 2. Dataset
 
 El dataset contiene información de:
 
@@ -36,7 +33,7 @@ Categorías
 
 Ventas en formato REAL (decimales)
 
-📝 Columnas principales:
+## 📝 Columnas principales:
 Columna	Descripción
 Order ID	Identificador del pedido
 Order Date	Fecha de pedido
