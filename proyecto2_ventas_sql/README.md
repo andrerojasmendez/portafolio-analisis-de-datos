@@ -1,4 +1,4 @@
-📊 Proyecto 2 — Análisis de Ventas con SQL
+# 📊 Proyecto 2 — Análisis de Ventas con SQL
 
 Análisis exploratorio y consultas avanzadas en SQL sobre un dataset de ventas del sector retail.
 El objetivo es utilizar SQL puro para identificar patrones por región, categoría, segmento y cliente, además de aplicar CTEs y funciones analíticas (window functions) para producir insights relevantes del negocio.
