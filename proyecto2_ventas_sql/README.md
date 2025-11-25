@@ -86,3 +86,17 @@ Cada pedido puede aparecer en varias filas si incluye varios productos.
 
 ---
 
+## 🔹 1.3. Total de clientes únicos
+
+```sql
+SELECT COUNT(DISTINCT "Customer ID")
+FROM sales_superstore;
+```
+
+**Resultado:** _[coloca aquí el número que te devuelva]_  
+
+**Interpretación:**  
+Permite identificar cuántos clientes diferentes realizaron compras.  
+Esta métrica es clave para analizar la base total de clientes y preparar análisis posteriores sobre comportamiento y ranking.
+
+
