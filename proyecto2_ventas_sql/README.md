@@ -93,10 +93,22 @@ SELECT COUNT(DISTINCT "Customer ID")
 FROM sales_superstore;
 ```
 
-**Resultado:** _[coloca aquí el número que te devuelva]_  
+**Resultado:** 793 clientes únicos 
 
 **Interpretación:**  
 Permite identificar cuántos clientes diferentes realizaron compras.  
 Esta métrica es clave para analizar la base total de clientes y preparar análisis posteriores sobre comportamiento y ranking.
 
+## 🔹 1.4. Total de productos únicos
+
+```sql
+SELECT COUNT(DISTINCT "Product ID")
+FROM sales_superstore;
+```
+
+**Resultado:**  1861 productos únicos 
+
+**Interpretación:**  
+Esta consulta muestra cuántos productos diferentes aparecen en el dataset.  
+Es esencial para comprender la variedad del catálogo y preparar análisis posteriores sobre ventas por categoría y productos con mayor impacto.
 
