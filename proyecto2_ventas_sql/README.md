@@ -21,21 +21,42 @@ Realizar un EDA (Exploratory Data Analysis) utilizando SQL.
 
 El dataset contiene información de:
 
-Pedidos
+- **Pedidos**  
+- **Clientes**  
+- **Localización**  
+- **Productos**  
+- **Categorías**  
+- **Ventas** en formato **REAL** (decimales)
 
-Clientes
+## 🗂️ 3. Columnas principales del dataset
 
-Localización
+El dataset incluye información sobre pedidos, clientes, localización, productos y ventas.  
+Estas son las columnas principales extraídas directamente del archivo importado:
 
-Productos
+- **Row ID** — Identificador numérico del registro.  
+- **Order ID** — Código único asignado a cada pedido.  
+- **Order Date** — Fecha en la que se realizó el pedido.  
+- **Ship Date** — Fecha de envío del pedido.  
+- **Ship Mode** — Método de envío seleccionado.  
+- **Customer ID** — Identificador único del cliente.  
+- **Customer Name** — Nombre del cliente.  
+- **Segment** — Segmento al que pertenece el cliente (Consumer, Corporate, Home Office).  
+- **Country** — País del cliente.  
+- **City** — Ciudad del cliente.  
+- **State** — Estado o provincia.  
+- **Postal Code** — Código postal.  
+- **Region** — Región geográfica.  
+- **Product ID** — Identificador único del producto.  
+- **Category** — Categoría general del producto.  
+- **Sub-Category** — Subcategoría del producto.  
+- **Product Name** — Nombre descriptivo del producto.  
+- **Sales** — Valor monetario de la venta (tipo REAL).
 
-Categorías
+##📘 Análisis Exploratorio (EDA) y Desarrollo de Consultas SQL
 
-Ventas en formato REAL (decimales)
+### 📘 1. Exploración inicial del dataset (EDA)
 
-# 📘 1. Exploración inicial del dataset (EDA)
-
-## 🔹 1.1. Total de registros en el dataset
+### 🔹 1.1. Total de registros en el dataset
 
 ```sql
 SELECT COUNT(*) 
@@ -50,7 +71,7 @@ Permite validar que la importación se realizó correctamente y conocer la magni
 
 ---
 
-## 🔹 1.2. Total de pedidos únicos
+### 🔹 1.2. Total de pedidos únicos
 
 ```sql
 SELECT COUNT(DISTINCT "Order ID")
