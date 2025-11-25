@@ -1,68 +1,66 @@
-# 📊 Proyecto 2 — Análisis de ventas en Superstore usando SQL
+📊 Proyecto 2 — Análisis de Ventas con SQL
 
-Este proyecto tiene como objetivo analizar el comportamiento de las ventas de una tienda tipo **Superstore** a partir de un dataset de pedidos reales.  
-El enfoque está puesto en el uso de **SQL** para explorar, transformar y extraer información relevante para la toma de decisiones.
+Análisis exploratorio y consultas avanzadas en SQL sobre un dataset de ventas del sector retail.
+El objetivo es utilizar SQL puro para identificar patrones por región, categoría, segmento y cliente, además de aplicar CTEs y funciones analíticas (window functions) para producir insights relevantes del negocio.
 
----
+🎯 1. Objetivo del proyecto
 
-## 🧰 Herramientas utilizadas
+Este proyecto tiene como propósito reforzar mis habilidades en SQL a través del análisis de datos de ventas.
+Los objetivos específicos incluyen:
 
-- **SQL** (consultas, agregaciones, CTE, window functions).
-- **Gestor de base de datos**: (MySQL / PostgreSQL / SQLite / el que esté utilizando).
-- **CSV original**: para la carga inicial de datos en la base de datos.
+Realizar un EDA (Exploratory Data Analysis) utilizando SQL.
 
----
+Comprender la estructura del dataset y la calidad de los datos.
 
-## 📂 Dataset
+Analizar ventas por región, segmento, categoría y producto.
 
-El dataset utilizado corresponde a un registro de ventas con el siguiente esquema:
+Identificar clientes y productos de mayor impacto.
 
-- `Row ID`
-- `Order ID`
-- `Order Date`
-- `Ship Date`
-- `Ship Mode`
-- `Customer ID`
-- `Customer Name`
-- `Segment`
-- `Country`
-- `City`
-- `State`
-- `Postal Code`
-- `Region`
-- `Product ID`
-- `Category`
-- `Sub-Category`
-- `Product Name`
-- `Sales`
+Aplicar consultas avanzadas como GROUP BY, CTEs, RANK(), y ORDER BY.
 
-> El archivo original procede de Kaggle (`sales-forecasting`) y se utiliza aquí como base para un caso práctico de **Retail Analytics** centrado en ventas.
+Documentar de forma clara y replicable cada paso del análisis.
 
----
+🗂️ 2. Dataset
 
-## 🗄️ Modelo de datos en SQL
+El dataset contiene información de:
 
-Para trabajar de forma más cómoda en SQL, se ha creado una tabla llamada `sales_superstore` con nombres de columnas estandarizados en formato `snake_case`:
+Pedidos
 
-```sql
-CREATE TABLE sales_superstore (
-    row_id        INT,
-    order_id      VARCHAR(20),
-    order_date    DATE,
-    ship_date     DATE,
-    ship_mode     VARCHAR(50),
-    customer_id   VARCHAR(20),
-    customer_name VARCHAR(100),
-    segment       VARCHAR(50),
-    country       VARCHAR(50),
-    city          VARCHAR(100),
-    state         VARCHAR(100),
-    postal_code   INT,
-    region        VARCHAR(50),
-    product_id    VARCHAR(50),
-    category      VARCHAR(50),
-    sub_category  VARCHAR(50),
-    product_name  VARCHAR(255),
-    sales         DECIMAL(10, 2)
-);
+Clientes
 
+Localización
+
+Productos
+
+Categorías
+
+Ventas en formato REAL (decimales)
+
+📝 Columnas principales:
+Columna	Descripción
+Order ID	Identificador del pedido
+Order Date	Fecha de pedido
+Customer ID	Cliente
+Segment	Tipo de cliente
+City / State / Region	Geografía
+Category / Sub-Category	Tipo de producto
+Sales	Valor monetario de la venta
+🔍 3. Exploración inicial del dataset (EDA)
+
+A continuación se presentan las primeras consultas que permiten comprender la estructura básica del dataset y verificar la calidad de los datos.
+
+🔹 3.1. Total de registros en el dataset
+SELECT COUNT(*) 
+FROM sales_superstore;
+
+
+Resultado: 9800 registros
+Interpretación: Verifica la carga completa y establece la magnitud total del dataset.
+
+🔹 3.2. Número de pedidos únicos
+SELECT COUNT(DISTINCT "Order ID")
+FROM sales_superstore;
+
+
+Resultado: 4922 pedidos únicos
+Interpretación: Un pedido puede incluir varios productos y aparecer en múltiples filas; usar DISTINCT permite obtener el número real de transacciones.
