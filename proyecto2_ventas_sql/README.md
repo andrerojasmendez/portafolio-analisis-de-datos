@@ -112,3 +112,19 @@ FROM sales_superstore;
 Esta consulta muestra cuántos productos diferentes aparecen en el dataset.  
 Es esencial para comprender la variedad del catálogo y preparar análisis posteriores sobre ventas por categoría y productos con mayor impacto.
 
+## 🔹 2.1. Regiones disponibles
+
+```sql
+SELECT DISTINCT Region
+FROM sales_superstore;
+```
+
+**Resultado:**  
+- South  
+- West  
+- Central  
+- East  
+
+**Interpretación:**  
+Permite identificar todas las regiones presentes en el dataset.  
+Este paso es esencial para comprender la segmentación geográfica y preparar análisis posteriores por área o zona de ventas.
