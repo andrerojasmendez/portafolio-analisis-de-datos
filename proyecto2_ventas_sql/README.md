@@ -44,20 +44,4 @@ Category / Sub-Category	Tipo de producto
 Sales	Valor monetario de la venta
 🔍 3. Exploración inicial del dataset (EDA)
 
-A continuación se presentan las primeras consultas que permiten comprender la estructura básica del dataset y verificar la calidad de los datos.
-
-🔹 3.1. Total de registros en el dataset
-SELECT COUNT(*) 
-FROM sales_superstore;
-
-
-Resultado: 9800 registros
-Interpretación: Verifica la carga completa y establece la magnitud total del dataset.
-
-🔹 3.2. Número de pedidos únicos
-SELECT COUNT(DISTINCT "Order ID")
-FROM sales_superstore;
-
-
-Resultado: 4922 pedidos únicos
-Interpretación: Un pedido puede incluir varios productos y aparecer en múltiples filas; usar DISTINCT permite obtener el número real de transacciones.
+v
