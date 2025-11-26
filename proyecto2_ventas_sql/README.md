@@ -128,3 +128,20 @@ FROM sales_superstore;
 **Interpretación:**  
 Permite identificar todas las regiones presentes en el dataset.  
 Este paso es esencial para comprender la segmentación geográfica y preparar análisis posteriores por área o zona de ventas.
+
+## 🔹 2.2. Segmentos de clientes
+
+```sql
+SELECT DISTINCT Segment
+FROM sales_superstore;
+```
+
+**Resultado:**  
+- Consumer  
+- Corporate  
+- Home Office  
+
+**Interpretación:**  
+Permite identificar los distintos segmentos de clientes presentes en el dataset.  
+Es importante para comprender cómo está distribuida la base de clientes y para preparar análisis posteriores por tipo de cliente.
+
