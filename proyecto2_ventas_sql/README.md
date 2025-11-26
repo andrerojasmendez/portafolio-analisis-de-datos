@@ -145,3 +145,48 @@ FROM sales_superstore;
 Permite identificar los distintos segmentos de clientes presentes en el dataset.  
 Es importante para comprender cómo está distribuida la base de clientes y para preparar análisis posteriores por tipo de cliente.
 
+## 🔹 2.3. Categorías de productos
+
+```sql
+SELECT DISTINCT Category
+FROM sales_superstore;
+```
+
+**Resultado:**  
+- Furniture  
+- Office Supplies  
+- Technology  
+
+**Interpretación:**  
+Esta consulta permite identificar las categorías principales del catálogo de productos.  
+Es un paso clave para estructurar el análisis de ventas por línea de productos y comprender cómo se organiza el inventario de la tienda.
+
+## 🔹 2.4. Subcategorías de productos
+
+```sql
+SELECT DISTINCT "Sub-Category"
+FROM sales_superstore;
+```
+
+**Resultado:**  
+- Bookcases  
+- Chairs  
+- Labels  
+- Tables  
+- Storage  
+- Furnishings  
+- Art  
+- Phones  
+- Binders  
+- Appliances  
+- Paper  
+- Accessories  
+- Envelopes  
+- Fasteners  
+- Supplies  
+- Machines  
+- Copiers  
+
+**Interpretación:**  
+Esta consulta permite identificar cómo se subdividen las categorías principales del catálogo.  
+Conocer las subcategorías es clave para análisis más detallados, como ventas por línea de producto, rentabilidad específica y comportamiento dentro de cada categoría.
