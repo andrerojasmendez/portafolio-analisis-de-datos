@@ -190,3 +190,24 @@ FROM sales_superstore;
 **Interpretación:**  
 Esta consulta permite identificar cómo se subdividen las categorías principales del catálogo.  
 Conocer las subcategorías es clave para análisis más detallados, como ventas por línea de producto, rentabilidad específica y comportamiento dentro de cada categoría.
+
+## 🔹 3.1. Ventas totales por región
+
+```sql
+SELECT Region,
+       SUM(Sales) AS Total_Sales
+FROM sales_superstore
+GROUP BY Region
+ORDER BY Total_Sales DESC;
+```
+
+**Resultado:**  
+- **West:** 710,219.6845  
+- **East:** 669,518.726  
+- **Central:** 492,646.9132  
+- **South:** 389,151.459  
+
+**Interpretación:**  
+La región **West** es la de mayor volumen de ventas, superando los 710K.  
+Le siguen **East** y **Central**, mientras que **South** es la región con menor rendimiento.  
+Este análisis permite identificar las áreas geográficas más rentables y priorizar estrategias comerciales según desempeño regional.
