@@ -211,3 +211,23 @@ ORDER BY Total_Sales DESC;
 La región **West** es la de mayor volumen de ventas, superando los 710K.  
 Le siguen **East** y **Central**, mientras que **South** es la región con menor rendimiento.  
 Este análisis permite identificar las áreas geográficas más rentables y priorizar estrategias comerciales según desempeño regional.
+
+## 🔹 3.2. Ventas totales por segmento de cliente
+
+```sql
+SELECT Segment,
+       SUM(Sales) AS Total_Sales
+FROM sales_superstore
+GROUP BY Segment
+ORDER BY Total_Sales DESC;
+```
+
+**Resultado:**  
+- **Consumer:** 1,148,060.531  
+- **Corporate:** 688,494.0748  
+- **Home Office:** 424,982.1769  
+
+**Interpretación:**  
+El segmento **Consumer** representa el mayor volumen de ventas, superando el millón de dólares.  
+Le sigue el segmento **Corporate**, mientras que **Home Office** es el de menor participación.  
+Este análisis permite identificar cuáles tipos de clientes aportan más ingresos y orientar estrategias comerciales hacia los segmentos con mayor potencial.
