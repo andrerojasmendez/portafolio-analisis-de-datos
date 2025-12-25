@@ -231,3 +231,13 @@ ORDER BY Total_Sales DESC;
 El segmento **Consumer** representa el mayor volumen de ventas, superando el millón de dólares.  
 Le sigue el segmento **Corporate**, mientras que **Home Office** es el de menor participación.  
 Este análisis permite identificar cuáles tipos de clientes aportan más ingresos y orientar estrategias comerciales hacia los segmentos con mayor potencial.
+
+## 🚧 Estado del proyecto
+
+🟡 **Proyecto en desarrollo**
+
+El análisis se irá ampliando progresivamente con nuevas consultas, visualizaciones y notas interpretativas.
+
+## 📎 Nota final
+
+Este proyecto forma parte de un portafolio de aprendizaje orientado al **análisis de datos y Big Data**, con especial interés en el uso ético y contextualizado de la información.
