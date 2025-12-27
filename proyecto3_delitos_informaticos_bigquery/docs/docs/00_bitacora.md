@@ -4,6 +4,13 @@
 El análisis se limita a la hoja `CA_DelitosInf` del archivo original, correspondiente a delitos informáticos.  
 Aunque el archivo contiene múltiples especialidades, se decidió trabajar con una sola para mantener foco, profundidad y trazabilidad del proceso.
 
+**Decisión técnica clave:**  
+Tras explorar las primeras filas del archivo, se identificó que los encabezados reales del dataset se encuentran en la fila 16, donde aparecen las Comunidades Autónomas como columnas.  
+Las filas anteriores contienen títulos y metadatos institucionales, por lo que fueron excluidas del análisis.
+
+A partir de la fila 17 se observan datos numéricos consistentes por tipología de delito.
+
+
 ## Sesión 1 — [fecha]
 **Objetivo:**  
 - (Ej: Crear dataset y tabla en BigQuery)
