@@ -11,13 +11,13 @@ El objetivo no es únicamente identificar tendencias, sino **reflexionar sobre c
 - Analizar la evolución de los delitos informáticos sin caer en conclusiones simplistas
 - Practicar **data storytelling responsable**, inspirado en el pensamiento crítico estadístico
 
-## 📊 Fuente de datos
+📊 **Fuente de datos**
 
-- **Fiscalía General del Estado**
-- Compendio de especialidades (2023)
-- Especialidad: **Delitos Informáticos**
+- Fiscalía General del Estado  
+- Compendio de especialidades (2023)  
+- **Hoja analizada:** `CA_DelitosInf` (Delitos informáticos)
 
-Los datos están agregados por año y tipología, sin información personal ni microdatos.
+El archivo original contiene múltiples especialidades, pero este proyecto se centra únicamente en delitos informáticos.
 
 ## 🧱 Estructura del dataset
 
