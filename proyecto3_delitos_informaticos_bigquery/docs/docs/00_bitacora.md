@@ -15,8 +15,26 @@ A partir de la fila 17 se observan datos numéricos consistentes por tipología 
 **Objetivo:**  
 - (Ej: Crear dataset y tabla en BigQuery)
 
+## Sesión 3 — Limpieza mínima del dataset
+
+**Objetivo:**  
+Eliminar ruido evidente y preparar una versión mínima del dataset para análisis posterior.
+
 **Paso técnico realizado:**  
-- 
+- Eliminación de columnas completamente vacías.
+- Renombrado de la columna principal a `tipo_delito`.
+
+**Resultado:**  
+- Dataset con ___ filas y ___ columnas.
+- Estructura más clara: tipos de delito por territorio.
+
+**Aprendizajes:**  
+- La estructura original del Excel responde a criterios de presentación institucional.
+- Es necesario reinterpretar semánticamente las columnas para análisis de datos.
+
+**Siguiente paso:**  
+- Reestructurar el dataset a formato largo (long format).
+
 
 **Resultado / evidencia:**  
 - (Ej: Captura, nombre de tabla, número de filas, errores si hubo)
