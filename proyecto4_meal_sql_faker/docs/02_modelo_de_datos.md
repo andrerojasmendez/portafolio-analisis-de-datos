@@ -296,6 +296,218 @@ consultas SQL.
 
 ### Idea clave
 
+## Tabla 3: `actividades`
+
+### ¿Qué representa?
+
+La tabla `actividades` almacenará las acciones realizadas durante la
+implementación del programa **Territorios que Dialogan**.
+
+Cada fila representará una actividad concreta desarrollada en un territorio
+y vinculada a uno de los proyectos o componentes del programa.
+
+Ejemplos:
+
+- Taller de mediación comunitaria.
+- Encuentro juvenil por la convivencia.
+- Mesa de diálogo entre comunidad e instituciones.
+- Formación en liderazgo para mujeres.
+- Jornada de aprendizaje y revisión de resultados.
+
+### Nivel de detalle de la tabla
+
+Una fila representa una actividad específica.
+
+Por ejemplo, dos talleres de mediación realizados en fechas o comunidades
+diferentes deberán aparecer como dos registros independientes.
+
+| id_actividad | actividad | fecha_realizacion | comunidad |
+|---:|---|---|---|
+| 1 | Taller de mediación | 2024-03-15 | Comunidad Río Verde |
+| 2 | Taller de mediación | 2024-04-10 | Comunidad La Esperanza |
+
+Aunque tengan el mismo tipo de actividad, no representan el mismo evento.
+
+### Campos necesarios
+
+| Campo | Descripción | Función |
+|---|---|---|
+| `id_actividad` | Identificador interno de la actividad | Clave primaria |
+| `codigo_actividad` | Código legible como ACT-0001 | Identificación |
+| `id_proyecto` | Proyecto al que pertenece la actividad | Clave foránea |
+| `id_territorio` | Territorio donde se desarrolla | Clave foránea |
+| `nombre_actividad` | Nombre específico de la actividad | Descripción |
+| `tipo_actividad` | Categoría general de la actividad | Clasificación |
+| `fecha_planificada` | Fecha prevista para su realización | Planificación |
+| `fecha_realizacion` | Fecha en la que realmente se ejecutó | Seguimiento |
+| `modalidad` | Presencial, virtual o híbrida | Clasificación |
+| `meta_participantes` | Número previsto de participantes | Meta |
+| `duracion_horas` | Duración total de la actividad | Seguimiento |
+| `costo_planificado` | Presupuesto previsto para la actividad | Planificación financiera |
+| `costo_real` | Gasto finalmente ejecutado | Seguimiento financiero |
+| `estado_actividad` | Estado de ejecución de la actividad | Clasificación |
+
+### Clave primaria
+
+La clave primaria será:
+
+```text
+id_actividad
+```
+
+Esta columna identificará de manera única cada actividad.
+
+### Claves foráneas
+
+La tabla tendrá dos claves foráneas principales:
+
+```text
+id_proyecto
+id_territorio
+```
+
+La relación con `proyectos` será:
+
+```text
+proyectos.id_proyecto
+        ↓
+actividades.id_proyecto
+```
+
+La relación con `territorios` será:
+
+```text
+territorios.id_territorio
+          ↓
+actividades.id_territorio
+```
+
+Esto permitirá conocer qué actividad se realizó, a qué proyecto perteneció
+y dónde se desarrolló.
+
+### Relaciones
+
+Un proyecto podrá tener muchas actividades:
+
+```text
+Un proyecto → muchas actividades
+```
+
+Un territorio también podrá recibir muchas actividades:
+
+```text
+Un territorio → muchas actividades
+```
+
+Sin embargo, en este modelo cada actividad pertenecerá a un único proyecto
+y se registrará en un único territorio.
+
+### Valores posibles
+
+El campo `tipo_actividad` podrá contener valores como:
+
+```text
+Taller de mediación
+Diálogo comunitario
+Formación en liderazgo
+Campaña de convivencia
+Mesa institucional
+Jornada de aprendizaje
+```
+
+El campo `modalidad` podrá contener:
+
+```text
+Presencial
+Virtual
+Híbrida
+```
+
+El campo `estado_actividad` podrá contener:
+
+```text
+Planificada
+Realizada
+Cancelada
+Reprogramada
+```
+
+### Diferencia entre meta y resultado
+
+La columna `meta_participantes` almacenará el número de personas que se
+esperaba que asistieran.
+
+No almacenaremos en esta tabla el número real de asistentes.
+
+La asistencia real se calculará mediante la tabla `asistencias`.
+
+```text
+meta_participantes = cantidad prevista
+asistencias = participación realmente registrada
+```
+
+Por ejemplo:
+
+```text
+Meta de participantes: 30
+Personas que asistieron: 24
+Cumplimiento de la meta: 80 %
+```
+
+El porcentaje se calculará posteriormente mediante SQL.
+
+### Diferencia entre fecha planificada y fecha real
+
+Las columnas `fecha_planificada` y `fecha_realizacion` permitirán analizar
+si una actividad se ejecutó dentro del calendario previsto.
+
+Ejemplo:
+
+| fecha_planificada | fecha_realizacion | interpretación |
+|---|---|---|
+| 2024-05-10 | 2024-05-10 | Realizada a tiempo |
+| 2024-05-10 | 2024-05-18 | Realizada con retraso |
+| 2024-05-10 | NULL | No realizada todavía |
+
+El valor `NULL` indicará que no existe una fecha real registrada.
+
+### Preguntas que podremos responder
+
+La tabla `actividades` permitirá responder preguntas como:
+
+- ¿Cuántas actividades realizó cada proyecto?
+- ¿Qué actividades fueron canceladas o reprogramadas?
+- ¿Qué territorios recibieron más actividades?
+- ¿Qué actividades superaron el costo planificado?
+- ¿Cuáles se realizaron después de la fecha prevista?
+- ¿Qué actividades no alcanzaron su meta de participación?
+- ¿Cuál fue el costo promedio por tipo de actividad?
+- ¿Cuáles fueron las actividades más costosas dentro de cada proyecto?
+
+### Información que no se almacenará directamente
+
+No guardaremos en esta tabla:
+
+- el número real de asistentes;
+- el porcentaje de cumplimiento de participación;
+- el costo por participante;
+- el retraso en días;
+- el número de mujeres o jóvenes asistentes.
+
+Estos resultados se calcularán mediante consultas SQL y relaciones con
+otras tablas.
+
+### Idea clave
+
+La tabla `actividades` registra **qué ocurrió, dónde ocurrió, cuándo ocurrió
+y cuánto costó**.
+
+```text
+proyectos = qué intervención se gestiona
+territorios = dónde se implementa
+actividades = qué acciones se realizan
+```
+
 La tabla `territorios` describe **dónde** se implementa el programa.
 
 ```text
