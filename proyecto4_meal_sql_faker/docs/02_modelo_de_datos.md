@@ -71,3 +71,46 @@ PROYECTOS
    ├── INDICADORES ── MEDICIONES_INDICADORES ── TERRITORIOS
    │
    └── RETROALIMENTACION ── TERRITORIOS
+
+## Tabla 1: `proyectos`
+
+### ¿Qué representa?
+
+La tabla `proyectos` almacenará los cuatro componentes operativos que forman
+parte del programa **Territorios que Dialogan**.
+
+Cada fila representará un proyecto o componente específico del programa.
+
+Ejemplos:
+
+- Jóvenes Constructores de Convivencia.
+- Mujeres Mediadoras Comunitarias.
+- Redes Locales de Diálogo.
+- Comunidades que Aprenden.
+
+### Nivel de detalle de la tabla
+
+Una fila representa un proyecto.
+
+No representa una actividad, una persona participante ni un territorio.
+Esa información se almacenará en otras tablas relacionadas.
+
+### Campos necesarios
+
+| Campo | Descripción | Función |
+|---|---|---|
+| `id_proyecto` | Identificador interno del proyecto | Clave primaria |
+| `codigo_proyecto` | Código como P01, P02, P03 o P04 | Identificación legible |
+| `nombre_proyecto` | Nombre completo del proyecto | Descripción |
+| `objetivo_especifico` | Cambio que busca conseguir el proyecto | Información programática |
+| `fecha_inicio` | Fecha de inicio | Seguimiento temporal |
+| `fecha_fin` | Fecha prevista de finalización | Seguimiento temporal |
+| `presupuesto_aprobado` | Presupuesto asignado al proyecto | Seguimiento financiero |
+| `estado` | Situación actual del proyecto | Clasificación |
+
+### Clave primaria
+
+La clave primaria será:
+
+```text
+id_proyecto
