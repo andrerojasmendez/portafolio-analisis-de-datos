@@ -114,4 +114,70 @@ La clave primaria será:
 
 ```text
 id_proyecto
+```
+### Clave primaria
 
+La clave primaria será:
+
+```text
+id_proyecto
+```
+
+Esta columna identificará de manera única cada proyecto.
+
+Ejemplo:
+
+| id_proyecto | codigo_proyecto | nombre_proyecto |
+|---:|---|---|
+| 1 | P01 | Jóvenes Constructores de Convivencia |
+| 2 | P02 | Mujeres Mediadoras Comunitarias |
+| 3 | P03 | Redes Locales de Diálogo |
+| 4 | P04 | Comunidades que Aprenden |
+
+### Relaciones
+
+La tabla `proyectos` se relacionará con otras tablas mediante el campo
+`id_proyecto`.
+
+Por ejemplo:
+
+```text
+proyectos.id_proyecto
+        ↓
+actividades.id_proyecto
+```
+
+Esto significa que un proyecto podrá tener muchas actividades, pero cada
+actividad pertenecerá a un solo proyecto.
+
+La relación será:
+
+```text
+Un proyecto → muchas actividades
+```
+
+
+### Información que no se almacenará directamente
+
+No guardaremos en esta tabla:
+
+- el número total de participantes;
+- el número total de actividades;
+- el porcentaje de ejecución presupuestaria;
+- la duración del proyecto en meses.
+
+Estos resultados se calcularán posteriormente mediante consultas SQL.
+
+Por ejemplo:
+
+```text
+porcentaje de ejecución =
+presupuesto ejecutado / presupuesto aprobado × 100
+```
+
+### Idea clave
+
+Cada fila de la tabla `proyectos` representa un único proyecto.
+
+Los totales, porcentajes y otros resultados calculados no se almacenan
+directamente cuando pueden obtenerse mediante consultas SQL.
