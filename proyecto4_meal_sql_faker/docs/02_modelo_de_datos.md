@@ -1338,3 +1338,374 @@ La tabla `evaluaciones` responde a la pregunta:
 Cada fila almacena una medición.
 
 La comparación entre mediciones se realizará posteriormente con SQL.
+
+## Tabla 7: `indicadores`
+
+### ¿Qué representa?
+
+La tabla `indicadores` almacenará la definición de los indicadores utilizados
+para realizar el seguimiento y la evaluación del programa
+**Territorios que Dialogan**.
+
+Cada fila representará un indicador específico vinculado a uno de los
+proyectos o componentes del programa.
+
+Ejemplos:
+
+- Número de personas que completaron una formación en mediación.
+- Porcentaje de participantes que mejoraron sus conocimientos.
+- Número de espacios de diálogo comunitario realizados.
+- Porcentaje de mujeres entre las personas participantes.
+- Porcentaje de actividades ejecutadas dentro del presupuesto previsto.
+
+### Nivel de detalle de la tabla
+
+Una fila representa un indicador.
+
+Ejemplo:
+
+| codigo_indicador | nombre_indicador | tipo_indicador | meta_total |
+|---|---|---|---:|
+| IND-01 | Número de actividades realizadas | Producto | 160 |
+| IND-05 | Participantes que mejoraron sus conocimientos | Resultado | 70 |
+| IND-09 | Mujeres entre las personas participantes | Participación | 55 |
+
+Aunque dos indicadores estén vinculados al mismo proyecto, cada uno tendrá
+su propio registro.
+
+### Campos necesarios
+
+| Campo | Descripción | Función |
+|---|---|---|
+| `id_indicador` | Identificador interno del indicador | Clave primaria |
+| `codigo_indicador` | Código legible como IND-01 | Identificación |
+| `id_proyecto` | Proyecto al que pertenece el indicador | Clave foránea |
+| `nombre_indicador` | Nombre completo del indicador | Descripción |
+| `tipo_indicador` | Producto, resultado, impacto u otra categoría | Clasificación |
+| `unidad_medida` | Forma en la que se expresa el indicador | Interpretación |
+| `meta_total` | Valor que se espera alcanzar | Planificación |
+| `frecuencia_medicion` | Periodicidad con la que se mide | Seguimiento |
+| `fuente_verificacion` | Documento o sistema que respalda el resultado | Calidad del dato |
+| `desagregacion_requerida` | Indica si debe analizarse por sexo, edad o territorio | Análisis |
+| `estado_indicador` | Indica si el indicador está activo o inactivo | Control |
+
+### Clave primaria
+
+La clave primaria será:
+
+```text
+id_indicador
+```
+
+Esta columna identificará de manera única cada indicador.
+
+### Código del indicador
+
+El campo `codigo_indicador` contendrá valores como:
+
+```text
+IND-01
+IND-02
+IND-03
+```
+
+El código permitirá identificar el indicador de forma breve dentro de los
+informes y consultas.
+
+Posteriormente estableceremos una restricción para evitar códigos repetidos:
+
+```text
+UNIQUE (codigo_indicador)
+```
+
+### Clave foránea
+
+La tabla tendrá una clave foránea:
+
+```text
+id_proyecto
+```
+
+La relación será:
+
+```text
+proyectos.id_proyecto
+        ↓
+indicadores.id_proyecto
+```
+
+Esto significa que un proyecto podrá tener varios indicadores, pero cada
+indicador estará vinculado a un proyecto principal.
+
+```text
+Un proyecto → muchos indicadores
+```
+
+
+### Tipos de indicadores
+
+El campo `tipo_indicador` podrá contener valores como:
+
+```text
+Producto
+Resultado
+Impacto
+Participación
+Eficiencia
+Rendición de cuentas
+```
+
+### Diferencia entre producto y resultado
+
+Un indicador de producto mide lo que el programa realizó o entregó.
+
+Ejemplo:
+
+```text
+Número de talleres realizados
+```
+
+Un indicador de resultado mide un cambio producido en las personas,
+organizaciones o comunidades.
+
+Ejemplo:
+
+```text
+Porcentaje de participantes que mejoraron sus conocimientos
+```
+
+Por tanto:
+
+```text
+Producto = qué entregó el programa
+Resultado = qué cambió gracias a la intervención
+```
+
+
+### Unidades de medida
+
+El campo `unidad_medida` podrá contener valores como:
+
+```text
+Número
+Porcentaje
+Puntos
+Días
+Euros
+Horas
+```
+
+Ejemplos:
+
+| indicador | unidad_medida | meta_total |
+|---|---|---:|
+| Actividades realizadas | Número | 160 |
+| Mujeres participantes | Porcentaje | 55 |
+| Mejora promedio en confianza | Puntos | 15 |
+| Respuestas dentro del plazo | Porcentaje | 90 |
+
+La unidad de medida es necesaria para interpretar correctamente la meta.
+
+Por ejemplo:
+
+```text
+Meta = 70
+Unidad = Porcentaje
+```
+
+significa:
+
+```text
+Meta = 70 %
+```
+
+No significa 70 personas.
+
+### Frecuencia de medición
+
+El campo `frecuencia_medicion` podrá contener:
+
+```text
+Mensual
+Trimestral
+Semestral
+Anual
+Baseline y Endline
+Al cierre de la actividad
+```
+
+La frecuencia indicará cada cuánto tiempo debe actualizarse el indicador.
+
+Ejemplo:
+
+| indicador | frecuencia_medicion |
+|---|---|
+| Número de actividades realizadas | Trimestral |
+| Personas que mejoraron conocimientos | Baseline y Endline |
+| Quejas respondidas dentro del plazo | Mensual |
+
+### Fuente de verificación
+
+La fuente de verificación indica de dónde procede la evidencia utilizada para
+calcular el indicador.
+
+Podrá contener valores como:
+
+```text
+Listas de asistencia
+Formularios de evaluación
+Informes de actividad
+Registros financieros
+Actas comunitarias
+Sistema de retroalimentación
+```
+
+Ejemplo:
+
+```text
+Indicador: Número de personas que completaron una formación
+Fuente de verificación: Listas de asistencia
+```
+
+La fuente de verificación no es el resultado.
+
+Es la evidencia que permite comprobarlo.
+
+### Desagregación requerida
+
+Algunos indicadores deberán analizarse separando los resultados por
+características relevantes.
+
+Por ejemplo:
+
+```text
+Sexo
+Rango de edad
+Grupo poblacional
+Territorio
+```
+
+El campo `desagregacion_requerida` permitirá indicar si el análisis necesita
+alguna de estas divisiones.
+
+Ejemplo:
+
+| indicador | desagregacion_requerida |
+|---|---|
+| Número de participantes | Sexo y rango de edad |
+| Número de actividades realizadas | Territorio |
+| Ejecución presupuestaria | No aplica |
+
+### Diferencia entre meta y valor alcanzado
+
+La tabla `indicadores` almacenará la meta prevista.
+
+```text
+meta_total = lo que se espera alcanzar
+```
+
+No almacenará los resultados obtenidos en cada territorio o periodo.
+
+Los valores alcanzados se guardarán en la tabla:
+
+```text
+mediciones_indicadores
+```
+
+Ejemplo:
+
+```text
+Indicador: Número de espacios de diálogo
+Meta total: 36
+```
+
+Los resultados podrían registrarse así:
+
+| periodo | territorio | valor_alcanzado |
+|---|---|---:|
+| 2024-T1 | Guapi | 2 |
+| 2024-T1 | Tumaco | 3 |
+| 2024-T2 | Guapi | 1 |
+
+La suma de las mediciones permitirá calcular el avance acumulado.
+
+### ¿Por qué separamos indicadores y mediciones?
+
+La definición del indicador suele mantenerse relativamente estable:
+
+```text
+Nombre
+Tipo
+Unidad
+Meta
+Frecuencia
+Fuente de verificación
+```
+
+Los resultados cambian con el tiempo y el territorio:
+
+```text
+Periodo
+Territorio
+Valor alcanzado
+```
+
+Por eso utilizaremos dos tablas:
+
+```text
+indicadores = qué se mide y cuál es la meta
+mediciones_indicadores = cuánto se alcanzó, dónde y cuándo
+```
+
+### Preguntas que podremos responder
+
+La tabla `indicadores` permitirá responder preguntas como:
+
+- ¿Cuántos indicadores tiene cada proyecto?
+- ¿Qué proyectos tienen más indicadores de resultado?
+- ¿Qué indicadores se miden trimestralmente?
+- ¿Qué indicadores requieren desagregación por sexo?
+- ¿Cuáles tienen metas expresadas en porcentaje?
+- ¿Qué proyectos tienen más de tres indicadores activos?
+- ¿Qué indicadores utilizan formularios de evaluación como fuente?
+- ¿Qué indicadores están vinculados a rendición de cuentas?
+
+Al relacionarla con `mediciones_indicadores`, podremos responder:
+
+- ¿Qué indicadores alcanzaron su meta?
+- ¿Cuáles están por debajo del 80 % de cumplimiento?
+- ¿Qué territorios presentan mayor avance?
+- ¿Qué proyectos tienen más de un indicador incumplido?
+- ¿Cómo evolucionó un indicador entre 2024 y 2025?
+
+### Información que no se almacenará directamente
+
+No guardaremos en esta tabla:
+
+- el valor alcanzado durante cada trimestre;
+- el porcentaje de cumplimiento;
+- el resultado acumulado;
+- el ranking de territorios;
+- la diferencia entre la meta y el resultado;
+- la clasificación del indicador como cumplido o incumplido.
+
+Estos resultados se calcularán utilizando la tabla
+`mediciones_indicadores` y consultas SQL.
+
+### Idea clave
+
+La tabla `indicadores` responde a las preguntas:
+
+```text
+¿Qué vamos a medir?
+¿Cómo lo vamos a medir?
+¿Cuál es la meta?
+```
+
+La tabla `mediciones_indicadores` responderá después:
+
+```text
+¿Cuánto se alcanzó?
+¿Dónde se alcanzó?
+¿Cuándo se alcanzó?
+```
