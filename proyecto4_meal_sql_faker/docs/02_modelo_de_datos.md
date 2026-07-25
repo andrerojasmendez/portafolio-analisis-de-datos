@@ -514,3 +514,237 @@ La tabla `territorios` describe **dónde** se implementa el programa.
 proyectos = qué intervención se ejecuta
 territorios = dónde se ejecuta
 ```
+
+## Tabla 4: `participantes`
+
+### ¿Qué representa?
+
+La tabla `participantes` almacenará la información básica de las personas
+que participan directamente en las actividades del programa
+**Territorios que Dialogan**.
+
+Cada fila representará una persona participante.
+
+El proyecto trabajará únicamente con datos sintéticos generados con Faker.
+Además, se utilizarán códigos en lugar de nombres completos para simular una
+buena práctica de protección de datos.
+
+### Nivel de detalle de la tabla
+
+Una fila representa una persona participante.
+
+Ejemplo:
+
+| id_participante | codigo_participante | sexo | rango_edad | grupo_poblacional |
+|---:|---|---|---|---|
+| 1 | PAR-0001 | Mujer | 18-29 | Jóvenes |
+| 2 | PAR-0002 | Hombre | 30-44 | Líderes comunitarios |
+| 3 | PAR-0003 | Mujer | 45-59 | Mujeres lideresas |
+
+Una misma persona podrá participar en varias actividades, pero solo tendrá
+un registro dentro de la tabla `participantes`.
+
+### Campos necesarios
+
+| Campo | Descripción | Función |
+|---|---|---|
+| `id_participante` | Identificador interno de la persona | Clave primaria |
+| `codigo_participante` | Código ficticio como PAR-0001 | Identificación no nominal |
+| `id_territorio` | Comunidad o territorio de residencia | Clave foránea |
+| `sexo` | Sexo registrado para el análisis de participación | Desagregación |
+| `rango_edad` | Grupo de edad de la persona | Desagregación |
+| `grupo_poblacional` | Grupo principal con el que se vincula | Clasificación |
+| `fecha_registro` | Fecha de ingreso al programa | Seguimiento temporal |
+| `estado_participante` | Situación de la persona dentro del programa | Seguimiento |
+
+### Clave primaria
+
+La clave primaria será:
+
+```text
+id_participante
+```
+
+Esta columna identificará de manera única cada persona participante.
+
+### Código del participante
+
+El campo `codigo_participante` contendrá valores como:
+
+```text
+PAR-0001
+PAR-0002
+PAR-0003
+```
+
+Este código será más apropiado que utilizar nombres, documentos de identidad,
+direcciones o números de teléfono.
+
+La base de datos se publicará en GitHub, por lo que no debe contener
+información personal real.
+
+### Clave foránea
+
+La tabla tendrá una clave foránea:
+
+```text
+id_territorio
+```
+
+La relación será:
+
+```text
+territorios.id_territorio
+          ↓
+participantes.id_territorio
+```
+
+Esto permitirá conocer en qué comunidad reside o está registrado cada
+participante.
+
+Un territorio podrá tener muchas personas participantes:
+
+```text
+Un territorio → muchos participantes
+```
+
+Sin embargo, para simplificar este modelo, cada participante estará asociado
+a un territorio principal.
+
+### Valores posibles
+
+El campo `sexo` podrá contener:
+
+```text
+Mujer
+Hombre
+Otro
+Prefiere no responder
+```
+
+El campo `rango_edad` podrá contener:
+
+```text
+18-29
+30-44
+45-59
+60 o más
+```
+
+El campo `grupo_poblacional` podrá contener valores como:
+
+```text
+Jóvenes
+Mujeres lideresas
+Líderes comunitarios
+Docentes
+Funcionariado local
+Población general
+```
+
+El campo `estado_participante` podrá contener:
+
+```text
+Activo
+Finalizó
+Retirado
+```
+
+### Diferencia entre participante y asistencia
+
+La tabla `participantes` indica quién está registrado en el programa.
+
+No indica todavía a qué actividades asistió.
+
+La participación en actividades se almacenará en la tabla `asistencias`.
+
+```text
+participantes = quiénes forman parte del programa
+asistencias = a qué actividades asistió cada persona
+```
+
+Una persona podrá aparecer una sola vez en `participantes`, pero podrá tener
+muchos registros en `asistencias`.
+
+Ejemplo:
+
+| participante | actividad |
+|---|---|
+| PAR-0001 | Taller de mediación |
+| PAR-0001 | Encuentro juvenil |
+| PAR-0001 | Diálogo comunitario |
+
+### Relación de muchos a muchos
+
+Una actividad puede tener muchas personas participantes.
+
+Una persona también puede asistir a muchas actividades.
+
+Por tanto, entre `actividades` y `participantes` existe una relación de
+muchos a muchos.
+
+```text
+Muchas actividades ↔ muchos participantes
+```
+
+Esta relación se resolverá mediante la tabla intermedia `asistencias`.
+
+```text
+actividades
+     ↓
+asistencias
+     ↓
+participantes
+```
+
+### Preguntas que podremos responder
+
+La tabla `participantes` permitirá responder preguntas como:
+
+- ¿Cuántas personas están registradas en cada territorio?
+- ¿Qué porcentaje de participantes son mujeres?
+- ¿Cuántas personas jóvenes participan en el programa?
+- ¿Qué grupos poblacionales tienen menor representación?
+- ¿Cuántas personas finalizaron o abandonaron el programa?
+- ¿Qué territorios tienen más participantes activos?
+- ¿Cuántas personas asistieron a actividades en más de un proyecto?
+
+### Información que no se almacenará directamente
+
+No guardaremos en esta tabla:
+
+- el número de actividades a las que asistió cada persona;
+- el total de horas de participación;
+- el porcentaje de asistencia;
+- el cambio entre línea base y medición final;
+- el número de proyectos en los que participó.
+
+Estos resultados se calcularán relacionando `participantes` con
+`asistencias`, `actividades` y `evaluaciones`.
+
+### Protección y minimización de datos
+
+El modelo no incluirá:
+
+- nombres completos;
+- documentos de identidad;
+- direcciones particulares;
+- números de teléfono;
+- correos electrónicos personales.
+
+Aunque los datos serán ficticios, el proyecto simulará una práctica
+responsable de gobernanza del dato.
+
+### Idea clave
+
+La tabla `participantes` responde a la pregunta:
+
+```text
+¿Quiénes forman parte del programa?
+```
+
+La tabla `asistencias` responderá después:
+
+```text
+¿En cuáles actividades participó cada persona?
+```
