@@ -1709,3 +1709,477 @@ La tabla `mediciones_indicadores` responderá después:
 ¿Dónde se alcanzó?
 ¿Cuándo se alcanzó?
 ```
+
+## Tabla 8: `mediciones_indicadores`
+
+### ¿Qué representa?
+
+La tabla `mediciones_indicadores` almacenará los resultados alcanzados por
+los indicadores del programa **Territorios que Dialogan** en diferentes
+territorios y periodos.
+
+Cada fila representará una medición concreta de un indicador.
+
+Ejemplo:
+
+| indicador | territorio | periodo | valor_alcanzado |
+|---|---|---|---:|
+| Actividades realizadas | Comunidad Río Verde | 2024-T1 | 4 |
+| Actividades realizadas | Comunidad Río Verde | 2024-T2 | 6 |
+| Actividades realizadas | Comunidad La Esperanza | 2024-T1 | 3 |
+
+Aunque se trate del mismo indicador, cada territorio y periodo tendrá un
+registro independiente.
+
+### Nivel de detalle de la tabla
+
+Una fila representa:
+
+```text
+un indicador + un territorio + un periodo
+```
+
+Ejemplo:
+
+```text
+IND-01 + Comunidad Río Verde + 2024-T1
+```
+
+Esto significa que la fila no representa la meta general del indicador.
+
+Representa el resultado registrado en un territorio y periodo específicos.
+
+### Campos necesarios
+
+| Campo | Descripción | Función |
+|---|---|---|
+| `id_medicion` | Identificador interno de la medición | Clave primaria |
+| `id_indicador` | Indicador que se está midiendo | Clave foránea |
+| `id_territorio` | Territorio al que corresponde el resultado | Clave foránea |
+| `periodo` | Trimestre o periodo de reporte | Seguimiento temporal |
+| `fecha_medicion` | Fecha en la que se registró el resultado | Control |
+| `valor_alcanzado` | Resultado obtenido durante el periodo | Medición |
+| `fuente_verificacion_registrada` | Evidencia utilizada para respaldar el dato | Calidad |
+| `estado_validacion` | Situación de revisión del dato | Control de calidad |
+| `observaciones` | Información adicional sobre la medición | Contexto |
+
+### Clave primaria
+
+La clave primaria será:
+
+```text
+id_medicion
+```
+
+Esta columna identificará de manera única cada resultado registrado.
+
+### Claves foráneas
+
+La tabla tendrá dos claves foráneas:
+
+```text
+id_indicador
+id_territorio
+```
+
+La relación con `indicadores` será:
+
+```text
+indicadores.id_indicador
+          ↓
+mediciones_indicadores.id_indicador
+```
+
+La relación con `territorios` será:
+
+```text
+territorios.id_territorio
+          ↓
+mediciones_indicadores.id_territorio
+```
+
+Esto permitirá saber qué se midió y en qué territorio se obtuvo el resultado.
+
+### Relaciones
+
+Un indicador podrá tener muchas mediciones:
+
+```text
+Un indicador → muchas mediciones
+```
+
+Un territorio también podrá tener muchas mediciones:
+
+```text
+Un territorio → muchas mediciones
+```
+
+Cada medición estará asociada a un único indicador y a un único territorio.
+
+### Periodos de medición
+
+El campo `periodo` podrá contener valores como:
+
+```text
+2024-T1
+2024-T2
+2024-T3
+2024-T4
+2025-T1
+2025-T2
+2025-T3
+2025-T4
+```
+
+La letra `T` significa trimestre.
+
+En inglés:
+
+```text
+Q1 = First quarter
+Q2 = Second quarter
+Q3 = Third quarter
+Q4 = Fourth quarter
+```
+
+Ejemplo:
+
+```text
+2024-T1 = primer trimestre de 2024
+```
+
+### Valor alcanzado
+
+El campo `valor_alcanzado` almacenará el resultado obtenido durante el
+periodo correspondiente.
+
+Ejemplo:
+
+| indicador | unidad | valor_alcanzado |
+|---|---|---:|
+| Actividades realizadas | Número | 8 |
+| Mujeres participantes | Porcentaje | 58 |
+| Mejora promedio en confianza | Puntos | 17 |
+
+El valor debe interpretarse utilizando la unidad de medida definida en la
+tabla `indicadores`.
+
+Por ejemplo:
+
+```text
+valor_alcanzado = 58
+unidad_medida = Porcentaje
+```
+
+significa:
+
+```text
+58 %
+```
+
+### Diferencia entre meta y medición
+
+La meta se almacenará en:
+
+```text
+indicadores.meta_total
+```
+
+El resultado alcanzado se almacenará en:
+
+```text
+mediciones_indicadores.valor_alcanzado
+```
+
+Ejemplo:
+
+```text
+Meta total: 36 espacios de diálogo
+Resultado acumulado: 30 espacios de diálogo
+```
+
+El porcentaje de cumplimiento será:
+
+```text
+porcentaje de cumplimiento =
+resultado alcanzado / meta total × 100
+```
+
+```text
+porcentaje de cumplimiento =
+30 / 36 × 100
+```
+
+```text
+porcentaje de cumplimiento = 83,33 %
+```
+
+Este porcentaje no se almacenará directamente.
+
+Se calculará mediante SQL.
+
+### Resultados periódicos y acumulados
+
+Para los indicadores expresados como número, cada registro representará el
+resultado alcanzado durante un periodo específico.
+
+Ejemplo:
+
+| periodo | valor_alcanzado |
+|---|---:|
+| 2024-T1 | 4 |
+| 2024-T2 | 6 |
+| 2024-T3 | 5 |
+
+El resultado acumulado será:
+
+```text
+4 + 6 + 5 = 15
+```
+
+Este total se calculará con:
+
+```text
+SUM(valor_alcanzado)
+```
+
+No guardaremos otra fila con el valor acumulado, porque podría provocar una
+doble contabilización.
+
+### Cuidado con los porcentajes
+
+Los porcentajes no siempre deben sumarse.
+
+Ejemplo:
+
+| periodo | porcentaje de mujeres |
+|---|---:|
+| 2024-T1 | 55 |
+| 2024-T2 | 60 |
+
+No sería correcto calcular:
+
+```text
+55 + 60 = 115 %
+```
+
+Para analizar porcentajes será necesario calcular un promedio o volver a
+calcular el indicador utilizando los datos de participantes y asistencias.
+
+Esta diferencia será importante durante las consultas SQL:
+
+```text
+Números absolutos → pueden sumarse
+Porcentajes → normalmente no deben sumarse
+```
+
+### Fuente de verificación registrada
+
+El campo `fuente_verificacion_registrada` indicará la evidencia concreta
+utilizada para respaldar cada medición.
+
+Ejemplos:
+
+```text
+Informe de actividad 2024-T1
+Lista de asistencia ACT-0025
+Formulario Endline 2025
+Acta de diálogo comunitario
+Registro financiero trimestral
+```
+
+En `indicadores` se define el tipo general de fuente esperada.
+
+En `mediciones_indicadores` se registra la evidencia utilizada para una
+medición concreta.
+
+Ejemplo:
+
+```text
+indicadores.fuente_verificacion
+= Listas de asistencia
+```
+
+```text
+mediciones_indicadores.fuente_verificacion_registrada
+= Lista de asistencia ACT-0025
+```
+
+### Estado de validación
+
+El campo `estado_validacion` podrá contener:
+
+```text
+Pendiente
+Revisado
+Validado
+Rechazado
+```
+
+Ejemplo:
+
+| estado_validacion | interpretación |
+|---|---|
+| Pendiente | El dato todavía no ha sido revisado |
+| Revisado | Se realizó una primera comprobación |
+| Validado | El dato puede utilizarse en el análisis |
+| Rechazado | El dato presenta errores o no tiene evidencia suficiente |
+
+Para los informes finales podremos utilizar únicamente los registros donde:
+
+```text
+estado_validacion = 'Validado'
+```
+
+Esto representa una práctica de calidad del dato.
+
+### Evitar mediciones duplicadas
+
+No debería existir más de una medición del mismo indicador para el mismo
+territorio y periodo.
+
+Posteriormente crearemos una restricción única:
+
+```text
+UNIQUE (id_indicador, id_territorio, periodo)
+```
+
+Esto permitirá registrar:
+
+```text
+IND-01 + Territorio 1 + 2024-T1
+IND-01 + Territorio 1 + 2024-T2
+IND-01 + Territorio 2 + 2024-T1
+```
+
+Pero impedirá repetir:
+
+```text
+IND-01 + Territorio 1 + 2024-T1
+IND-01 + Territorio 1 + 2024-T1
+```
+
+### Diferencia entre clave primaria y restricción única
+
+La clave primaria identificará cada registro:
+
+```text
+id_medicion
+```
+
+La combinación única evitará duplicados lógicos:
+
+```text
+id_indicador + id_territorio + periodo
+```
+
+### Preguntas que podremos responder
+
+La tabla `mediciones_indicadores` permitirá responder preguntas como:
+
+- ¿Cuál es el avance acumulado de cada indicador?
+- ¿Qué indicadores alcanzaron su meta?
+- ¿Cuáles tienen menos del 80 % de cumplimiento?
+- ¿Qué territorios presentan mejores resultados?
+- ¿Cómo evolucionó cada indicador entre 2024 y 2025?
+- ¿Qué indicadores tienen mediciones pendientes de validación?
+- ¿Qué territorios no tienen resultados registrados?
+- ¿Qué proyectos tienen más de un indicador incumplido?
+- ¿Cuál es el ranking de territorios según su nivel de cumplimiento?
+- ¿Qué indicadores no fueron medidos durante algún trimestre?
+
+### Consultas con varias tablas
+
+Para comparar resultados y metas será necesario relacionar:
+
+```text
+indicadores
+      ↓
+mediciones_indicadores
+```
+
+Para analizar los resultados por territorio será necesario relacionar:
+
+```text
+mediciones_indicadores
+          ↓
+territorios
+```
+
+Para conocer el proyecto al que pertenece cada indicador será necesario
+encadenar:
+
+```text
+proyectos
+     ↓
+indicadores
+     ↓
+mediciones_indicadores
+     ↓
+territorios
+```
+
+Este encadenamiento permitirá practicar varios `JOIN`.
+
+### Uso de `GROUP BY` y `HAVING`
+
+Podremos agrupar las mediciones por indicador:
+
+```text
+GROUP BY id_indicador
+```
+
+Y filtrar los indicadores que tengan más de cuatro mediciones:
+
+```text
+HAVING COUNT(*) > 4
+```
+
+También podremos encontrar proyectos con más de un indicador por debajo de
+la meta.
+
+### Uso de funciones de ventana
+
+Podremos crear un ranking de territorios según el resultado alcanzado:
+
+```text
+RANK() OVER (
+    PARTITION BY id_indicador
+    ORDER BY valor_alcanzado DESC
+)
+```
+
+La función dividirá los resultados por indicador y clasificará los
+territorios dentro de cada grupo.
+
+### Información que no se almacenará directamente
+
+No guardaremos en esta tabla:
+
+- el porcentaje de cumplimiento;
+- el valor acumulado;
+- la diferencia frente a la meta;
+- el ranking del territorio;
+- la clasificación como cumplido o incumplido;
+- el promedio general del proyecto.
+
+Estos resultados se calcularán mediante consultas SQL.
+
+### Idea clave
+
+La tabla `indicadores` responde:
+
+```text
+¿Qué se pretende medir y cuál es la meta?
+```
+
+La tabla `mediciones_indicadores` responde:
+
+```text
+¿Cuánto se alcanzó, dónde y cuándo?
+```
+
+```text
+indicadores = definición y meta
+mediciones_indicadores = resultados periódicos
+```
