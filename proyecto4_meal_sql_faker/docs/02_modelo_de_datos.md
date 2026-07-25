@@ -181,3 +181,124 @@ Cada fila de la tabla `proyectos` representa un único proyecto.
 
 Los totales, porcentajes y otros resultados calculados no se almacenan
 directamente cuando pueden obtenerse mediante consultas SQL.
+
+## Tabla 2: `territorios`
+
+### ¿Qué representa?
+
+La tabla `territorios` almacenará los lugares donde se implementa el programa
+**Territorios que Dialogan**.
+
+Cada fila representará una comunidad o zona específica de intervención.
+
+Un municipio podrá contener varias comunidades, por lo que no utilizaremos
+una fila para representar todo el municipio.
+
+### Nivel de detalle de la tabla
+
+Una fila representa una comunidad o zona de intervención.
+
+Ejemplo:
+
+| id_territorio | departamento | municipio | comunidad | zona |
+|---:|---|---|---|---|
+| 1 | Cauca | Guapi | Comunidad Río Verde | Rural |
+| 2 | Cauca | Guapi | Comunidad La Esperanza | Rural dispersa |
+| 3 | Nariño | Tumaco | Comunidad Nuevo Horizonte | Urbana |
+
+Aunque dos comunidades estén ubicadas en el mismo municipio, cada una tendrá
+su propio registro.
+
+### Campos necesarios
+
+| Campo | Descripción | Función |
+|---|---|---|
+| `id_territorio` | Identificador interno del territorio | Clave primaria |
+| `departamento` | Departamento donde se ubica la comunidad | Clasificación territorial |
+| `municipio` | Municipio donde se implementa el programa | Análisis geográfico |
+| `comunidad` | Nombre ficticio de la comunidad o zona | Unidad de intervención |
+| `zona` | Tipo de zona: urbana, rural o rural dispersa | Clasificación |
+| `nivel_prioridad` | Nivel de prioridad asignado al territorio | Planificación programática |
+
+### Clave primaria
+
+La clave primaria será:
+
+```text
+id_territorio
+```
+
+Esta columna permitirá identificar de manera única cada comunidad o zona de
+intervención.
+
+### Valores posibles
+
+El campo `zona` podrá contener:
+
+```text
+Urbana
+Rural
+Rural dispersa
+```
+
+El campo `nivel_prioridad` podrá contener:
+
+```text
+Alta
+Media
+Baja
+```
+
+### Relaciones
+
+La tabla `territorios` se relacionará con la tabla `actividades` mediante
+`id_territorio`.
+
+```text
+territorios.id_territorio
+          ↓
+actividades.id_territorio
+```
+
+Esto significa que un territorio podrá tener muchas actividades, pero cada
+actividad se realizará en un solo territorio.
+
+```text
+Un territorio → muchas actividades
+```
+
+
+También se relacionará posteriormente con las mediciones de indicadores y
+con los registros de retroalimentación comunitaria.
+
+### Preguntas que podremos responder
+
+Esta tabla permitirá responder preguntas como:
+
+- ¿Cuántas actividades se realizaron en cada municipio?
+- ¿Qué territorios todavía no han recibido actividades?
+- ¿Qué zonas rurales presentan menor participación?
+- ¿Qué municipio alcanzó mejores resultados?
+- ¿Qué territorios fueron clasificados con prioridad alta?
+- ¿En qué comunidades se superó el presupuesto previsto?
+
+### Información que no se almacenará directamente
+
+No guardaremos en esta tabla:
+
+- el número de actividades realizadas;
+- el número de participantes;
+- el presupuesto ejecutado;
+- el porcentaje de cumplimiento de indicadores.
+
+Estos datos se obtendrán relacionando `territorios` con otras tablas mediante
+consultas SQL.
+
+### Idea clave
+
+La tabla `territorios` describe **dónde** se implementa el programa.
+
+```text
+proyectos = qué intervención se ejecuta
+territorios = dónde se ejecuta
+```
