@@ -748,3 +748,278 @@ La tabla `asistencias` responderá después:
 ```text
 ¿En cuáles actividades participó cada persona?
 ```
+
+## Tabla 5: `asistencias`
+
+### ¿Qué representa?
+
+La tabla `asistencias` registrará la relación entre las personas participantes
+y las actividades del programa **Territorios que Dialogan**.
+
+Cada fila representará la inscripción o participación de una persona en una
+actividad específica.
+
+Ejemplo:
+
+| id_asistencia | participante | actividad | estado_asistencia |
+|---:|---|---|---|
+| 1 | PAR-0001 | Taller de mediación | Asistió |
+| 2 | PAR-0001 | Diálogo comunitario | Asistió |
+| 3 | PAR-0002 | Taller de mediación | No asistió |
+
+Una misma persona podrá aparecer varias veces porque puede estar vinculada
+a diferentes actividades.
+
+### Nivel de detalle de la tabla
+
+Una fila representa la relación entre:
+
+```text
+una persona + una actividad
+```
+
+Por ejemplo:
+
+```text
+PAR-0001 + Taller de mediación del 15 de marzo de 2024
+```
+
+No representa a la persona por sí sola ni a la actividad completa.
+
+### Campos necesarios
+
+| Campo | Descripción | Función |
+|---|---|---|
+| `id_asistencia` | Identificador interno del registro | Clave primaria |
+| `id_actividad` | Actividad en la que se registró la persona | Clave foránea |
+| `id_participante` | Persona vinculada a la actividad | Clave foránea |
+| `estado_asistencia` | Indica si asistió o no | Seguimiento |
+| `completo_actividad` | Indica si completó la actividad | Seguimiento |
+| `horas_participacion` | Número de horas en las que participó | Medición |
+| `fecha_registro` | Fecha en la que se registró la asistencia | Control del dato |
+
+### Clave primaria
+
+La clave primaria será:
+
+```text
+id_asistencia
+```
+
+Esta columna identificará de manera única cada registro de asistencia.
+
+### Claves foráneas
+
+La tabla tendrá dos claves foráneas:
+
+```text
+id_actividad
+id_participante
+```
+
+La relación con `actividades` será:
+
+```text
+actividades.id_actividad
+          ↓
+asistencias.id_actividad
+```
+
+La relación con `participantes` será:
+
+```text
+participantes.id_participante
+            ↓
+asistencias.id_participante
+```
+
+Estas relaciones permitirán saber quién participó en cada actividad.
+
+### Tabla intermedia
+
+La tabla `asistencias` funcionará como una tabla intermedia entre
+`actividades` y `participantes`.
+
+```text
+actividades
+     ↓
+asistencias
+     ↓
+participantes
+```
+
+Una actividad puede tener muchas personas participantes.
+
+Una persona puede participar en muchas actividades.
+
+```text
+Muchas actividades ↔ muchos participantes
+```
+
+La tabla `asistencias` transforma esta relación de muchos a muchos en dos
+relaciones de uno a muchos:
+
+```text
+Una actividad → muchos registros de asistencia
+
+Una persona → muchos registros de asistencia
+```
+
+### Valores posibles
+
+El campo `estado_asistencia` podrá contener:
+
+```text
+Inscrito
+Asistió
+No asistió
+Ausencia justificada
+```
+
+El campo `completo_actividad` almacenará valores booleanos:
+
+```text
+TRUE
+FALSE
+```
+
+Ejemplo:
+
+| estado_asistencia | completo_actividad | interpretación |
+|---|---|---|
+| Asistió | TRUE | Asistió y completó la actividad |
+| Asistió | FALSE | Asistió, pero no la completó |
+| No asistió | FALSE | Estaba registrado, pero no asistió |
+| Ausencia justificada | FALSE | No asistió y justificó la ausencia |
+
+### Horas de participación
+
+El campo `horas_participacion` permitirá registrar cuánto tiempo participó
+realmente una persona.
+
+Ejemplo:
+
+| duración de la actividad | horas_participacion | interpretación |
+|---:|---:|---|
+| 8 horas | 8 horas | Participación completa |
+| 8 horas | 4 horas | Participación parcial |
+| 8 horas | 0 horas | No asistió |
+
+Esto permitirá calcular posteriormente tasas de permanencia y finalización.
+
+### Evitar registros duplicados
+
+Una persona no debería aparecer dos veces en la misma actividad.
+
+Por ejemplo, este registro no debe repetirse:
+
+```text
+PAR-0001 + ACT-0001
+```
+
+Posteriormente estableceremos una restricción para que la combinación de
+`id_actividad` e `id_participante` sea única.
+
+```text
+UNIQUE (id_actividad, id_participante)
+```
+
+Esta restricción no reemplaza la clave primaria.
+
+Su función será evitar que la misma persona sea registrada dos veces en una
+misma actividad.
+
+### Diferencia entre clave primaria y combinación única
+
+La clave primaria identificará el registro:
+
+```text
+id_asistencia
+```
+
+La combinación única protegerá la calidad del dato:
+
+```text
+id_actividad + id_participante
+```
+
+Ejemplo:
+
+| id_asistencia | id_actividad | id_participante |
+|---:|---:|---:|
+| 1 | 10 | 25 |
+| 2 | 10 | 26 |
+| 3 | 11 | 25 |
+
+El participante 25 puede asistir a las actividades 10 y 11.
+
+Sin embargo, no puede aparecer dos veces en la actividad 10.
+
+### Preguntas que podremos responder
+
+La tabla `asistencias` permitirá responder preguntas como:
+
+- ¿Cuántas personas asistieron realmente a cada actividad?
+- ¿Qué actividades no alcanzaron su meta de participantes?
+- ¿Qué personas asistieron a más actividades?
+- ¿Cuál fue el porcentaje de asistencia por territorio?
+- ¿Cuántas personas completaron una formación?
+- ¿Qué actividades tuvieron más ausencias?
+- ¿Cuántas horas de participación acumuló cada persona?
+- ¿Qué grupos poblacionales presentan menor permanencia?
+- ¿Qué participantes asistieron a actividades de varios proyectos?
+- ¿Qué personas estaban inscritas, pero nunca asistieron?
+
+### Ejemplo de cálculo posterior
+
+Una actividad tenía una meta de 30 participantes y asistieron 24 personas.
+
+```text
+porcentaje de cumplimiento =
+24 / 30 × 100
+```
+
+```text
+porcentaje de cumplimiento = 80 %
+```
+
+El número 24 no se almacenará directamente en `actividades`.
+
+Se obtendrá contando los registros de `asistencias` cuyo estado sea
+`Asistió`.
+
+### Información que no se almacenará directamente
+
+No guardaremos en esta tabla:
+
+- el nombre del participante;
+- el nombre de la actividad;
+- el municipio donde se realizó;
+- el proyecto al que pertenece;
+- el porcentaje de asistencia;
+- el total de actividades completadas por una persona.
+
+Estos datos ya existen en otras tablas o pueden calcularse mediante SQL.
+
+Para obtenerlos será necesario encadenar varias tablas:
+
+```text
+participantes
+      ↓
+asistencias
+      ↓
+actividades
+      ↓
+proyectos y territorios
+```
+
+### Idea clave
+
+La tabla `asistencias` responde a la pregunta:
+
+```text
+¿Qué relación tuvo cada participante con cada actividad?
+```
+
+También es la tabla que resuelve la relación de muchos a muchos entre
+`participantes` y `actividades`.
