@@ -7,7 +7,7 @@ Aquí reúno proyectos desarrollados con **Excel, Power BI, SQL y Python**, inte
 
 ## 🧭 Sobre mí
 
-Soy **Andrea Rojas**, profesional con experiencia en docencia, mediación e investigación, actualmente enfocada en el **Análisis de Datos y Business Intelligence**.  
+Soy **Andrea Rojas**, profesional con experiencia en docencia, mediación e investigación, actualmente enfocada en el **Análisis de Datos**.  
 Me caracteriza una combinación de pensamiento analítico, atención al detalle y sensibilidad visual.
 
 Disfruto transformar datos en información útil y accionable, aplicando rigor técnico y narrativa clara.
