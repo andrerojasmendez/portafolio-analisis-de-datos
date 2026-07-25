@@ -71,7 +71,7 @@ PROYECTOS
    ├── INDICADORES ── MEDICIONES_INDICADORES ── TERRITORIOS
    │
    └── RETROALIMENTACION ── TERRITORIOS
-
+```
 ## Tabla 1: `proyectos`
 
 ### ¿Qué representa?
@@ -114,3 +114,4 @@ La clave primaria será:
 
 ```text
 id_proyecto
+
