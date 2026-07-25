@@ -1023,3 +1023,318 @@ La tabla `asistencias` responde a la pregunta:
 
 También es la tabla que resuelve la relación de muchos a muchos entre
 `participantes` y `actividades`.
+
+## Tabla 6: `evaluaciones`
+
+### ¿Qué representa?
+
+La tabla `evaluaciones` almacenará los resultados obtenidos por las personas
+participantes en las mediciones realizadas antes y después de la intervención.
+
+Cada fila representará una medición aplicada a una persona dentro de un
+proyecto específico.
+
+Los dos tipos principales de medición serán:
+
+```text
+Baseline
+Endline
+```
+
+- `Baseline`: medición realizada antes de la intervención.
+- `Endline`: medición realizada al finalizar la intervención.
+
+### Nivel de detalle de la tabla
+
+Una fila representa:
+
+```text
+una persona + un proyecto + un tipo de medición
+```
+
+Ejemplo:
+
+| participante | proyecto | tipo_medicion | conocimientos | confianza | convivencia |
+|---|---|---|---:|---:|---:|
+| PAR-0001 | P01 | Baseline | 42 | 50 | 47 |
+| PAR-0001 | P01 | Endline | 74 | 69 | 66 |
+
+En este ejemplo, la misma persona aparece dos veces porque tiene una medición
+inicial y una medición final.
+
+### Campos necesarios
+
+| Campo | Descripción | Función |
+|---|---|---|
+| `id_evaluacion` | Identificador interno de la evaluación | Clave primaria |
+| `id_participante` | Persona evaluada | Clave foránea |
+| `id_proyecto` | Proyecto en el que se realiza la evaluación | Clave foránea |
+| `tipo_medicion` | Baseline o Endline | Clasificación |
+| `fecha_medicion` | Fecha de aplicación de la evaluación | Seguimiento temporal |
+| `puntaje_conocimientos` | Resultado sobre conocimientos de mediación y conflicto | Medición de resultado |
+| `puntaje_confianza` | Nivel de confianza para gestionar conflictos | Medición de resultado |
+| `puntaje_convivencia` | Percepción sobre convivencia comunitaria | Medición de resultado |
+| `formulario_completo` | Indica si la evaluación fue completada | Control de calidad |
+
+### Clave primaria
+
+La clave primaria será:
+
+```text
+id_evaluacion
+```
+
+Esta columna identificará de manera única cada evaluación registrada.
+
+### Claves foráneas
+
+La tabla tendrá dos claves foráneas:
+
+```text
+id_participante
+id_proyecto
+```
+
+La relación con `participantes` será:
+
+```text
+participantes.id_participante
+            ↓
+evaluaciones.id_participante
+```
+
+La relación con `proyectos` será:
+
+```text
+proyectos.id_proyecto
+        ↓
+evaluaciones.id_proyecto
+```
+
+Esto permitirá saber quién fue evaluado y dentro de qué proyecto se produjo
+la medición.
+
+### Valores posibles
+
+El campo `tipo_medicion` podrá contener:
+
+```text
+Baseline
+Endline
+```
+
+El campo `formulario_completo` almacenará valores booleanos:
+
+```text
+TRUE
+FALSE
+```
+
+Los campos de puntuación utilizarán una escala de 0 a 100:
+
+```text
+0 = puntuación mínima
+100 = puntuación máxima
+```
+
+### Comparación entre Baseline y Endline
+
+El objetivo de esta tabla será comparar la situación inicial y final de cada
+persona.
+
+Ejemplo:
+
+| tipo_medicion | puntaje_conocimientos |
+|---|---:|
+| Baseline | 45 |
+| Endline | 72 |
+
+La mejora será:
+
+```text
+mejora en conocimientos =
+puntaje Endline - puntaje Baseline
+```
+
+```text
+mejora en conocimientos =
+72 - 45 = 27 puntos
+```
+
+La mejora no se almacenará directamente en la tabla.
+
+Se calculará mediante consultas SQL.
+
+### ¿Por qué no guardamos la mejora?
+
+La mejora depende de dos registros distintos:
+
+```text
+registro Baseline
+registro Endline
+```
+
+Si uno de esos valores cambia, el resultado debe calcularse nuevamente.
+
+Guardar la mejora directamente podría provocar inconsistencias.
+
+Por eso almacenamos los puntajes originales y calculamos la diferencia con
+SQL.
+
+### Evitar mediciones duplicadas
+
+Una persona no debería tener dos mediciones `Baseline` para el mismo
+proyecto.
+
+Tampoco debería tener dos mediciones `Endline` para el mismo proyecto.
+
+Posteriormente crearemos una restricción única:
+
+```text
+UNIQUE (id_participante, id_proyecto, tipo_medicion)
+```
+
+Esto permitirá que una persona tenga:
+
+```text
+PAR-0001 + P01 + Baseline
+PAR-0001 + P01 + Endline
+```
+
+Pero impedirá repetir:
+
+```text
+PAR-0001 + P01 + Baseline
+PAR-0001 + P01 + Baseline
+```
+
+### Diferencia entre evaluación completa e incompleta
+
+Una persona puede comenzar una evaluación y no terminarla.
+
+Ejemplo:
+
+| tipo_medicion | formulario_completo | interpretación |
+|---|---|---|
+| Baseline | TRUE | Evaluación inicial válida |
+| Endline | TRUE | Evaluación final válida |
+| Endline | FALSE | Evaluación iniciada, pero incompleta |
+
+Para algunos análisis utilizaremos solamente los registros donde:
+
+```text
+formulario_completo = TRUE
+```
+
+Esto representa una regla de calidad del dato.
+
+### Preguntas que podremos responder
+
+La tabla `evaluaciones` permitirá responder preguntas como:
+
+- ¿Cuántas personas tienen Baseline y Endline?
+- ¿Cuántas personas no completaron la evaluación final?
+- ¿Cuál fue la mejora promedio en conocimientos?
+- ¿Qué proyecto produjo una mayor mejora en confianza?
+- ¿Qué territorios presentaron mejores resultados?
+- ¿Qué participantes redujeron su puntuación final?
+- ¿Qué porcentaje mejoró al menos 15 puntos?
+- ¿Qué proyecto tiene más de 100 personas con evaluaciones completas?
+- ¿Cuáles fueron los tres territorios con mayor mejora promedio?
+- ¿Qué grupos poblacionales mostraron menor cambio?
+
+### Consultas que requerirán varias tablas
+
+Para analizar los resultados por territorio será necesario relacionar:
+
+```text
+evaluaciones
+      ↓
+participantes
+      ↓
+territorios
+```
+
+Para analizar los resultados por proyecto será necesario relacionar:
+
+```text
+evaluaciones
+      ↓
+proyectos
+```
+
+Para conocer si una persona asistió realmente a actividades antes de ser
+evaluada será necesario relacionar:
+
+```text
+evaluaciones
+      ↓
+participantes
+      ↓
+asistencias
+      ↓
+actividades
+```
+
+### Casos sin Endline
+
+No todas las personas tendrán necesariamente una medición final.
+
+Por ejemplo:
+
+| participante | Baseline | Endline |
+|---|---|---|
+| PAR-0001 | Sí | Sí |
+| PAR-0002 | Sí | No |
+| PAR-0003 | Sí | Sí |
+
+Esto nos permitirá practicar `LEFT JOIN`.
+
+La consulta podrá conservar a todas las personas con Baseline, aunque no
+tengan Endline.
+
+### Diferencia entre producto y resultado
+
+La asistencia a una actividad representa principalmente un dato de
+seguimiento operativo.
+
+```text
+Asistencia = participación en una actividad
+```
+
+La mejora entre Baseline y Endline representa un resultado.
+
+```text
+Cambio en puntajes = posible resultado de la intervención
+```
+
+Por tanto:
+
+```text
+asistencias = Monitoring
+evaluaciones = Evaluation
+```
+
+### Información que no se almacenará directamente
+
+No guardaremos en esta tabla:
+
+- la mejora entre Baseline y Endline;
+- el promedio del proyecto;
+- el porcentaje de personas que mejoraron;
+- el ranking de territorios;
+- la clasificación de una persona como mejoró o no mejoró.
+
+Estos resultados se calcularán mediante consultas SQL.
+
+### Idea clave
+
+La tabla `evaluaciones` responde a la pregunta:
+
+```text
+¿Qué cambió entre la situación inicial y la situación final?
+```
+
+Cada fila almacena una medición.
+
+La comparación entre mediciones se realizará posteriormente con SQL.
