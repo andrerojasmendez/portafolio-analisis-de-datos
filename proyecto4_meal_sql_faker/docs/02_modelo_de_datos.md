@@ -2609,3 +2609,211 @@ Evaluation = comparación de resultados
 Accountability = retroalimentación y respuesta
 Learning = análisis y uso de los hallazgos
 ```
+
+# Revisión general del modelo
+
+## Tablas definitivas
+
+El modelo inicial estará compuesto por nueve tablas:
+
+| Tabla | ¿Qué representa cada fila? |
+|---|---|
+| `proyectos` | Un proyecto o componente del programa |
+| `territorios` | Una comunidad o zona de intervención |
+| `actividades` | Una actividad concreta |
+| `participantes` | Una persona participante |
+| `asistencias` | La relación entre una persona y una actividad |
+| `evaluaciones` | Una medición Baseline o Endline |
+| `indicadores` | La definición y meta de un indicador |
+| `mediciones_indicadores` | El resultado de un indicador en un territorio y periodo |
+| `retroalimentacion` | Un caso de consulta, sugerencia, queja u otra retroalimentación |
+
+## Claves primarias
+
+Cada tabla tendrá una clave primaria propia:
+
+```text
+proyectos                   → id_proyecto
+territorios                 → id_territorio
+actividades                 → id_actividad
+participantes               → id_participante
+asistencias                 → id_asistencia
+evaluaciones                → id_evaluacion
+indicadores                 → id_indicador
+mediciones_indicadores      → id_medicion
+retroalimentacion           → id_retroalimentacion
+```
+
+Una clave primaria identifica de manera única cada fila.
+
+## Claves foráneas
+
+Las claves foráneas conectarán las tablas:
+
+| Tabla | Clave foránea | Tabla relacionada |
+|---|---|---|
+| `actividades` | `id_proyecto` | `proyectos` |
+| `actividades` | `id_territorio` | `territorios` |
+| `participantes` | `id_territorio` | `territorios` |
+| `asistencias` | `id_actividad` | `actividades` |
+| `asistencias` | `id_participante` | `participantes` |
+| `evaluaciones` | `id_participante` | `participantes` |
+| `evaluaciones` | `id_proyecto` | `proyectos` |
+| `indicadores` | `id_proyecto` | `proyectos` |
+| `mediciones_indicadores` | `id_indicador` | `indicadores` |
+| `mediciones_indicadores` | `id_territorio` | `territorios` |
+| `retroalimentacion` | `id_proyecto` | `proyectos` |
+| `retroalimentacion` | `id_territorio` | `territorios` |
+| `retroalimentacion` | `id_participante` | `participantes` |
+
+## Relaciones de uno a muchos
+
+Las relaciones principales serán:
+
+```text
+Un proyecto → muchas actividades
+Un proyecto → muchas evaluaciones
+Un proyecto → muchos indicadores
+Un proyecto → muchos casos de retroalimentación
+
+Un territorio → muchas actividades
+Un territorio → muchos participantes
+Un territorio → muchas mediciones
+Un territorio → muchos casos de retroalimentación
+
+Una actividad → muchos registros de asistencia
+Una persona → muchos registros de asistencia
+Una persona → muchas evaluaciones
+Un indicador → muchas mediciones
+```
+
+## Relación de muchos a muchos
+
+Entre `actividades` y `participantes` existe una relación de muchos a muchos:
+
+```text
+Una actividad puede tener muchas personas.
+Una persona puede asistir a muchas actividades.
+```
+
+La tabla `asistencias` resolverá esta relación:
+
+```text
+actividades
+     ↓
+asistencias
+     ↓
+participantes
+```
+
+## Restricciones únicas
+
+Además de las claves primarias, necesitaremos restricciones para evitar
+duplicados lógicos.
+
+```text
+proyectos.codigo_proyecto
+territorios: departamento + municipio + comunidad
+actividades.codigo_actividad
+participantes.codigo_participante
+asistencias: id_actividad + id_participante
+evaluaciones: id_participante + id_proyecto + tipo_medicion
+indicadores.codigo_indicador
+mediciones_indicadores: id_indicador + id_territorio + periodo
+retroalimentacion.codigo_caso
+```
+
+Estas restricciones se crearán posteriormente mediante `UNIQUE`.
+
+## Reglas de calidad del dato
+
+El modelo deberá respetar reglas como:
+
+- las fechas finales no pueden ser anteriores a las fechas iniciales;
+- los presupuestos y costos no pueden ser negativos;
+- los puntajes de evaluación deben estar entre 0 y 100;
+- las horas de participación no pueden ser negativas;
+- una persona no puede registrarse dos veces en la misma actividad;
+- una persona no puede tener dos Baseline del mismo proyecto;
+- una medición no puede repetirse para el mismo indicador, territorio y periodo;
+- la fecha de respuesta no puede ser anterior a la fecha de recepción;
+- un caso anónimo no debe estar asociado a una persona identificada.
+
+Estas reglas se implementarán mediante tipos de datos, restricciones y
+validaciones durante la generación de datos.
+
+## Valores calculados
+
+No almacenaremos directamente valores que puedan obtenerse con SQL, como:
+
+- número real de asistentes;
+- porcentaje de cumplimiento de participación;
+- ejecución presupuestaria;
+- costo por participante;
+- retraso en días;
+- mejora entre Baseline y Endline;
+- porcentaje de cumplimiento de indicadores;
+- tiempo de respuesta;
+- rankings de proyectos o territorios.
+
+Ejemplo:
+
+```text
+ejecución presupuestaria =
+costo real / costo planificado × 100
+```
+
+Estos valores se calcularán para evitar información duplicada o
+inconsistente.
+
+## Decisiones de simplificación
+
+Para mantener un proyecto comprensible y ejecutable se adoptan las siguientes
+decisiones:
+
+1. La base de datos representa un solo programa: `Territorios que Dialogan`.
+2. Los cuatro componentes se almacenarán como registros de `proyectos`.
+3. Cada actividad estará vinculada a un único territorio.
+4. Cada participante tendrá un territorio principal.
+5. No se almacenarán datos personales reales.
+6. Las personas beneficiarias indirectas no tendrán registros individuales.
+7. Los resultados serán completamente sintéticos y se generarán con Faker.
+
+## Modelo relacional resumido
+
+```text
+PROYECTOS
+   ├── ACTIVIDADES
+   │      ├── TERRITORIOS
+   │      └── ASISTENCIAS ── PARTICIPANTES
+   │
+   ├── EVALUACIONES ── PARTICIPANTES
+   │
+   ├── INDICADORES
+   │      └── MEDICIONES_INDICADORES ── TERRITORIOS
+   │
+   └── RETROALIMENTACION
+          ├── TERRITORIOS
+          └── PARTICIPANTES (opcional)
+```
+
+## Conclusión de la revisión
+
+El modelo permite representar las cuatro dimensiones principales de MEAL:
+
+```text
+Monitoring
+→ actividades, asistencias, presupuestos e indicadores
+
+Evaluation
+→ evaluaciones Baseline y Endline
+
+Accountability
+→ retroalimentación y gestión de respuestas
+
+Learning
+→ consultas y análisis comparativos realizados con SQL
+```
+
+El modelo queda aprobado para comenzar la creación física de la base de
+datos mediante sentencias `CREATE TABLE`.
