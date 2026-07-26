@@ -1,0 +1,148 @@
+Table proyectos {
+  id_proyecto int [pk, increment]
+  codigo_proyecto varchar(10) [not null, unique]
+  nombre_proyecto varchar(150) [not null]
+  objetivo_especifico text [not null]
+  fecha_inicio date [not null]
+  fecha_fin date [not null]
+  presupuesto_aprobado decimal(12,2) [not null]
+  estado varchar(30) [not null]
+}
+
+Table territorios {
+  id_territorio int [pk, increment]
+  departamento varchar(100) [not null]
+  municipio varchar(100) [not null]
+  comunidad varchar(150) [not null]
+  zona varchar(30) [not null]
+  nivel_prioridad varchar(20) [not null]
+
+  indexes {
+    (departamento, municipio, comunidad) [unique]
+  }
+}
+
+Table actividades {
+  id_actividad int [pk, increment]
+  codigo_actividad varchar(15) [not null, unique]
+  id_proyecto int [not null]
+  id_territorio int [not null]
+  nombre_actividad varchar(150) [not null]
+  tipo_actividad varchar(80) [not null]
+  fecha_planificada date [not null]
+  fecha_realizacion date
+  modalidad varchar(20) [not null]
+  meta_participantes int [not null]
+  duracion_horas decimal(5,2) [not null]
+  costo_planificado decimal(10,2) [not null]
+  costo_real decimal(10,2)
+  estado_actividad varchar(30) [not null]
+}
+
+Ref: actividades.id_proyecto > proyectos.id_proyecto
+Ref: actividades.id_territorio > territorios.id_territorio
+
+Table participantes {
+  id_participante int [pk, increment]
+  codigo_participante varchar(15) [not null, unique]
+  id_territorio int [not null]
+  sexo varchar(30) [not null]
+  rango_edad varchar(20) [not null]
+  grupo_poblacional varchar(60) [not null]
+  fecha_registro date [not null]
+  estado_participante varchar(20) [not null]
+}
+
+Table asistencias {
+  id_asistencia int [pk, increment]
+  id_actividad int [not null]
+  id_participante int [not null]
+  estado_asistencia varchar(30) [not null]
+  completo_actividad boolean [not null]
+  horas_participacion decimal(5,2) [not null]
+  fecha_registro date [not null]
+
+  indexes {
+    (id_actividad, id_participante) [unique]
+  }
+}
+
+Ref: participantes.id_territorio > territorios.id_territorio
+Ref: asistencias.id_actividad > actividades.id_actividad
+Ref: asistencias.id_participante > participantes.id_participante
+
+Table evaluaciones {
+  id_evaluacion int [pk, increment]
+  id_participante int [not null]
+  id_proyecto int [not null]
+  tipo_medicion varchar(20) [not null]
+  fecha_medicion date [not null]
+  puntaje_conocimientos int [not null]
+  puntaje_confianza int [not null]
+  puntaje_convivencia int [not null]
+  formulario_completo boolean [not null]
+
+  indexes {
+    (id_participante, id_proyecto, tipo_medicion) [unique]
+  }
+}
+
+Table indicadores {
+  id_indicador int [pk, increment]
+  codigo_indicador varchar(15) [not null, unique]
+  id_proyecto int [not null]
+  nombre_indicador varchar(250) [not null]
+  tipo_indicador varchar(40) [not null]
+  unidad_medida varchar(30) [not null]
+  meta_total decimal(12,2) [not null]
+  frecuencia_medicion varchar(40) [not null]
+  fuente_verificacion varchar(150) [not null]
+  desagregacion_requerida varchar(100)
+  estado_indicador varchar(20) [not null]
+}
+
+Ref: evaluaciones.id_participante > participantes.id_participante
+Ref: evaluaciones.id_proyecto > proyectos.id_proyecto
+Ref: indicadores.id_proyecto > proyectos.id_proyecto
+
+Table mediciones_indicadores {
+  id_medicion int [pk, increment]
+  id_indicador int [not null]
+  id_territorio int [not null]
+  periodo varchar(10) [not null]
+  fecha_medicion date [not null]
+  valor_alcanzado decimal(12,2) [not null]
+  fuente_verificacion_registrada varchar(200) [not null]
+  estado_validacion varchar(20) [not null]
+  observaciones text
+
+  indexes {
+    (id_indicador, id_territorio, periodo) [unique]
+  }
+}
+
+Table retroalimentacion {
+  id_retroalimentacion int [pk, increment]
+  codigo_caso varchar(15) [not null, unique]
+  id_proyecto int [not null]
+  id_territorio int [not null]
+  id_participante int
+  fecha_recepcion date [not null]
+  canal_recepcion varchar(50) [not null]
+  tipo_retroalimentacion varchar(30) [not null]
+  categoria varchar(60) [not null]
+  es_anonima boolean [not null]
+  nivel_prioridad varchar(20) [not null]
+  estado_caso varchar(20) [not null]
+  fecha_limite_respuesta date [not null]
+  fecha_respuesta date
+  satisfaccion_respuesta int
+  observaciones text
+}
+
+Ref: mediciones_indicadores.id_indicador > indicadores.id_indicador
+Ref: mediciones_indicadores.id_territorio > territorios.id_territorio
+
+Ref: retroalimentacion.id_proyecto > proyectos.id_proyecto
+Ref: retroalimentacion.id_territorio > territorios.id_territorio
+Ref: retroalimentacion.id_participante > participantes.id_participante
