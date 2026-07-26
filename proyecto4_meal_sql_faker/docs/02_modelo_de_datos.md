@@ -2183,3 +2183,429 @@ La tabla `mediciones_indicadores` responde:
 indicadores = definición y meta
 mediciones_indicadores = resultados periódicos
 ```
+## Tabla 9: `retroalimentacion`
+
+### ¿Qué representa?
+
+La tabla `retroalimentacion` almacenará las consultas, sugerencias, quejas,
+reconocimientos y solicitudes recibidas durante la implementación del
+programa **Territorios que Dialogan**.
+
+Cada fila representará un caso de retroalimentación recibido mediante alguno
+de los canales habilitados por el programa.
+
+Ejemplos:
+
+- Una sugerencia para cambiar el horario de una actividad.
+- Una consulta sobre los requisitos de participación.
+- Una queja relacionada con el trato recibido.
+- Una solicitud de información sobre el programa.
+- Un reconocimiento al equipo facilitador.
+- Una alerta que requiere revisión o derivación.
+
+### Nivel de detalle de la tabla
+
+Una fila representa un caso de retroalimentación.
+
+Ejemplo:
+
+| codigo_caso | tipo_retroalimentacion | canal | estado_caso |
+|---|---|---|---|
+| RET-0001 | Sugerencia | Buzón comunitario | Cerrado |
+| RET-0002 | Queja | Línea telefónica | En revisión |
+| RET-0003 | Consulta | Formulario web | Respondido |
+
+Una misma persona podrá presentar varios casos.
+
+También podrán existir casos anónimos que no estén asociados con una persona
+participante identificada.
+
+### Campos necesarios
+
+| Campo | Descripción | Función |
+|---|---|---|
+| `id_retroalimentacion` | Identificador interno del caso | Clave primaria |
+| `codigo_caso` | Código legible como RET-0001 | Identificación |
+| `id_proyecto` | Proyecto relacionado con el caso | Clave foránea |
+| `id_territorio` | Territorio donde se recibió o al que se refiere | Clave foránea |
+| `id_participante` | Persona que presentó el caso, cuando sea identificable | Clave foránea opcional |
+| `fecha_recepcion` | Fecha en la que se recibió la retroalimentación | Seguimiento temporal |
+| `canal_recepcion` | Medio por el que se recibió | Clasificación |
+| `tipo_retroalimentacion` | Consulta, sugerencia, queja u otra categoría | Clasificación |
+| `categoria` | Tema principal del caso | Análisis |
+| `es_anonima` | Indica si la persona decidió permanecer anónima | Protección del dato |
+| `nivel_prioridad` | Prioridad asignada al caso | Gestión |
+| `estado_caso` | Estado actual de la gestión | Seguimiento |
+| `fecha_limite_respuesta` | Fecha máxima prevista para responder | Control |
+| `fecha_respuesta` | Fecha en la que se proporcionó una respuesta | Seguimiento |
+| `satisfaccion_respuesta` | Valoración de la respuesta recibida | Calidad |
+| `observaciones` | Información adicional no sensible | Contexto |
+
+### Clave primaria
+
+La clave primaria será:
+
+```text
+id_retroalimentacion
+```
+
+Esta columna identificará de manera única cada caso.
+
+### Código del caso
+
+El campo `codigo_caso` contendrá valores como:
+
+```text
+RET-0001
+RET-0002
+RET-0003
+```
+
+Posteriormente estableceremos una restricción para impedir códigos repetidos:
+
+```text
+UNIQUE (codigo_caso)
+```
+
+El código permitirá hacer seguimiento al caso sin utilizar nombres o datos
+personales en informes y consultas.
+
+### Claves foráneas
+
+La tabla tendrá tres claves foráneas:
+
+```text
+id_proyecto
+id_territorio
+id_participante
+```
+
+La relación con `proyectos` será:
+
+```text
+proyectos.id_proyecto
+        ↓
+retroalimentacion.id_proyecto
+```
+
+La relación con `territorios` será:
+
+```text
+territorios.id_territorio
+          ↓
+retroalimentacion.id_territorio
+```
+
+La relación opcional con `participantes` será:
+
+```text
+participantes.id_participante
+            ↓
+retroalimentacion.id_participante
+```
+
+Esto permitirá conocer con qué proyecto y territorio está relacionado cada
+caso.
+
+### Clave foránea opcional
+
+El campo `id_participante` podrá contener `NULL`.
+
+Esto será necesario cuando:
+
+- el caso sea anónimo;
+- la persona no esté registrada como participante;
+- no sea apropiado conservar su identificación.
+
+Ejemplo:
+
+| codigo_caso | es_anonima | id_participante |
+|---|---|---:|
+| RET-0001 | FALSE | 25 |
+| RET-0002 | TRUE | NULL |
+| RET-0003 | FALSE | NULL |
+
+El tercer caso podría corresponder a una persona de la comunidad que no está
+registrada como participante del programa.
+
+### Valores posibles
+
+El campo `canal_recepcion` podrá contener:
+
+```text
+Buzón comunitario
+Línea telefónica
+Correo electrónico
+Formulario web
+Reunión comunitaria
+Atención presencial
+```
+
+El campo `tipo_retroalimentacion` podrá contener:
+
+```text
+Consulta
+Sugerencia
+Queja
+Reconocimiento
+Solicitud
+Alerta
+```
+
+El campo `categoria` podrá contener valores como:
+
+```text
+Información del programa
+Acceso y participación
+Horario o ubicación
+Trato recibido
+Calidad de la actividad
+Protección y seguridad
+Uso de recursos
+Otro
+```
+
+El campo `nivel_prioridad` podrá contener:
+
+```text
+Baja
+Media
+Alta
+Urgente
+```
+
+El campo `estado_caso` podrá contener:
+
+```text
+Recibido
+En revisión
+Respondido
+Cerrado
+Derivado
+```
+
+### Casos anónimos
+
+El campo `es_anonima` almacenará valores booleanos:
+
+```text
+TRUE
+FALSE
+```
+
+Cuando:
+
+```text
+es_anonima = TRUE
+```
+
+el campo `id_participante` deberá permanecer vacío:
+
+```text
+id_participante = NULL
+```
+
+Esto permitirá practicar el tratamiento de valores `NULL` y consultas con
+`LEFT JOIN`.
+
+### Fecha límite y fecha de respuesta
+
+La tabla almacenará:
+
+```text
+fecha_limite_respuesta
+fecha_respuesta
+```
+
+Estas columnas permitirán determinar si el caso fue respondido dentro del
+plazo establecido.
+
+Ejemplo:
+
+| fecha_limite_respuesta | fecha_respuesta | interpretación |
+|---|---|---|
+| 2024-06-15 | 2024-06-13 | Respondido dentro del plazo |
+| 2024-06-15 | 2024-06-20 | Respondido con retraso |
+| 2024-06-15 | NULL | Sin respuesta registrada |
+
+No guardaremos una columna llamada `respuesta_en_plazo`.
+
+Este resultado se calculará comparando las fechas mediante SQL.
+
+```text
+fecha_respuesta <= fecha_limite_respuesta
+```
+
+### Indicador de rendición de cuentas
+
+Uno de los indicadores del programa será:
+
+```text
+Porcentaje de casos respondidos dentro del plazo establecido
+```
+
+El cálculo será:
+
+```text
+casos respondidos dentro del plazo
+---------------------------------- × 100
+total de casos que requerían respuesta
+```
+
+Ejemplo:
+
+```text
+Casos que requerían respuesta: 50
+Casos respondidos dentro del plazo: 45
+```
+
+```text
+45 / 50 × 100 = 90 %
+```
+
+Este porcentaje se calculará con SQL y no se almacenará directamente en la
+tabla.
+
+### Satisfacción con la respuesta
+
+El campo `satisfaccion_respuesta` podrá utilizar una escala de 1 a 5:
+
+```text
+1 = Muy insatisfecha
+2 = Insatisfecha
+3 = Neutral
+4 = Satisfecha
+5 = Muy satisfecha
+```
+
+Este campo podrá contener `NULL` cuando:
+
+- el caso todavía no haya sido respondido;
+- la persona no haya valorado la respuesta;
+- el caso sea anónimo y no sea posible realizar seguimiento.
+
+### Protección de información
+
+La tabla no almacenará descripciones detalladas de situaciones sensibles ni
+datos personales innecesarios.
+
+El campo `observaciones` se utilizará únicamente para información sintética,
+general y no identificable.
+
+En un sistema real, los casos especialmente sensibles deberían gestionarse
+con acceso restringido y protocolos específicos de protección.
+
+### Preguntas que podremos responder
+
+La tabla `retroalimentacion` permitirá responder preguntas como:
+
+- ¿Cuántos casos se recibieron en cada territorio?
+- ¿Cuál fue el canal de recepción más utilizado?
+- ¿Qué tipo de retroalimentación fue más frecuente?
+- ¿Cuántas quejas siguen abiertas?
+- ¿Qué proyectos recibieron más sugerencias?
+- ¿Qué porcentaje de casos fue respondido dentro del plazo?
+- ¿Cuántos casos anónimos se recibieron?
+- ¿Qué territorios tienen más de cinco casos pendientes?
+- ¿Cuál fue el tiempo promedio de respuesta?
+- ¿Qué categorías presentan una satisfacción más baja?
+- ¿Qué casos urgentes todavía no tienen respuesta?
+- ¿Qué territorios no registraron ningún mecanismo de retroalimentación?
+
+### Consultas con `LEFT JOIN`
+
+Para conservar todos los casos, incluso los anónimos o presentados por
+personas no registradas, podremos utilizar:
+
+```text
+retroalimentacion
+        ↓ LEFT JOIN
+participantes
+```
+
+Un `INNER JOIN` eliminaría los casos cuyo `id_participante` sea `NULL`.
+
+El `LEFT JOIN` permitirá mantenerlos en el resultado.
+
+### Uso de `GROUP BY` y `HAVING`
+
+Podremos agrupar los casos por territorio:
+
+```text
+GROUP BY id_territorio
+```
+
+Y mostrar únicamente los territorios con más de cinco casos pendientes:
+
+```text
+HAVING COUNT(*) > 5
+```
+
+También podremos agrupar por proyecto, categoría, canal o estado.
+
+### Uso de funciones de ventana
+
+Podremos numerar los casos recibidos dentro de cada territorio:
+
+```text
+ROW_NUMBER() OVER (
+    PARTITION BY id_territorio
+    ORDER BY fecha_recepcion
+)
+```
+
+También podremos crear un ranking de proyectos según el número de casos
+respondidos fuera del plazo.
+
+### Información que no se almacenará directamente
+
+No guardaremos en esta tabla:
+
+- el número de días utilizados para responder;
+- la clasificación automática como respuesta puntual o tardía;
+- el porcentaje de casos respondidos dentro del plazo;
+- el total de casos por territorio;
+- el promedio de satisfacción;
+- el ranking de proyectos;
+- el número de casos pendientes.
+
+Estos resultados se calcularán mediante consultas SQL.
+
+### Relación con MEAL
+
+La tabla `retroalimentacion` representa principalmente la dimensión de:
+
+```text
+Accountability
+```
+
+En español:
+
+```text
+Rendición de cuentas
+```
+
+Permite comprobar si el programa:
+
+- escucha a las comunidades;
+- ofrece canales accesibles;
+- registra las preocupaciones recibidas;
+- responde oportunamente;
+- utiliza la retroalimentación para mejorar.
+
+### Idea clave
+
+La tabla `retroalimentacion` responde a las preguntas:
+
+```text
+¿Qué expresó la comunidad?
+¿Cómo gestionó el programa esa información?
+¿La respuesta fue proporcionada dentro del plazo?
+```
+
+```text
+Monitoring = seguimiento de actividades y asistencia
+Evaluation = comparación de resultados
+Accountability = retroalimentación y respuesta
+Learning = análisis y uso de los hallazgos
+```
