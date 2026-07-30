@@ -50,7 +50,6 @@ Table participantes {
   rango_edad varchar(20) [not null]
   grupo_poblacional varchar(60) [not null]
   fecha_registro date [not null]
-  estado_participante varchar(20) [not null]
 }
 
 Table asistencias {
