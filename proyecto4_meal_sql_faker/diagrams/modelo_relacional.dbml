@@ -162,3 +162,22 @@ Ref: mediciones_indicadores.id_territorio > territorios.id_territorio
 Ref: retroalimentacion.id_proyecto > proyectos.id_proyecto
 Ref: retroalimentacion.id_territorio > territorios.id_territorio
 Ref: retroalimentacion.id_participante > participantes.id_participante
+
+-- =====================================================
+-- Tabla: participantes
+-- Granularidad: una fila representa una persona participante
+-- =====================================================
+
+CREATE TABLE participantes (
+  id_participante INT AUTO_INCREMENT PRIMARY KEY,
+  codigo_participante VARCHAR(15) NOT NULL UNIQUE, 
+  id_territorio INT NOT NULL, 
+  sexo VARCHAR(30) NOT NULL,
+  rango_edad VARCHAR(20) NOT NULL, 
+  grupo_poblacional VARCHAR(60) NOT NULL,
+  fecha_registro DATE NOT NULL, 
+
+  CONSTRAINT fk_participantes_territorio
+  FOREIGN KEY (id_territorio)
+  REFERENCES territorios(id_territorio)
+  );
