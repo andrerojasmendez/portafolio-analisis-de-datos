@@ -22,3 +22,19 @@ CREATE TABLE proyectos (
   presupuesto_aprobado DECIMAL(10,2) NOT NULL,
   estado VARCHAR(30) NOT NULL
 );
+
+-- =====================================================
+-- Tabla: territorios
+-- Granularidad: una fila representa una comunidad
+-- o zona específica de intervención
+-- =====================================================
+
+CREATE TABLE territorios (
+  id_territorio INT AUTO_INCREMENT PRIMARY KEY, 
+  departamento VARCHAR(100) NOT NULL,
+  municipio VARCHAR(100)NOT NULL,
+  comunidad VARCHAR(150) NOT NULL, 
+  zona VARCHAR(30) NOT NULL, 
+  nivel_prioridad VARCHAR(20) NOT NULL,
+  UNIQUE (departamento, municipio, comunidad)
+);
