@@ -52,6 +52,23 @@ Table participantes {
   fecha_registro date [not null]
 }
 
+Table participaciones_proyecto {
+  id_participacion int [pk, increment]
+  id_participante int [not null]
+  id_proyecto int [not null]
+  fecha_inscripcion date [not null]
+  estado_participacion varchar(20) [not null]
+  fecha_salida date
+  motivo_salida varchar(150)
+
+  indexes {
+    (id_participante, id_proyecto) [unique]
+  }
+}
+
+Ref: participaciones_proyecto.id_participante > participantes.id_participante
+Ref: participaciones_proyecto.id_proyecto > proyectos.id_proyecto
+
 Table asistencias {
   id_asistencia int [pk, increment]
   id_actividad int [not null]
