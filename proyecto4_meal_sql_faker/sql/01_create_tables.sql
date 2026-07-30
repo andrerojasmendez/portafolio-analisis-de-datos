@@ -70,4 +70,30 @@ CREATE TABLE actividades (
   REFERENCES territorios(id_territorio)
 );
 
+-- =====================================================
+-- Tabla: participaciones_proyecto
+-- Granularidad: una fila representa la inscripción
+-- de una persona participante en un proyecto
+-- =====================================================
+
+CREATE TABLE participaciones_proyecto (
+  id_participacion INT AUTO_INCREMENT PRIMARY KEY, 
+  id_participante INT NOT NULL,
+  id_proyecto INT NOT NULL, 
+  fecha_inscripcion DATE NOT NULL,
+  estado_participacion VARCHAR(20) NOT NULL, 
+  fecha_salida DATE,
+  motivo_salida VARCHAR(150),
+
+  UNIQUE (id_participante, id_proyecto),
+
+  CONSTRAINT fk_participaciones_participante
+  FOREIGN KEY (id_participante)
+  REFERENCES participantes(id_participante),
+
+  CONSTRAINT fk_participaciones_proyecto
+  FOREIGN KEY (id_proyecto)
+  REFERENCES proyectos(id_proyecto)
+  );
+
 
