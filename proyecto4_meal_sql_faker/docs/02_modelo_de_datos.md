@@ -26,11 +26,12 @@ El modelo estará formado inicialmente por nueve tablas:
 2. `territorios`
 3. `actividades`
 4. `participantes`
-5. `asistencias`
-6. `evaluaciones`
-7. `indicadores`
-8. `mediciones_indicadores`
-9. `retroalimentacion`
+5. `participaciones_proyecto`
+6. `asistencias`
+7. `evaluaciones`
+8. `indicadores`
+9. `mediciones_indicadores`
+10. `retroalimentacion`
 
 ## Clasificación de las tablas
 
@@ -49,6 +50,7 @@ utilizada por otras tablas.
 Estas tablas almacenan hechos, actividades, mediciones o situaciones que
 ocurren durante la implementación del programa.
 
+- `participaciones_proyecto`
 - `actividades`
 - `asistencias`
 - `evaluaciones`
@@ -749,7 +751,75 @@ La tabla `asistencias` responderá después:
 ¿En cuáles actividades participó cada persona?
 ```
 
-## Tabla 5: `asistencias`
+## Tabla 5: `participaciones_proyecto`
+
+### ¿Qué representa?
+
+La tabla `participaciones_proyecto` registrará en qué proyectos está inscrita
+cada persona participante.
+
+Cada fila representará:
+
+```text
+una persona + un proyecto
+```
+
+Su granularidad será una inscripción de una persona en un proyecto.
+
+### Campos principales
+
+| Campo | Descripción | Función |
+|---|---|---|
+| `id_participacion` | Identificador interno del registro | Clave primaria |
+| `id_participante` | Persona inscrita | Clave foránea |
+| `id_proyecto` | Proyecto en el que está inscrita | Clave foránea |
+| `fecha_inscripcion` | Fecha de vinculación | Seguimiento |
+| `estado_participacion` | Estado dentro de ese proyecto | Clasificación |
+| `fecha_salida` | Fecha de salida, cuando corresponda | Seguimiento |
+| `motivo_salida` | Motivo general de la salida | Análisis |
+
+### Relaciones
+
+```text
+participantes
+      ↓
+participaciones_proyecto
+      ↓
+proyectos
+```
+
+Una persona puede participar en varios proyectos y un proyecto puede tener
+muchas personas participantes.
+
+La tabla `participaciones_proyecto` resuelve esta relación de muchos a muchos.
+
+### Restricción única
+
+La combinación:
+
+```text
+id_participante + id_proyecto
+```
+
+será única para evitar que una persona sea inscrita dos veces en el mismo
+proyecto.
+
+### Diferencia frente a `asistencias`
+
+```text
+participaciones_proyecto
+→ indica en qué proyecto está inscrita una persona
+
+asistencias
+→ indica a qué actividad concreta asistió
+```
+
+### Idea clave
+
+El estado de participación pertenece a la relación entre una persona y un
+proyecto, no a la persona por sí sola.
+
+## Tabla 6: `asistencias`
 
 ### ¿Qué representa?
 
@@ -1710,7 +1780,7 @@ La tabla `mediciones_indicadores` responderá después:
 ¿Cuándo se alcanzó?
 ```
 
-## Tabla 8: `mediciones_indicadores`
+## Tabla 9: `mediciones_indicadores`
 
 ### ¿Qué representa?
 
@@ -2183,7 +2253,7 @@ La tabla `mediciones_indicadores` responde:
 indicadores = definición y meta
 mediciones_indicadores = resultados periódicos
 ```
-## Tabla 9: `retroalimentacion`
+## Tabla 10: `retroalimentacion`
 
 ### ¿Qué representa?
 
@@ -2622,6 +2692,7 @@ El modelo inicial estará compuesto por nueve tablas:
 | `territorios` | Una comunidad o zona de intervención |
 | `actividades` | Una actividad concreta |
 | `participantes` | Una persona participante |
+| `participaciones_proyecto` | La inscripción de una persona en un proyecto |
 | `asistencias` | La relación entre una persona y una actividad |
 | `evaluaciones` | Una medición Baseline o Endline |
 | `indicadores` | La definición y meta de un indicador |
@@ -2637,6 +2708,7 @@ proyectos                   → id_proyecto
 territorios                 → id_territorio
 actividades                 → id_actividad
 participantes               → id_participante
+participaciones_proyecto     → id_participacion
 asistencias                 → id_asistencia
 evaluaciones                → id_evaluacion
 indicadores                 → id_indicador
@@ -2716,6 +2788,7 @@ proyectos.codigo_proyecto
 territorios: departamento + municipio + comunidad
 actividades.codigo_actividad
 participantes.codigo_participante
+participaciones_proyecto: id_participante + id_proyecto
 asistencias: id_actividad + id_participante
 evaluaciones: id_participante + id_proyecto + tipo_medicion
 indicadores.codigo_indicador
