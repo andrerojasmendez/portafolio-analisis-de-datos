@@ -201,3 +201,40 @@ CREATE TABLE mediciones_indicadores (
   REFERENCES territorios(id_territorio)
   
 );
+
+-- =====================================================
+-- Tabla: retroalimentacion
+-- Granularidad: una fila representa un caso
+-- de retroalimentación recibido por el programa
+-- =====================================================
+
+CREATE TABLE retroalimentacion (
+  id_retroalimentacion INT AUTO_INCREMENT PRIMARY KEY,
+  codigo_caso VARCHAR(15) NOT NULL UNIQUE,
+  id_proyecto INT NOT NULL,
+  id_territorio INT NOT NULL,
+  id_participante INT,
+  fecha_recepcion DATE NOT NULL,
+  canal_recepcion VARCHAR(50) NOT NULL,
+  tipo_retroalimentacion VARCHAR(30) NOT NULL,
+  categoria VARCHAR(60) NOT NULL, 
+  es_anonima BOOLEAN NOT NULL,
+  nivel_prioridad VARCHAR(20) NOT NULL,
+  estado_caso VARCHAR(20) NOT NULL,
+  fecha_limite_respuesta DATE NOT NULL,
+  fecha_respuesta DATE,
+  satisfaccion_respuesta INT,
+  observaciones TEXT,
+
+  CONSTRAINT fk_retroalimentacion_proyecto
+  FOREIGN KEY (id_proyecto) 
+  REFERENCES proyectos(id_proyecto),
+
+  CONSTRAINT fk_retroalimentacion_territorio
+  FOREIGN KEY (id_territorio)
+  REFERENCES territorios(id_territorio),
+
+  CONSTRAINT fk_retroalimentacion_participante
+  FOREIGN KEY (id_participante)
+  REFERENCES participantes(id_participante)
+);
