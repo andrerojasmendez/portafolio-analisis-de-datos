@@ -89,8 +89,7 @@ Ref: asistencias.id_participante > participantes.id_participante
 
 Table evaluaciones {
   id_evaluacion int [pk, increment]
-  id_participante int [not null]
-  id_proyecto int [not null]
+  id_participacion int [not null]
   tipo_medicion varchar(20) [not null]
   fecha_medicion date [not null]
   puntaje_conocimientos int [not null]
@@ -99,7 +98,7 @@ Table evaluaciones {
   formulario_completo boolean [not null]
 
   indexes {
-    (id_participante, id_proyecto, tipo_medicion) [unique]
+    (id_participacion, tipo_medicion) [unique]
   }
 }
 
@@ -117,8 +116,7 @@ Table indicadores {
   estado_indicador varchar(20) [not null]
 }
 
-Ref: evaluaciones.id_participante > participantes.id_participante
-Ref: evaluaciones.id_proyecto > proyectos.id_proyecto
+Ref: evaluaciones.id_participacion > participaciones_proyecto.id_participacion
 Ref: indicadores.id_proyecto > proyectos.id_proyecto
 
 Table mediciones_indicadores {
