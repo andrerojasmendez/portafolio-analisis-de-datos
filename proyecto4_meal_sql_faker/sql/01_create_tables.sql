@@ -96,4 +96,30 @@ CREATE TABLE participaciones_proyecto (
   REFERENCES proyectos(id_proyecto)
   );
 
+-- =====================================================
+-- Tabla: asistencias
+-- Granularidad: una fila representa la relación
+-- entre una persona participante y una actividad
+-- =====================================================
+
+CREATE TABLE asistencia (
+  id_asistencia INT AUTO_INCREMENT PRIMARY KEY,
+  id_actividad INT NOT NULL,
+  id_participante INT NOT NULL,
+  estado_asistencia VARCHAR(30) NOT NULL,
+  completo_actividad BOOLEAN NOT NULL, 
+  horas_participacion DECIMAL(5,2) NOT NULL,
+  fecha_registro DATE NOT NULL, 
+
+  UNIQUE (id_actividad, id_participante),
+
+  CONSTRAINT fk_asistencias_actividad
+  FOREIGN KEY (id_actividad)
+  REFERENCES actividades(id_actividad),
+
+  CONSTRAINT fk_asistencias_participante
+  FOREIGN KEY (id_participante)
+  REFERENCES participantes(id_participante)
+
+);
 
