@@ -172,3 +172,32 @@ CREATE TABLE indicadores (
   REFERENCES proyectos(id_proyecto)
 
 );
+
+-- =====================================================
+-- Tabla: mediciones_indicadores
+-- Granularidad: una fila representa la medición
+-- de un indicador en un territorio y periodo concretos
+-- =====================================================
+
+CREATE TABLE mediciones_indicadores (
+  id_medicion INT AUTO_INCREMENT PRIMARY KEY,
+  id_indicador INT NOT NULL,
+  id_territorio INT NOT NULL,
+  periodo VARCHAR(10) NOT NULL,
+  fecha_medicion DATE NOT NULL, 
+  valor_alcanzado DECIMAL(12,2) NOT NULL,
+  fuente_verificacion_registrada VARCHAR(200) NOT NULL,
+  estado_validacion VARCHAR(20) NOT NULL, 
+  observaciones TEXT,
+
+  UNIQUE (id_indicador, id_territorio, periodo),
+
+  CONSTRAINT fk_medicion_indicador
+  FOREIGN KEY (id_indicador)
+  REFERENCES indicadores(id_indicador),
+
+  CONSTRAINT fk_mediciones_territorio
+  FOREIGN KEY (id_territorio)
+  REFERENCES territorios(id_territorio)
+  
+);
