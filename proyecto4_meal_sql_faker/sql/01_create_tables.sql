@@ -148,4 +148,27 @@ CREATE TABLE evaluaciones (
  
 );
 
+-- =====================================================
+-- Tabla: indicadores
+-- Granularidad: una fila representa un indicador
+-- vinculado a un proyecto
+-- =====================================================
 
+CREATE TABLE indicadores (
+  id_indicador INT AUTO_INCREMENT PRIMARY KEY,
+  codigo_indicador VARCHAR(15) NOT NULL UNIQUE,
+  id_proyecto INT NOT NULL,
+  nombre_indicador VARCHAR(250) NOT NULL,
+  tipo_indicador VARCHAR(40) NOT NULL,
+  unidad_medida VARCHAR(30) NOT NULL,
+  meta_total DECIMAL(12,2) NOT NULL,
+  frecuencia_medicion VARCHAR(40) NOT NULL,
+  fuente_verificacion VARCHAR(150) NOT NULL,
+  desagregacion_requerida VARCHAR(100),
+  estado_indicador VARCHAR(20) NOT NULL,
+
+  CONSTRAINT fk_indicadores_proyecto
+  FOREIGN KEY (id_proyecto)
+  REFERENCES proyectos(id_proyecto)
+
+);
