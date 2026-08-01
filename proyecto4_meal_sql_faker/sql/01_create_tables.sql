@@ -123,3 +123,29 @@ CREATE TABLE asistencia (
 
 );
 
+-- =====================================================
+-- Tabla: evaluaciones
+-- Granularidad: una fila representa una medición
+-- Baseline o Endline de una participación en un proyecto
+-- =====================================================
+
+CREATE TABLE evaluaciones (
+  id_evaluacion INT AUTO_INCREMENT PRIMARY KEY,
+  id_participacion INT NOT NULL,
+  tipo_medicion VARCHAR(20) NOT NULL,
+  fecha_medicion DATE NOT NULL,
+  puntaje_conocimientos INT NOT NULL,
+  puntaje_confianza INT NOT NULL,
+  puntaje_convivencia INT NOT NULL, 
+  formulario_completo BOOLEAN NOT NULL,
+
+  UNIQUE (id_participacion, tipo_medicion),
+
+  CONSTRAINT fk_evaluaciones_participacion
+  FOREIGN KEY (id_participacion)
+  REFERENCES participaciones_proyecto(id_participacion)
+
+ 
+);
+
+
