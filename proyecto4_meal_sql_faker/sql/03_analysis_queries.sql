@@ -50,3 +50,29 @@ ORDER BY
   t.departamento,
   p.codigo_participante;
 
+  -- =====================================================
+-- Consulta 3
+-- Pregunta:
+-- ¿Qué participantes están inscritos en cada proyecto
+-- y cuál es el estado de su participación?
+-- =====================================================
+
+SELECT
+  pp.id_participacion,
+  pa.codigo_participante,
+  pr.codigo_proyecto,
+  pr.nombre_proyecto,
+  pp.fecha_inscripcion,
+  pp.estado_participacion,
+  pp.fecha_salida,
+  PP.motivo_salida
+FROM participaciones_proyecto AS pp
+INNER JOIN participantes AS pa
+  ON pp.id_participante = pa.id_participante
+INNER JOIN proyectos AS pr
+ON pp.id_proyecto = pr.id_proyecto
+ORDER BY 
+  pa.codigo_participante,
+  pr.codigo_proyecto;
+
+
