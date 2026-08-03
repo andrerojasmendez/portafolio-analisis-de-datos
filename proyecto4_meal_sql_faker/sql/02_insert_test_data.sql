@@ -429,3 +429,180 @@ VALUES
     1750.00,
     'Realizada'
 );
+
+-- =====================================================
+-- ARCHIVO: 02_insert_test_data.sql
+-- PROPÓSITO: insertar datos manuales de prueba
+-- =====================================================
+
+USE territorios_que_dialogan;
+
+INSERT INTO participaciones_proyecto (
+    id_participante,
+    id_proyecto,
+    fecha_inscripcion,
+    estado_participacion,
+    fecha_salida,
+    motivo_salida
+)
+VALUES
+(
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-001'
+    ),
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P01'
+    ),
+    '2024-01-15',
+    'Activa',
+    NULL,
+    NULL
+),
+(
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-001'
+    ),
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P04'
+    ),
+    '2024-08-20',
+    'Activa',
+    NULL,
+    NULL
+),
+(
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-002'
+    ),
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P01'
+    ),
+    '2024-01-16',
+    'Activa',
+    NULL,
+    NULL
+),
+(
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-003'
+    ),
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P02'
+    ),
+    '2024-01-20',
+    'Activa',
+    NULL,
+    NULL
+),
+(
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-004'
+    ),
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P01'
+    ),
+    '2024-01-22',
+    'Activa',
+    NULL,
+    NULL
+),
+(
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-005'
+    ),
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P02'
+    ),
+    '2024-02-01',
+    'Activa',
+    NULL,
+    NULL
+),
+(
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-006'
+    ),
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P02'
+    ),
+    '2024-02-05',
+    'Retirada',
+    '2024-07-15',
+    'Cambio de residencia'
+),
+(
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-007'
+    ),
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P03'
+    ),
+    '2024-02-10',
+    'Activa',
+    NULL,
+    NULL
+),
+(
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-008'
+    ),
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P03'
+    ),
+    '2024-02-12',
+    'Activa',
+    NULL,
+    NULL
+),
+(
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-008'
+    ),
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P04'
+    ),
+    '2024-08-25',
+    'Activa',
+    NULL,
+    NULL
+);
