@@ -14,16 +14,16 @@ USE territorios_que_dialogan;
 -- =====================================================
 
 SELECT 
-a.id_actividad,
-a.codigo_actividad,
-a.nombre_actividad,
-p.codigo_proyecto,
-p.nombre_proyecto,
-t.departamento,
-t.municipio
+  a.id_actividad,
+  a.codigo_actividad,
+  a.nombre_actividad,
+  p.codigo_proyecto,
+  p.nombre_proyecto,
+  t.departamento,
+  t.municipio
 FROM actividades AS a
 INNER JOIN proyectos AS p
-ON a.id_proyecto = p.id_proyecto
+  ON a.id_proyecto = p.id_proyecto
 INNER JOIN territorios AS t
-ON a.id_territorio = t.id_territorio
+  ON a.id_territorio = t.id_territorio
 ORDER BY a.codigo_actividad;
