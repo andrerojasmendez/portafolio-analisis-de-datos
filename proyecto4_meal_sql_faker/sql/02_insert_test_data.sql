@@ -1,0 +1,431 @@
+-- =====================================================
+-- Proyecto: Territorios que Dialogan
+-- Archivo: 02_insert_test_data.sql
+-- Descripción: datos manuales para validar el modelo
+-- =====================================================
+
+USE territorios_que_dialogan;
+
+-- =====================================================
+-- Datos de prueba: proyectos
+-- =====================================================
+
+INSERT INTO proyectos (
+    codigo_proyecto,
+    nombre_proyecto,
+    objetivo_especifico,
+    fecha_inicio,
+    fecha_fin,
+    presupuesto_aprobado,
+    estado
+)
+VALUES
+(
+    'P01',
+    'Jóvenes Constructores de Convivencia',
+    'Fortalecer las capacidades de liderazgo, participación y transformación pacífica de conflictos entre jóvenes.',
+    '2024-01-01',
+    '2025-12-31',
+    180000.00,
+    'Finalizado'
+),
+(
+    'P02',
+    'Mujeres Mediadoras Comunitarias',
+    'Fortalecer el liderazgo y las capacidades de mediación de las mujeres en sus comunidades.',
+    '2024-01-01',
+    '2025-12-31',
+    220000.00,
+    'Finalizado'
+),
+(
+    'P03',
+    'Redes Locales de Diálogo',
+    'Promover espacios de diálogo y coordinación entre comunidades, organizaciones sociales e instituciones locales.',
+    '2024-01-01',
+    '2025-12-31',
+    200000.00,
+    'Finalizado'
+),
+(
+    'P04',
+    'Comunidades que Aprenden',
+    'Fortalecer los mecanismos de seguimiento, retroalimentación, rendición de cuentas y aprendizaje del programa.',
+    '2024-01-01',
+    '2025-12-31',
+    100000.00,
+    'Finalizado'
+);
+
+-- =====================================================
+-- Datos de prueba: territorios
+-- =====================================================
+
+INSERT INTO territorios (
+    departamento,
+    municipio,
+    comunidad,
+    zona,
+    nivel_prioridad
+)
+VALUES
+(
+    'Antioquia',
+    'Medellín',
+    'Comuna Esperanza',
+    'Urbana',
+    'Alta'
+),
+(
+    'Cauca',
+    'Santander de Quilichao',
+    'Vereda La Unión',
+    'Rural',
+    'Alta'
+),
+(
+    'Meta',
+    'Villavicencio',
+    'Barrio Nuevo Horizonte',
+    'Urbana',
+    'Media'
+),
+(
+    'Nariño',
+    'Pasto',
+    'Comuna Semillas de Paz',
+    'Urbana',
+    'Media'
+),
+(
+    'Chocó',
+    'Quibdó',
+    'Comunidad Río Abajo',
+    'Rural',
+    'Alta'
+),
+(
+    'Bolívar',
+    'Cartagena',
+    'Barrio Puentes',
+    'Urbana',
+    'Media'
+);
+
+-- =====================================================
+-- Datos de prueba: participantes
+-- Las subconsultas recuperan los IDs reales
+-- de los territorios.
+-- =====================================================
+
+INSERT INTO participantes (
+    codigo_participante,
+    id_territorio,
+    sexo,
+    rango_edad,
+    grupo_poblacional,
+    fecha_registro
+)
+VALUES
+(
+    'PAR-001',
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Antioquia'
+          AND municipio = 'Medellín'
+          AND comunidad = 'Comuna Esperanza'
+    ),
+    'Mujer',
+    '18-25',
+    'Juventud',
+    '2024-01-15'
+),
+(
+    'PAR-002',
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Antioquia'
+          AND municipio = 'Medellín'
+          AND comunidad = 'Comuna Esperanza'
+    ),
+    'Hombre',
+    '26-35',
+    'Liderazgo comunitario',
+    '2024-01-16'
+),
+(
+    'PAR-003',
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Cauca'
+          AND municipio = 'Santander de Quilichao'
+          AND comunidad = 'Vereda La Unión'
+    ),
+    'Mujer',
+    '36-45',
+    'Víctimas del conflicto',
+    '2024-01-20'
+),
+(
+    'PAR-004',
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Cauca'
+          AND municipio = 'Santander de Quilichao'
+          AND comunidad = 'Vereda La Unión'
+    ),
+    'Hombre',
+    '18-25',
+    'Juventud rural',
+    '2024-01-22'
+),
+(
+    'PAR-005',
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Meta'
+          AND municipio = 'Villavicencio'
+          AND comunidad = 'Barrio Nuevo Horizonte'
+    ),
+    'Mujer',
+    '26-35',
+    'Población desplazada',
+    '2024-02-01'
+),
+(
+    'PAR-006',
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Nariño'
+          AND municipio = 'Pasto'
+          AND comunidad = 'Comuna Semillas de Paz'
+    ),
+    'Mujer',
+    '46-60',
+    'Liderazgo comunitario',
+    '2024-02-05'
+),
+(
+    'PAR-007',
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Chocó'
+          AND municipio = 'Quibdó'
+          AND comunidad = 'Comunidad Río Abajo'
+    ),
+    'Hombre',
+    '36-45',
+    'Comunidades étnicas',
+    '2024-02-10'
+),
+(
+    'PAR-008',
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Bolívar'
+          AND municipio = 'Cartagena'
+          AND comunidad = 'Barrio Puentes'
+    ),
+    'Mujer',
+    '18-25',
+    'Juventud',
+    '2024-02-12'
+);
+
+-- =====================================================
+-- Datos de prueba: actividades
+-- Las claves foráneas se recuperan mediante subconsultas.
+-- =====================================================
+
+INSERT INTO actividades (
+    codigo_actividad,
+    id_proyecto,
+    id_territorio,
+    nombre_actividad,
+    tipo_actividad,
+    fecha_planificada,
+    fecha_realizacion,
+    modalidad,
+    meta_participantes,
+    duracion_horas,
+    costo_planificado,
+    costo_real,
+    estado_actividad
+)
+VALUES
+(
+    'ACT-001',
+    (SELECT id_proyecto FROM proyectos WHERE codigo_proyecto = 'P01'),
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Antioquia'
+          AND municipio = 'Medellín'
+          AND comunidad = 'Comuna Esperanza'
+    ),
+    'Taller de transformación pacífica de conflictos',
+    'Taller',
+    '2024-03-10',
+    '2024-03-10',
+    'Presencial',
+    25,
+    6.00,
+    2500.00,
+    2450.00,
+    'Realizada'
+),
+(
+    'ACT-002',
+    (SELECT id_proyecto FROM proyectos WHERE codigo_proyecto = 'P01'),
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Cauca'
+          AND municipio = 'Santander de Quilichao'
+          AND comunidad = 'Vereda La Unión'
+    ),
+    'Escuela juvenil de liderazgo comunitario',
+    'Formación',
+    '2024-04-15',
+    '2024-04-16',
+    'Presencial',
+    30,
+    8.00,
+    3200.00,
+    3350.00,
+    'Realizada'
+),
+(
+    'ACT-003',
+    (SELECT id_proyecto FROM proyectos WHERE codigo_proyecto = 'P02'),
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Meta'
+          AND municipio = 'Villavicencio'
+          AND comunidad = 'Barrio Nuevo Horizonte'
+    ),
+    'Formación para mujeres mediadoras',
+    'Formación',
+    '2024-05-05',
+    '2024-05-05',
+    'Presencial',
+    20,
+    8.00,
+    2800.00,
+    2750.00,
+    'Realizada'
+),
+(
+    'ACT-004',
+    (SELECT id_proyecto FROM proyectos WHERE codigo_proyecto = 'P02'),
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Nariño'
+          AND municipio = 'Pasto'
+          AND comunidad = 'Comuna Semillas de Paz'
+    ),
+    'Encuentro de lideresas comunitarias',
+    'Encuentro',
+    '2024-06-20',
+    '2024-06-21',
+    'Presencial',
+    35,
+    5.00,
+    4000.00,
+    3900.00,
+    'Realizada'
+),
+(
+    'ACT-005',
+    (SELECT id_proyecto FROM proyectos WHERE codigo_proyecto = 'P03'),
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Chocó'
+          AND municipio = 'Quibdó'
+          AND comunidad = 'Comunidad Río Abajo'
+    ),
+    'Mesa comunitaria de diálogo territorial',
+    'Mesa de diálogo',
+    '2024-07-12',
+    '2024-07-12',
+    'Presencial',
+    40,
+    4.00,
+    3500.00,
+    3600.00,
+    'Realizada'
+),
+(
+    'ACT-006',
+    (SELECT id_proyecto FROM proyectos WHERE codigo_proyecto = 'P03'),
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Bolívar'
+          AND municipio = 'Cartagena'
+          AND comunidad = 'Barrio Puentes'
+    ),
+    'Encuentro entre comunidad e instituciones',
+    'Encuentro',
+    '2024-08-18',
+    '2024-08-18',
+    'Presencial',
+    45,
+    6.00,
+    5000.00,
+    4850.00,
+    'Realizada'
+),
+(
+    'ACT-007',
+    (SELECT id_proyecto FROM proyectos WHERE codigo_proyecto = 'P04'),
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Antioquia'
+          AND municipio = 'Medellín'
+          AND comunidad = 'Comuna Esperanza'
+    ),
+    'Taller sobre mecanismos de retroalimentación',
+    'Taller',
+    '2024-09-10',
+    '2024-09-10',
+    'Presencial',
+    25,
+    4.00,
+    2200.00,
+    2150.00,
+    'Realizada'
+),
+(
+    'ACT-008',
+    (SELECT id_proyecto FROM proyectos WHERE codigo_proyecto = 'P04'),
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Cauca'
+          AND municipio = 'Santander de Quilichao'
+          AND comunidad = 'Vereda La Unión'
+    ),
+    'Capacitación en seguimiento de indicadores',
+    'Capacitación',
+    '2024-10-15',
+    '2024-10-16',
+    'Virtual',
+    20,
+    5.00,
+    1800.00,
+    1750.00,
+    'Realizada'
+);
