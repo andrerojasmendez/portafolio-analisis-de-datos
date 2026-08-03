@@ -27,3 +27,26 @@ INNER JOIN proyectos AS p
 INNER JOIN territorios AS t
   ON a.id_territorio = t.id_territorio
 ORDER BY a.codigo_actividad;
+
+-- =====================================================
+-- Consulta 2
+-- Pregunta:
+-- ¿Qué participantes están registrados y a qué
+-- territorio pertenecen?
+-- =====================================================
+
+SELECT
+  p.codigo_participante,
+  p.sexo,
+  p.rango_edad,
+  p.grupo_poblacional,
+  t.departamento, 
+  t.municipio,
+  t.comunidad
+FROM participantes AS p
+INNER JOIN territorios AS t
+  ON p.id_territorio = t.id_territorio
+ORDER BY
+  t.departamento,
+  p.codigo_participante;
+
