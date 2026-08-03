@@ -606,3 +606,274 @@ VALUES
     NULL,
     NULL
 );
+-- =====================================================
+-- Datos de prueba: asistencias
+-- Granularidad: una fila representa la asistencia
+-- de un participante a una actividad concreta
+-- =====================================================
+
+INSERT INTO asistencias (
+    id_actividad,
+    id_participante,
+    estado_asistencia,
+    completo_actividad,
+    horas_participacion,
+    fecha_registro
+)
+VALUES
+(
+    (
+        SELECT id_actividad
+        FROM actividades
+        WHERE codigo_actividad = 'ACT-001'
+    ),
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-001'
+    ),
+    'Presente',
+    TRUE,
+    6.00,
+    '2024-03-10'
+),
+(
+    (
+        SELECT id_actividad
+        FROM actividades
+        WHERE codigo_actividad = 'ACT-001'
+    ),
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-002'
+    ),
+    'Presente',
+    TRUE,
+    6.00,
+    '2024-03-10'
+),
+(
+    (
+        SELECT id_actividad
+        FROM actividades
+        WHERE codigo_actividad = 'ACT-002'
+    ),
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-002'
+    ),
+    'Presente',
+    TRUE,
+    8.00,
+    '2024-04-16'
+),
+(
+    (
+        SELECT id_actividad
+        FROM actividades
+        WHERE codigo_actividad = 'ACT-002'
+    ),
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-004'
+    ),
+    'Presente',
+    TRUE,
+    8.00,
+    '2024-04-16'
+),
+(
+    (
+        SELECT id_actividad
+        FROM actividades
+        WHERE codigo_actividad = 'ACT-003'
+    ),
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-003'
+    ),
+    'Presente',
+    TRUE,
+    8.00,
+    '2024-05-05'
+),
+(
+    (
+        SELECT id_actividad
+        FROM actividades
+        WHERE codigo_actividad = 'ACT-003'
+    ),
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-005'
+    ),
+    'Presente',
+    FALSE,
+    7.50,
+    '2024-05-05'
+),
+(
+    (
+        SELECT id_actividad
+        FROM actividades
+        WHERE codigo_actividad = 'ACT-004'
+    ),
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-003'
+    ),
+    'Presente',
+    TRUE,
+    5.00,
+    '2024-06-21'
+),
+(
+    (
+        SELECT id_actividad
+        FROM actividades
+        WHERE codigo_actividad = 'ACT-004'
+    ),
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-006'
+    ),
+    'Retiro temprano',
+    FALSE,
+    2.50,
+    '2024-06-21'
+),
+(
+    (
+        SELECT id_actividad
+        FROM actividades
+        WHERE codigo_actividad = 'ACT-005'
+    ),
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-007'
+    ),
+    'Presente',
+    TRUE,
+    4.00,
+    '2024-07-12'
+),
+(
+    (
+        SELECT id_actividad
+        FROM actividades
+        WHERE codigo_actividad = 'ACT-005'
+    ),
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-008'
+    ),
+    'Ausente',
+    FALSE,
+    0.00,
+    '2024-07-12'
+),
+(
+    (
+        SELECT id_actividad
+        FROM actividades
+        WHERE codigo_actividad = 'ACT-006'
+    ),
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-007'
+    ),
+    'Presente',
+    TRUE,
+    6.00,
+    '2024-08-18'
+),
+(
+    (
+        SELECT id_actividad
+        FROM actividades
+        WHERE codigo_actividad = 'ACT-006'
+    ),
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-008'
+    ),
+    'Presente',
+    FALSE,
+    5.50,
+    '2024-08-18'
+),
+(
+    (
+        SELECT id_actividad
+        FROM actividades
+        WHERE codigo_actividad = 'ACT-007'
+    ),
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-001'
+    ),
+    'Presente',
+    TRUE,
+    4.00,
+    '2024-09-10'
+),
+(
+    (
+        SELECT id_actividad
+        FROM actividades
+        WHERE codigo_actividad = 'ACT-007'
+    ),
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-008'
+    ),
+    'Presente',
+    TRUE,
+    4.00,
+    '2024-09-10'
+),
+(
+    (
+        SELECT id_actividad
+        FROM actividades
+        WHERE codigo_actividad = 'ACT-008'
+    ),
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-001'
+    ),
+    'Presente',
+    TRUE,
+    5.00,
+    '2024-10-16'
+),
+(
+    (
+        SELECT id_actividad
+        FROM actividades
+        WHERE codigo_actividad = 'ACT-008'
+    ),
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-008'
+    ),
+    'Presente',
+    TRUE,
+    5.00,
+    '2024-10-16'
+);
