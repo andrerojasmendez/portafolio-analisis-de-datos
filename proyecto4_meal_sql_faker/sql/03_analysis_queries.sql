@@ -75,4 +75,28 @@ ORDER BY
   pa.codigo_participante,
   pr.codigo_proyecto;
 
+-- =====================================================
+-- Consulta 4
+-- Pregunta:
+-- ¿Qué participantes asistieron a cada actividad,
+-- cuántas horas participaron y si la completaron?
+-- =====================================================
+
+SELECT
+  asi.id_asistencia,
+  a.codigo_actividad,
+  a.nombre_actividad,
+  pa.codigo_participante,
+  asi.estado_asistencia,
+  asi.horas_participacion,
+  asi.completo_actividad,
+  asi.fecha_registro
+FROM asistencias AS asi
+INNER JOIN actividades AS a
+  ON asi.id_actividad = a.id_actividad
+INNER JOIN participantes AS pa
+  ON asi.id_participante = pa.id_participante
+ORDER BY 
+  a.codigo_actividad,
+  pa.codigo_participante;
 
