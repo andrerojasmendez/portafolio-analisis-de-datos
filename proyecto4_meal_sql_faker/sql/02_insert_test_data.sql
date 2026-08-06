@@ -877,3 +877,165 @@ VALUES
     5.00,
     '2024-10-16'
 );
+
+-- =====================================================
+-- Datos de prueba: evaluaciones
+-- Granularidad: una fila representa una medición
+-- realizada a una participación en un proyecto
+-- =====================================================
+
+INSERT INTO evaluaciones (
+    id_participacion,
+    tipo_medicion,
+    fecha_medicion,
+    puntaje_conocimientos,
+    puntaje_confianza,
+    puntaje_convivencia,
+    formulario_completo
+)
+VALUES
+(
+    (
+        SELECT pp.id_participacion
+        FROM participaciones_proyecto AS pp
+        INNER JOIN participantes AS pa
+            ON pp.id_participante = pa.id_participante
+        INNER JOIN proyectos AS pr
+            ON pp.id_proyecto = pr.id_proyecto
+        WHERE pa.codigo_participante = 'PAR-001'
+          AND pr.codigo_proyecto = 'P01'
+    ),
+    'Baseline',
+    '2024-01-20',
+    45,
+    50,
+    48,
+    TRUE
+),
+(
+    (
+        SELECT pp.id_participacion
+        FROM participaciones_proyecto AS pp
+        INNER JOIN participantes AS pa
+            ON pp.id_participante = pa.id_participante
+        INNER JOIN proyectos AS pr
+            ON pp.id_proyecto = pr.id_proyecto
+        WHERE pa.codigo_participante = 'PAR-001'
+          AND pr.codigo_proyecto = 'P01'
+    ),
+    'Endline',
+    '2025-11-20',
+    78,
+    80,
+    75,
+    TRUE
+),
+(
+    (
+        SELECT pp.id_participacion
+        FROM participaciones_proyecto AS pp
+        INNER JOIN participantes AS pa
+            ON pp.id_participante = pa.id_participante
+        INNER JOIN proyectos AS pr
+            ON pp.id_proyecto = pr.id_proyecto
+        WHERE pa.codigo_participante = 'PAR-003'
+          AND pr.codigo_proyecto = 'P02'
+    ),
+    'Baseline',
+    '2024-01-25',
+    52,
+    55,
+    50,
+    TRUE
+),
+(
+    (
+        SELECT pp.id_participacion
+        FROM participaciones_proyecto AS pp
+        INNER JOIN participantes AS pa
+            ON pp.id_participante = pa.id_participante
+        INNER JOIN proyectos AS pr
+            ON pp.id_proyecto = pr.id_proyecto
+        WHERE pa.codigo_participante = 'PAR-003'
+          AND pr.codigo_proyecto = 'P02'
+    ),
+    'Endline',
+    '2025-11-22',
+    82,
+    84,
+    79,
+    TRUE
+),
+(
+    (
+        SELECT pp.id_participacion
+        FROM participaciones_proyecto AS pp
+        INNER JOIN participantes AS pa
+            ON pp.id_participante = pa.id_participante
+        INNER JOIN proyectos AS pr
+            ON pp.id_proyecto = pr.id_proyecto
+        WHERE pa.codigo_participante = 'PAR-007'
+          AND pr.codigo_proyecto = 'P03'
+    ),
+    'Baseline',
+    '2024-02-15',
+    40,
+    46,
+    44,
+    TRUE
+),
+(
+    (
+        SELECT pp.id_participacion
+        FROM participaciones_proyecto AS pp
+        INNER JOIN participantes AS pa
+            ON pp.id_participante = pa.id_participante
+        INNER JOIN proyectos AS pr
+            ON pp.id_proyecto = pr.id_proyecto
+        WHERE pa.codigo_participante = 'PAR-007'
+          AND pr.codigo_proyecto = 'P03'
+    ),
+    'Endline',
+    '2025-11-25',
+    70,
+    75,
+    72,
+    TRUE
+),
+(
+    (
+        SELECT pp.id_participacion
+        FROM participaciones_proyecto AS pp
+        INNER JOIN participantes AS pa
+            ON pp.id_participante = pa.id_participante
+        INNER JOIN proyectos AS pr
+            ON pp.id_proyecto = pr.id_proyecto
+        WHERE pa.codigo_participante = 'PAR-008'
+          AND pr.codigo_proyecto = 'P04'
+    ),
+    'Baseline',
+    '2024-08-28',
+    58,
+    60,
+    55,
+    TRUE
+),
+(
+    (
+        SELECT pp.id_participacion
+        FROM participaciones_proyecto AS pp
+        INNER JOIN participantes AS pa
+            ON pp.id_participante = pa.id_participante
+        INNER JOIN proyectos AS pr
+            ON pp.id_proyecto = pr.id_proyecto
+        WHERE pa.codigo_participante = 'PAR-008'
+          AND pr.codigo_proyecto = 'P04'
+    ),
+    'Endline',
+    '2025-11-28',
+    85,
+    88,
+    82,
+    TRUE
+);
+
