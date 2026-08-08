@@ -1365,3 +1365,205 @@ VALUES
     NULL
 );
 
+-- =====================================================
+-- Datos de prueba: retroalimentacion
+-- Granularidad: una fila representa un caso
+-- de retroalimentación recibido por el programa
+-- =====================================================
+
+INSERT INTO retroalimentacion (
+    codigo_caso,
+    id_proyecto,
+    id_territorio,
+    id_participante,
+    fecha_recepcion,
+    canal_recepcion,
+    tipo_retroalimentacion,
+    categoria,
+    es_anonima,
+    nivel_prioridad,
+    estado_caso,
+    fecha_limite_respuesta,
+    fecha_respuesta,
+    satisfaccion_respuesta,
+    observaciones
+)
+VALUES
+(
+    'RET-001',
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P01'
+    ),
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Antioquia'
+          AND municipio = 'Medellín'
+          AND comunidad = 'Comuna Esperanza'
+    ),
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-001'
+    ),
+    '2025-01-10',
+    'Buzón comunitario',
+    'Sugerencia',
+    'Metodología de talleres',
+    FALSE,
+    'Media',
+    'Cerrado',
+    '2025-01-20',
+    '2025-01-17',
+    5,
+    'La sugerencia fue incorporada en actividades posteriores'
+),
+(
+    'RET-002',
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P02'
+    ),
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Meta'
+          AND municipio = 'Villavicencio'
+          AND comunidad = 'Barrio Nuevo Horizonte'
+    ),
+    NULL,
+    '2025-02-05',
+    'Línea telefónica',
+    'Queja',
+    'Horarios de actividades',
+    TRUE,
+    'Alta',
+    'Cerrado',
+    '2025-02-12',
+    '2025-02-10',
+    NULL,
+    'Caso anónimo respondido dentro del plazo'
+),
+(
+    'RET-003',
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P03'
+    ),
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Chocó'
+          AND municipio = 'Quibdó'
+          AND comunidad = 'Comunidad Río Abajo'
+    ),
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-007'
+    ),
+    '2025-03-15',
+    'Reunión comunitaria',
+    'Consulta',
+    'Continuidad del proyecto',
+    FALSE,
+    'Media',
+    'Cerrado',
+    '2025-03-25',
+    '2025-03-24',
+    4,
+    NULL
+),
+(
+    'RET-004',
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P04'
+    ),
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Cauca'
+          AND municipio = 'Santander de Quilichao'
+          AND comunidad = 'Vereda La Unión'
+    ),
+    NULL,
+    '2025-04-08',
+    'Formulario web',
+    'Queja',
+    'Demora en respuesta',
+    TRUE,
+    'Alta',
+    'Cerrado',
+    '2025-04-15',
+    '2025-04-20',
+    NULL,
+    'La respuesta fue enviada después de la fecha límite'
+),
+(
+    'RET-005',
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P01'
+    ),
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Antioquia'
+          AND municipio = 'Medellín'
+          AND comunidad = 'Comuna Esperanza'
+    ),
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-002'
+    ),
+    '2025-05-12',
+    'Reunión comunitaria',
+    'Reconocimiento',
+    'Facilitación',
+    FALSE,
+    'Baja',
+    'Cerrado',
+    '2025-05-22',
+    '2025-05-15',
+    5,
+    'Reconocimiento al equipo facilitador'
+),
+(
+    'RET-006',
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P02'
+    ),
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Nariño'
+          AND municipio = 'Pasto'
+          AND comunidad = 'Comuna Semillas de Paz'
+    ),
+    (
+        SELECT id_participante
+        FROM participantes
+        WHERE codigo_participante = 'PAR-006'
+    ),
+    '2025-06-18',
+    'Correo electrónico',
+    'Solicitud',
+    'Certificación de participación',
+    FALSE,
+    'Media',
+    'Abierto',
+    '2025-06-28',
+    NULL,
+    NULL,
+    'Caso pendiente de respuesta'
+);
