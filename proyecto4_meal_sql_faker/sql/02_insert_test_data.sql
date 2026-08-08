@@ -1039,3 +1039,152 @@ VALUES
     TRUE
 );
 
+-- =====================================================
+-- Datos de prueba: indicadores
+-- Granularidad: una fila representa un indicador
+-- asociado a un proyecto
+-- =====================================================
+
+INSERT INTO indicadores (
+    codigo_indicador,
+    id_proyecto,
+    nombre_indicador,
+    tipo_indicador,
+    unidad_medida,
+    meta_total,
+    frecuencia_medicion,
+    fuente_verificacion,
+    desagregacion_requerida,
+    estado_indicador
+)
+VALUES
+(
+    'IND-001',
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P01'
+    ),
+    'Participantes que mejoran sus conocimientos sobre transformación de conflictos',
+    'Resultado',
+    'Porcentaje',
+    70.00,
+    'Semestral',
+    'Evaluaciones Baseline y Endline',
+    'Sexo y rango de edad',
+    'Activo'
+),
+(
+    'IND-002',
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P01'
+    ),
+    'Actividades juveniles realizadas',
+    'Producto',
+    'Número',
+    20.00,
+    'Trimestral',
+    'Registros de actividades',
+    NULL,
+    'Activo'
+),
+(
+    'IND-003',
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P02'
+    ),
+    'Mujeres que mejoran su confianza para ejercer liderazgo comunitario',
+    'Resultado',
+    'Porcentaje',
+    75.00,
+    'Semestral',
+    'Evaluaciones Baseline y Endline',
+    'Rango de edad',
+    'Activo'
+),
+(
+    'IND-004',
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P02'
+    ),
+    'Mujeres formadas en mediación comunitaria',
+    'Producto',
+    'Número',
+    120.00,
+    'Trimestral',
+    'Listas de asistencia',
+    'Territorio',
+    'Activo'
+),
+(
+    'IND-005',
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P03'
+    ),
+    'Espacios de diálogo comunitario realizados',
+    'Producto',
+    'Número',
+    30.00,
+    'Trimestral',
+    'Actas de reuniones',
+    'Territorio',
+    'Activo'
+),
+(
+    'IND-006',
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P03'
+    ),
+    'Participantes que mejoran su percepción de convivencia',
+    'Resultado',
+    'Porcentaje',
+    65.00,
+    'Semestral',
+    'Evaluaciones Baseline y Endline',
+    'Sexo y territorio',
+    'Activo'
+),
+(
+    'IND-007',
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P04'
+    ),
+    'Casos de retroalimentación respondidos dentro del plazo',
+    'Resultado',
+    'Porcentaje',
+    90.00,
+    'Trimestral',
+    'Registro de retroalimentación',
+    'Tipo de retroalimentación',
+    'Activo'
+),
+(
+    'IND-008',
+    (
+        SELECT id_proyecto
+        FROM proyectos
+        WHERE codigo_proyecto = 'P04'
+    ),
+    'Informes de seguimiento elaborados',
+    'Producto',
+    'Número',
+    8.00,
+    'Semestral',
+    'Informes de seguimiento',
+    NULL,
+    'Activo'
+);
+
+
