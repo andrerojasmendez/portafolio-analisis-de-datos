@@ -137,3 +137,24 @@ INNER JOIN proyectos AS pr
 ORDER BY
   pr.codigo_proyecto,
   pa.codigo_participante;
+
+-- =====================================================
+-- Consulta 6
+-- Pregunta:
+-- ¿Cuál era la meta de cada indicador, cuánto se
+-- alcanzó realmente y cuál fue la diferencia?
+-- =====================================================
+
+SELECT
+    i.codigo_indicador,
+    i.nombre_indicador,
+    i.meta_total,
+    i.unidad_medida,
+    m.valor_alcanzado,
+    m.valor_alcanzado - i.meta_total
+        AS diferencia_meta
+FROM indicadores AS i
+INNER JOIN mediciones_indicadores AS m
+    ON i.id_indicador = m.id_indicador
+ORDER BY
+    i.codigo_indicador;
