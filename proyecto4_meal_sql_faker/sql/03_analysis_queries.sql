@@ -100,3 +100,40 @@ ORDER BY
   a.codigo_actividad,
   pa.codigo_participante;
 
+-- =====================================================
+-- Consulta 5
+-- Pregunta:
+-- ¿Cuánto mejoró cada participante entre Baseline
+-- y Endline en conocimientos, confianza y convivencia?
+-- =====================================================
+
+SELECT
+  pa.codigo_participante,
+  pr.codigo_proyecto,
+  pr.nombre_proyecto,
+  b.puntaje_conocimientos AS baseline_conocimientos,
+  e.puntaje_conocimientos AS endline_conocimiento,
+  e.puntaje_conocimientos - b.puntaje_conocimientos
+      AS mejora_conocimientos,
+  b.puntaje_confianza AS baseline_confianza, 
+  e.puntaje_confianza AS endline_confianza,
+  e.puntaje_confianza - b.puntaje_confianza 
+      AS mejora_confianza,
+  b.puntaje_convivencia AS baseline_convivencia,
+  e.puntaje_convivencia AS endline_convivencia,
+  e.puntaje_convivencia - b.puntaje_convivencia
+      AS mejora_convivenca
+FROM evaluaciones AS b
+INNER JOIN evaluaciones AS e
+  ON b.id_participacion = e.id_participacion
+  AND b.tipo_medicion = 'Baseline'
+  AND e.tipo_medicion = 'Endline'
+INNER JOIN participaciones_proyecto AS pp
+  ON b.id_participacion = pp.id_participacion
+INNER JOIN participantes AS pa
+  ON pp.id_participante = pa.id_participante
+INNER JOIN proyectos AS pr
+  ON pp.id_proyecto = pr.id_proyecto
+ORDER BY
+  pr.codigo_proyecto,
+  pa.codigo_participante;
