@@ -1187,4 +1187,181 @@ VALUES
     'Activo'
 );
 
+-- =====================================================
+-- Datos de prueba: mediciones_indicadores
+-- Granularidad: una fila representa la medición de
+-- un indicador en un territorio y periodo concretos
+-- =====================================================
+
+INSERT INTO mediciones_indicadores (
+    id_indicador,
+    id_territorio,
+    periodo,
+    fecha_medicion,
+    valor_alcanzado,
+    fuente_verificacion_registrada,
+    estado_validacion,
+    observaciones
+)
+VALUES
+(
+    (
+        SELECT id_indicador
+        FROM indicadores
+        WHERE codigo_indicador = 'IND-001'
+    ),
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Antioquia'
+          AND municipio = 'Medellín'
+          AND comunidad = 'Comuna Esperanza'
+    ),
+    '2025-T2',
+    '2025-12-05',
+    76.00,
+    'Evaluaciones Baseline y Endline P01 - Antioquia',
+    'Validado',
+    'La meta del indicador fue superada'
+),
+(
+    (
+        SELECT id_indicador
+        FROM indicadores
+        WHERE codigo_indicador = 'IND-002'
+    ),
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Cauca'
+          AND municipio = 'Santander de Quilichao'
+          AND comunidad = 'Vereda La Unión'
+    ),
+    '2025-T2',
+    '2025-12-06',
+    18.00,
+    'Registro consolidado de actividades juveniles',
+    'Validado',
+    'Resultado ligeramente inferior a la meta'
+),
+(
+    (
+        SELECT id_indicador
+        FROM indicadores
+        WHERE codigo_indicador = 'IND-003'
+    ),
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Meta'
+          AND municipio = 'Villavicencio'
+          AND comunidad = 'Barrio Nuevo Horizonte'
+    ),
+    '2025-T2',
+    '2025-12-07',
+    82.00,
+    'Evaluaciones Baseline y Endline P02 - Meta',
+    'Validado',
+    'La meta del indicador fue superada'
+),
+(
+    (
+        SELECT id_indicador
+        FROM indicadores
+        WHERE codigo_indicador = 'IND-004'
+    ),
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Nariño'
+          AND municipio = 'Pasto'
+          AND comunidad = 'Comuna Semillas de Paz'
+    ),
+    '2025-T2',
+    '2025-12-08',
+    114.00,
+    'Listas consolidadas de asistencia P02',
+    'Validado',
+    'Resultado cercano a la meta prevista'
+),
+(
+    (
+        SELECT id_indicador
+        FROM indicadores
+        WHERE codigo_indicador = 'IND-005'
+    ),
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Chocó'
+          AND municipio = 'Quibdó'
+          AND comunidad = 'Comunidad Río Abajo'
+    ),
+    '2025-T2',
+    '2025-12-09',
+    32.00,
+    'Actas consolidadas de mesas de diálogo',
+    'Validado',
+    'La meta fue superada'
+),
+(
+    (
+        SELECT id_indicador
+        FROM indicadores
+        WHERE codigo_indicador = 'IND-006'
+    ),
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Bolívar'
+          AND municipio = 'Cartagena'
+          AND comunidad = 'Barrio Puentes'
+    ),
+    '2025-T2',
+    '2025-12-10',
+    68.00,
+    'Evaluaciones Baseline y Endline P03 - Bolívar',
+    'Validado',
+    'La meta fue superada'
+),
+(
+    (
+        SELECT id_indicador
+        FROM indicadores
+        WHERE codigo_indicador = 'IND-007'
+    ),
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Antioquia'
+          AND municipio = 'Medellín'
+          AND comunidad = 'Comuna Esperanza'
+    ),
+    '2025-T2',
+    '2025-12-11',
+    87.00,
+    'Registro consolidado de casos de retroalimentación',
+    'Validado',
+    'Resultado por debajo de la meta'
+),
+(
+    (
+        SELECT id_indicador
+        FROM indicadores
+        WHERE codigo_indicador = 'IND-008'
+    ),
+    (
+        SELECT id_territorio
+        FROM territorios
+        WHERE departamento = 'Cauca'
+          AND municipio = 'Santander de Quilichao'
+          AND comunidad = 'Vereda La Unión'
+    ),
+    '2025-T2',
+    '2025-12-12',
+    8.00,
+    'Repositorio de informes de seguimiento',
+    'Validado',
+    NULL
+);
 
