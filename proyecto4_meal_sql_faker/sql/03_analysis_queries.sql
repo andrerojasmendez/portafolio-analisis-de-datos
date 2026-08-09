@@ -158,3 +158,42 @@ INNER JOIN mediciones_indicadores AS m
     ON i.id_indicador = m.id_indicador
 ORDER BY
     i.codigo_indicador;
+
+-- =====================================================
+-- Consulta 7
+-- Pregunta:
+-- ¿Los casos de retroalimentación fueron respondidos
+-- dentro del plazo, fuera del plazo o siguen pendientes?
+-- =====================================================
+
+SELECT
+    r.codigo_caso,
+    p.codigo_proyecto,
+    p.nombre_proyecto,
+    t.departamento,
+    t.municipio,
+    t.comunidad,
+    r.es_anonima,
+    pa.codigo_participante,
+    r.fecha_limite_respuesta,
+    r.fecha_respuesta,
+    r.tipo_retroalimentacion,
+    r.nivel_prioridad,
+    r.estado_caso,
+    CASE
+        WHEN fecha_respuesta IS NULL
+            THEN 'Pendiente'
+        WHEN fecha_respuesta <= fecha_limite_respuesta
+            THEN 'Dentro del plazo'
+        ELSE 'Fuera del plazo'
+    END AS cumplimiento_plazo 
+FROM retroalimentacion AS r
+INNER JOIN proyectos AS p
+    ON r.id_proyecto = p.id_proyecto
+INNER JOIN territorios AS t
+    ON r.id_territorio = t.id_territorio
+LEFT JOIN participantes AS pa
+    ON r.id_participante = pa.id_participante
+ORDER BY
+      r.fecha_recepcion DESC,
+      r.codigo_caso;
