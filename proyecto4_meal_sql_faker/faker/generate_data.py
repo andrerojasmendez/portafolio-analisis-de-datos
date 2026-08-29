@@ -1,5 +1,5 @@
 import random 
-from datetime import date
+from datetime import date, timedelta
 
 from faker import Faker
 
@@ -47,6 +47,65 @@ motivos_salida = [
     'Cambio laboral',
     'Decisión personal'
 ]
+
+tipos_actividad = [
+    'Capacitación',
+    'Encuentro',
+    'Formación',
+    'Mesa de diálogo',
+    'Taller'
+]
+
+nombres_por_tipo = {
+    'Taller': [
+        'Taller de transformación pacífica de conflictos',
+        'Taller sobre mecanismos de retroalimentación',
+        'Taller de comunicación no violenta'
+    ],
+    'Formación': [
+        'Formación para mujeres mediadoras',
+        'Formación en liderazgo comunitario',
+        'Formación en resolución de conflictos'
+    ],
+    'Encuentro': [
+        'Encuentro de lideresas comunitarias',
+        'Encuentro entre comunidad e instituciones',
+        'Encuentro juvenil por la convivencia'
+    ],
+    'Mesa de diálogo': [
+        'Mesa comunitaria de diálogo territorial',
+        'Mesa de diálogo para la convivencia',
+        'Mesa territorial de construcción de paz'
+    ],
+    'Capacitación': [
+        'Capacitación en seguimiento de indicadores',
+        'Capacitación en herramientas de mediación',
+        'Capacitación en participación comunitaria'
+    ]
+}
+
+modalidades = [
+    'Presencial',
+    'Virtual'
+]
+
+duraciones_horas = [4, 5, 6, 7, 8]
+
+variaciones_costo = [
+    -150,
+    -100,
+    -50,
+    50,
+    100,
+    150
+]
+
+proyectos_territorios = {
+    'P01': [1, 2],
+    'P02': [3, 4],
+    'P03': [5, 6],
+    'P04': [1, 2]
+}
 
 with open(
     'sql/04_generated_participants.sql',
@@ -178,3 +237,81 @@ for inicio in range(0, len(participaciones_sql), tamano_lote):
         )
 
     numero_lote += 1
+
+with open(
+    'sql/06_generated_activities.sql',
+    'w',
+    encoding='utf-8'
+) as archivo_actividades:   
+        
+        for numero in range(9, 41):
+            codigo_actividad = f"ACT-{numero:03d}"
+
+            codigo_proyecto = random.choice(proyectos_codigos)
+
+            id_territorio = random.choice(
+                proyectos_territorios[codigo_proyecto]
+           )
+
+            tipo_actividad = random.choice(tipos_actividad)
+            nombre_actividad = random.choice(
+                nombres_por_tipo[tipo_actividad]
+            )
+            modalidad = random.choice(modalidades)
+            duracion_horas = random.choice(duraciones_horas)
+            meta_participantes = random.randint(20, 45)
+            estado_actividad = 'Realizada'
+            fecha_planificada = fake.date_between(
+                start_date=date(2024, 11, 1),
+                end_date=date(2025, 12, 30)
+            )
+
+            desfase_dias = random.choice([0, 1])
+
+            fecha_realizacion = fecha_planificada + timedelta(
+                days=desfase_dias
+            )
+
+            costo_planificado = random.randint(1900, 4700)
+
+            variacion_costo = random.choice(variaciones_costo)
+
+            costo_real = costo_planificado + variacion_costo
+
+            sql_actividad = f"""
+INSERT INTO actividades (
+    codigo_actividad,
+    id_proyecto,
+    id_territorio,
+    nombre_actividad,
+    tipo_actividad,
+    fecha_planificada,
+    fecha_realizacion,
+    modalidad,
+    meta_participantes,
+    duracion_horas,
+    costo_planificado,
+    costo_real,
+    estado_actividad
+)
+VALUES (
+    '{codigo_actividad}',
+    (SELECT id_proyecto
+     FROM proyectos
+     WHERE codigo_proyecto = '{codigo_proyecto}'),
+    {id_territorio},
+    '{nombre_actividad}',
+    '{tipo_actividad}',
+    '{fecha_planificada}',
+    '{fecha_realizacion}',
+    '{modalidad}',
+    {meta_participantes},
+    {duracion_horas},
+    {costo_planificado},
+    {costo_real},
+    '{estado_actividad}'
+);
+"""
+
+            archivo_actividades.write(sql_actividad)
+  
