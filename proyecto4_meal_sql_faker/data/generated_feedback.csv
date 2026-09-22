@@ -1,0 +1,41 @@
+codigo_caso,codigo_proyecto,id_territorio,codigo_participante,fecha_recepcion,canal_recepcion,tipo_retroalimentacion,categoria,es_anonima,nivel_prioridad,estado_caso,fecha_limite_respuesta,fecha_respuesta,satisfaccion_respuesta
+RET-001,P01,1,,2025-02-22,Formulario web,Sugerencia,Horarios de actividades,True,Baja,Cerrado,2025-03-14,2025-03-12,5
+RET-002,P01,1,PAR-068,2025-10-15,Formulario web,Sugerencia,Metodología de talleres,False,Baja,Cerrado,2025-11-04,2025-11-07,3
+RET-003,P01,2,PAR-052,2025-05-23,Buzón comunitario,Reconocimiento,Facilitación,False,Baja,Cerrado,2025-06-12,2025-06-14,3
+RET-004,P01,2,PAR-089,2025-10-02,Correo electrónico,Sugerencia,Horarios de actividades,False,Media,Cerrado,2025-10-14,2025-10-17,3
+RET-005,P01,2,PAR-073,2025-01-24,Línea telefónica,Reconocimiento,Metodología de talleres,False,Baja,Cerrado,2025-02-13,2025-02-14,3
+RET-006,P01,1,,2025-07-01,Buzón comunitario,Queja,Horarios de actividades,True,Alta,Cerrado,2025-07-08,2025-07-09,5
+RET-007,P01,1,PAR-008,2025-11-24,Reunión comunitaria,Consulta,Continuidad del proyecto,False,Baja,Cerrado,2025-12-14,2025-12-14,5
+RET-008,P01,1,PAR-143,2025-04-19,Correo electrónico,Sugerencia,Metodología de talleres,False,Media,Abierto,2025-05-01,,
+RET-009,P01,2,PAR-064,2025-08-23,Correo electrónico,Sugerencia,Horarios de actividades,False,Media,Cerrado,2025-09-04,2025-09-03,3
+RET-010,P01,2,PAR-054,2025-09-18,Línea telefónica,Reconocimiento,Acompañamiento del equipo,False,Baja,Cerrado,2025-10-08,2025-10-05,3
+RET-011,P02,3,PAR-167,2025-08-28,Buzón comunitario,Reconocimiento,Acompañamiento del equipo,False,Baja,Cerrado,2025-09-17,2025-09-14,5
+RET-012,P02,4,,2025-03-22,Línea telefónica,Reconocimiento,Acompañamiento del equipo,True,Baja,Cerrado,2025-04-11,2025-04-12,5
+RET-013,P02,3,,2025-03-24,Reunión comunitaria,Solicitud,Información del proyecto,True,Media,Cerrado,2025-04-05,2025-04-02,5
+RET-014,P02,4,,2025-05-04,Buzón comunitario,Sugerencia,Horarios de actividades,True,Media,Abierto,2025-05-16,,
+RET-015,P02,3,,2025-09-01,Línea telefónica,Reconocimiento,Facilitación,True,Baja,Abierto,2025-09-21,,
+RET-016,P02,4,PAR-188,2025-04-13,Reunión comunitaria,Consulta,Requisitos de participación,False,Media,Cerrado,2025-04-25,2025-04-28,5
+RET-017,P02,4,,2025-02-02,Línea telefónica,Solicitud,Información del proyecto,True,Media,Cerrado,2025-02-14,2025-02-14,5
+RET-018,P02,3,,2025-01-17,Buzón comunitario,Sugerencia,Participación comunitaria,True,Baja,Abierto,2025-02-06,,
+RET-019,P02,3,PAR-153,2025-10-23,Línea telefónica,Queja,Horarios de actividades,False,Media,Cerrado,2025-11-04,2025-11-08,4
+RET-020,P02,3,PAR-152,2025-01-28,Formulario web,Sugerencia,Horarios de actividades,False,Media,Cerrado,2025-02-09,2025-02-07,3
+RET-021,P03,6,,2025-10-02,Reunión comunitaria,Reconocimiento,Facilitación,True,Baja,Cerrado,2025-10-22,2025-10-25,3
+RET-022,P03,6,PAR-269,2025-02-20,Línea telefónica,Sugerencia,Metodología de talleres,False,Media,Cerrado,2025-03-04,2025-03-01,3
+RET-023,P03,5,PAR-243,2025-03-26,Formulario web,Consulta,Próximas actividades,False,Baja,Cerrado,2025-04-15,2025-04-18,4
+RET-024,P03,6,,2025-06-01,Correo electrónico,Consulta,Requisitos de participación,True,Media,Cerrado,2025-06-13,2025-06-10,5
+RET-025,P03,5,PAR-221,2025-09-29,Buzón comunitario,Reconocimiento,Facilitación,False,Baja,Cerrado,2025-10-19,2025-10-17,3
+RET-026,P03,5,,2025-10-19,Buzón comunitario,Consulta,Continuidad del proyecto,True,Media,Cerrado,2025-10-31,2025-10-28,5
+RET-027,P03,6,PAR-253,2025-06-10,Reunión comunitaria,Consulta,Requisitos de participación,False,Media,Cerrado,2025-06-22,2025-06-25,3
+RET-028,P03,6,PAR-249,2025-02-21,Reunión comunitaria,Queja,Demora en respuesta,False,Media,Cerrado,2025-03-05,2025-03-05,5
+RET-029,P03,5,PAR-204,2025-08-13,Correo electrónico,Solicitud,Certificación de participación,False,Media,Cerrado,2025-08-25,2025-08-26,5
+RET-030,P03,5,PAR-257,2025-03-10,Correo electrónico,Consulta,Requisitos de participación,False,Media,Cerrado,2025-03-22,2025-03-20,5
+RET-031,P04,1,PAR-063,2025-11-21,Correo electrónico,Queja,Acceso a actividades,False,Media,Abierto,2025-12-03,,
+RET-032,P04,2,PAR-033,2025-01-23,Reunión comunitaria,Queja,Demora en respuesta,False,Media,Cerrado,2025-02-04,2025-02-03,5
+RET-033,P04,1,PAR-135,2025-02-08,Línea telefónica,Reconocimiento,Metodología de talleres,False,Baja,Abierto,2025-02-28,,
+RET-034,P04,1,PAR-011,2025-06-07,Línea telefónica,Solicitud,Apoyo para participación,False,Media,Cerrado,2025-06-19,2025-06-16,4
+RET-035,P04,1,PAR-071,2025-05-02,Línea telefónica,Reconocimiento,Acompañamiento del equipo,False,Baja,Abierto,2025-05-22,,
+RET-036,P04,2,PAR-029,2025-05-08,Buzón comunitario,Sugerencia,Participación comunitaria,False,Media,Cerrado,2025-05-20,2025-05-18,4
+RET-037,P04,2,PAR-061,2025-04-25,Reunión comunitaria,Queja,Horarios de actividades,False,Alta,Cerrado,2025-05-02,2025-05-02,4
+RET-038,P04,2,PAR-089,2025-10-02,Reunión comunitaria,Solicitud,Información del proyecto,False,Alta,Cerrado,2025-10-09,2025-10-06,3
+RET-039,P04,1,,2025-08-11,Correo electrónico,Reconocimiento,Acompañamiento del equipo,True,Baja,Cerrado,2025-08-31,2025-09-02,4
+RET-040,P04,1,,2025-08-12,Formulario web,Consulta,Requisitos de participación,True,Baja,Cerrado,2025-09-01,2025-09-01,4
