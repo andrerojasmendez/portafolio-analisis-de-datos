@@ -79,25 +79,8 @@ La base de datos contiene **10 tablas**:
 
 Una representación simplificada es:
 
-```text
-PROYECTOS
-   │
-   ├── ACTIVIDADES ── TERRITORIOS
-   │        │
-   │        └── ASISTENCIAS ── PARTICIPANTES
-   │                              │
-   │                              └── PARTICIPACIONES_PROYECTO
-   │                                           │
-   │                                           └── EVALUACIONES
-   │
-   ├── INDICADORES
-   │        │
-   │        └── MEDICIONES_INDICADORES ── TERRITORIOS
-   │
-   └── RETROALIMENTACION
-            ├── TERRITORIOS
-            └── PARTICIPANTES (opcional)
-```
+<img width="148" height="149" alt="image" src="https://github.com/user-attachments/assets/493ccda6-e365-4308-87c7-3f35241c13f8" />
+
 
 ---
 
