@@ -2,2347 +2,1347 @@
 
 ## Propósito del modelo
 
-La base de datos permitirá almacenar y relacionar la información necesaria
-para realizar el seguimiento y la evaluación del programa ficticio
-**Territorios que Dialogan**.
+La base de datos de **Territorios que Dialogan** representa el sistema de información de un programa ficticio de construcción de paz comunitaria.
 
-El modelo permitirá analizar:
+El modelo está orientado a **MEAL (Monitoring, Evaluation, Accountability and Learning)** y permite relacionar información sobre:
 
-- proyectos y componentes del programa;
-- territorios de intervención;
-- actividades realizadas;
-- personas participantes;
-- asistencia y permanencia;
-- resultados de línea base y medición final;
-- indicadores y cumplimiento de metas;
-- presupuesto planificado y ejecutado;
-- quejas, sugerencias y respuestas del programa.
+- proyectos;
+- territorios;
+- actividades;
+- participantes;
+- participación en proyectos;
+- asistencia y exposición a actividades;
+- evaluaciones Baseline–Endline;
+- indicadores y mediciones;
+- retroalimentación comunitaria.
 
-## Tablas principales
+Todos los datos utilizados en el proyecto son ficticios y se generan exclusivamente con fines educativos y de portafolio.
 
-El modelo estará formado inicialmente por nueve tablas:
+---
 
-1. `proyectos`
-2. `territorios`
-3. `actividades`
-4. `participantes`
-5. `participaciones_proyecto`
-6. `asistencias`
-7. `evaluaciones`
-8. `indicadores`
-9. `mediciones_indicadores`
-10. `retroalimentacion`
+## Principios de diseño
 
-## Clasificación de las tablas
+El modelo se construyó siguiendo cinco principios:
 
-### Tablas maestras
+1. **Granularidad clara:** cada tabla debe responder qué representa exactamente una fila.
+2. **Normalización:** la información no se repite innecesariamente entre tablas.
+3. **Integridad referencial:** las claves foráneas conectan registros válidos entre tablas.
+4. **Separación entre datos almacenados y resultados calculados:** porcentajes, tasas y agregados se calculan mediante SQL cuando pueden derivarse de los datos existentes.
+5. **Minimización de datos personales:** los participantes se identifican mediante códigos ficticios y variables agrupadas.
 
-Las tablas maestras almacenan información relativamente estable que será
-utilizada por otras tablas.
+---
+
+## Tablas definitivas
+
+El modelo está compuesto por **10 tablas**:
+
+| N.º | Tabla | Granularidad |
+|---:|---|---|
+| 1 | `proyectos` | Una fila representa un proyecto |
+| 2 | `territorios` | Una fila representa una comunidad o zona de intervención |
+| 3 | `actividades` | Una fila representa una actividad concreta |
+| 4 | `participantes` | Una fila representa una persona participante |
+| 5 | `participaciones_proyecto` | Una fila representa la relación entre una persona y un proyecto |
+| 6 | `asistencias` | Una fila representa la relación entre una persona y una actividad |
+| 7 | `evaluaciones` | Una fila representa una medición Baseline o Endline de una participación |
+| 8 | `indicadores` | Una fila representa un indicador vinculado a un proyecto |
+| 9 | `mediciones_indicadores` | Una fila representa la medición de un indicador en un territorio y periodo |
+| 10 | `retroalimentacion` | Una fila representa un caso de retroalimentación |
+
+---
+
+## Clasificación funcional
+
+### Estructura del programa
 
 - `proyectos`
 - `territorios`
-- `participantes`
-- `indicadores`
 
-### Tablas de movimientos o registros
+### Implementación
 
-Estas tablas almacenan hechos, actividades, mediciones o situaciones que
-ocurren durante la implementación del programa.
-
-- `participaciones_proyecto`
 - `actividades`
+
+### Participación
+
+- `participantes`
+- `participaciones_proyecto`
 - `asistencias`
+
+### Resultados y evaluación
+
 - `evaluaciones`
+- `indicadores`
 - `mediciones_indicadores`
+
+### Accountability
+
 - `retroalimentacion`
+
+---
 
 ## Relaciones generales
 
-La relación principal del modelo será la siguiente:
+El modelo contiene dos relaciones muchos-a-muchos principales.
+
+### Participantes y proyectos
+
+Conceptualmente:
+
+```text
+PARTICIPANTES N:M PROYECTOS
+```
+
+La relación se resuelve mediante:
+
+```text
+PARTICIPANTES
+      1
+      │
+      N
+PARTICIPACIONES_PROYECTO
+      N
+      │
+      1
+PROYECTOS
+```
+
+### Participantes y actividades
+
+Conceptualmente:
+
+```text
+PARTICIPANTES N:M ACTIVIDADES
+```
+
+La relación se resuelve mediante:
+
+```text
+PARTICIPANTES
+      1
+      │
+      N
+ASISTENCIAS
+      N
+      │
+      1
+ACTIVIDADES
+```
+
+### Evaluaciones
+
+Las evaluaciones no se relacionan directamente con la persona.
+
+La ruta correcta es:
+
+```text
+PARTICIPANTES
+      ↓
+PARTICIPACIONES_PROYECTO
+      ↓
+EVALUACIONES
+```
+
+Esto permite distinguir los resultados de una misma persona cuando participa en proyectos diferentes.
+
+### Indicadores
 
 ```text
 PROYECTOS
-   │
-   ├── ACTIVIDADES ── TERRITORIOS
-   │        │
-   │        └── ASISTENCIAS ── PARTICIPANTES
-   │
-   ├── EVALUACIONES ── PARTICIPANTES
-   │
-   ├── INDICADORES ── MEDICIONES_INDICADORES ── TERRITORIOS
-   │
-   └── RETROALIMENTACION ── TERRITORIOS
+    ↓
+INDICADORES
+    ↓
+MEDICIONES_INDICADORES
+    ↑
+TERRITORIOS
 ```
-## Tabla 1: `proyectos`
 
-### ¿Qué representa?
+### Retroalimentación
 
-La tabla `proyectos` almacenará los cuatro componentes operativos que forman
-parte del programa **Territorios que Dialogan**.
+Cada caso se vincula obligatoriamente con un proyecto y un territorio.
 
-Cada fila representará un proyecto o componente específico del programa.
+La relación con un participante es opcional porque un caso puede ser anónimo.
 
-Ejemplos:
+---
 
-- Jóvenes Constructores de Convivencia.
-- Mujeres Mediadoras Comunitarias.
-- Redes Locales de Diálogo.
-- Comunidades que Aprenden.
+## Diagrama relacional
 
-### Nivel de detalle de la tabla
+<p align="center">
+  <img src="images/modelo_relacional.png"
+       alt="Modelo relacional de Territorios que Dialogan"
+       width="100%">
+</p>
 
-Una fila representa un proyecto.
+---
 
-No representa una actividad, una persona participante ni un territorio.
-Esa información se almacenará en otras tablas relacionadas.
+# Tabla 1: `proyectos`
 
-### Campos necesarios
+## ¿Qué representa?
 
-| Campo | Descripción | Función |
+La tabla `proyectos` almacena los cuatro componentes operativos del programa **Territorios que Dialogan**.
+
+Los proyectos son:
+
+| Código | Proyecto |
+|---|---|
+| P01 | Jóvenes Constructores de Convivencia |
+| P02 | Mujeres Mediadoras Comunitarias |
+| P03 | Redes Locales de Diálogo |
+| P04 | Comunidades que Aprenden |
+
+## Granularidad
+
+```text
+1 fila = 1 proyecto
+```
+
+Una fila no representa una actividad, una persona ni un territorio.
+
+## Campos
+
+| Campo | Tipo lógico | Descripción |
 |---|---|---|
-| `id_proyecto` | Identificador interno del proyecto | Clave primaria |
-| `codigo_proyecto` | Código como P01, P02, P03 o P04 | Identificación legible |
-| `nombre_proyecto` | Nombre completo del proyecto | Descripción |
-| `objetivo_especifico` | Cambio que busca conseguir el proyecto | Información programática |
-| `fecha_inicio` | Fecha de inicio | Seguimiento temporal |
-| `fecha_fin` | Fecha prevista de finalización | Seguimiento temporal |
-| `presupuesto_aprobado` | Presupuesto asignado al proyecto | Seguimiento financiero |
-| `estado` | Situación actual del proyecto | Clasificación |
+| `id_proyecto` | Identificador | Clave primaria interna |
+| `codigo_proyecto` | Código | Código único del proyecto |
+| `nombre_proyecto` | Texto | Nombre del proyecto |
+| `objetivo_especifico` | Texto | Objetivo programático |
+| `fecha_inicio` | Fecha | Inicio del proyecto |
+| `fecha_fin` | Fecha | Finalización prevista |
+| `presupuesto_aprobado` | Decimal | Presupuesto aprobado |
+| `estado` | Texto | Estado del proyecto |
 
-### Clave primaria
+## Claves y restricciones
 
-La clave primaria será:
-
-```text
-id_proyecto
-```
-### Clave primaria
-
-La clave primaria será:
+Clave primaria:
 
 ```text
 id_proyecto
 ```
 
-Esta columna identificará de manera única cada proyecto.
+Código único:
 
-Ejemplo:
+```text
+codigo_proyecto
+```
 
-| id_proyecto | codigo_proyecto | nombre_proyecto |
-|---:|---|---|
-| 1 | P01 | Jóvenes Constructores de Convivencia |
-| 2 | P02 | Mujeres Mediadoras Comunitarias |
-| 3 | P03 | Redes Locales de Diálogo |
-| 4 | P04 | Comunidades que Aprenden |
+Los códigos legibles, como `P01`, son especialmente útiles porque no dependen del valor interno generado mediante `AUTO_INCREMENT`.
 
-### Relaciones
+## Relaciones
 
-La tabla `proyectos` se relacionará con otras tablas mediante el campo
-`id_proyecto`.
+Un proyecto puede tener:
 
-Por ejemplo:
+```text
+1 proyecto → muchas actividades
+1 proyecto → muchas participaciones_proyecto
+1 proyecto → muchos indicadores
+1 proyecto → muchos casos de retroalimentacion
+```
+
+Relaciones físicas:
 
 ```text
 proyectos.id_proyecto
-        ↓
-actividades.id_proyecto
+→ actividades.id_proyecto
+
+proyectos.id_proyecto
+→ participaciones_proyecto.id_proyecto
+
+proyectos.id_proyecto
+→ indicadores.id_proyecto
+
+proyectos.id_proyecto
+→ retroalimentacion.id_proyecto
 ```
 
-Esto significa que un proyecto podrá tener muchas actividades, pero cada
-actividad pertenecerá a un solo proyecto.
+## Información que no se almacena directamente
 
-La relación será:
+No se almacenan en esta tabla:
+
+- número total de participantes;
+- número de actividades;
+- porcentaje de ejecución;
+- cantidad de evaluaciones;
+- cantidad de casos de retroalimentación.
+
+Estos resultados se calculan mediante SQL.
+
+## Idea clave
+
+`proyectos` responde principalmente:
 
 ```text
-Un proyecto → muchas actividades
+¿Qué intervención se está gestionando?
 ```
 
+---
 
-### Información que no se almacenará directamente
+# Tabla 2: `territorios`
 
-No guardaremos en esta tabla:
+## ¿Qué representa?
 
-- el número total de participantes;
-- el número total de actividades;
-- el porcentaje de ejecución presupuestaria;
-- la duración del proyecto en meses.
+La tabla `territorios` almacena las comunidades o zonas donde se implementa el programa.
 
-Estos resultados se calcularán posteriormente mediante consultas SQL.
-
-Por ejemplo:
+## Granularidad
 
 ```text
-porcentaje de ejecución =
-presupuesto ejecutado / presupuesto aprobado × 100
+1 fila = 1 comunidad o zona de intervención
 ```
 
-### Idea clave
+Dos comunidades situadas en un mismo municipio siguen siendo registros distintos.
 
-Cada fila de la tabla `proyectos` representa un único proyecto.
+## Campos
 
-Los totales, porcentajes y otros resultados calculados no se almacenan
-directamente cuando pueden obtenerse mediante consultas SQL.
-
-## Tabla 2: `territorios`
-
-### ¿Qué representa?
-
-La tabla `territorios` almacenará los lugares donde se implementa el programa
-**Territorios que Dialogan**.
-
-Cada fila representará una comunidad o zona específica de intervención.
-
-Un municipio podrá contener varias comunidades, por lo que no utilizaremos
-una fila para representar todo el municipio.
-
-### Nivel de detalle de la tabla
-
-Una fila representa una comunidad o zona de intervención.
-
-Ejemplo:
-
-| id_territorio | departamento | municipio | comunidad | zona |
-|---:|---|---|---|---|
-| 1 | Cauca | Guapi | Comunidad Río Verde | Rural |
-| 2 | Cauca | Guapi | Comunidad La Esperanza | Rural dispersa |
-| 3 | Nariño | Tumaco | Comunidad Nuevo Horizonte | Urbana |
-
-Aunque dos comunidades estén ubicadas en el mismo municipio, cada una tendrá
-su propio registro.
-
-### Campos necesarios
-
-| Campo | Descripción | Función |
+| Campo | Tipo lógico | Descripción |
 |---|---|---|
-| `id_territorio` | Identificador interno del territorio | Clave primaria |
-| `departamento` | Departamento donde se ubica la comunidad | Clasificación territorial |
-| `municipio` | Municipio donde se implementa el programa | Análisis geográfico |
-| `comunidad` | Nombre ficticio de la comunidad o zona | Unidad de intervención |
-| `zona` | Tipo de zona: urbana, rural o rural dispersa | Clasificación |
-| `nivel_prioridad` | Nivel de prioridad asignado al territorio | Planificación programática |
+| `id_territorio` | Identificador | Clave primaria interna |
+| `departamento` | Texto | Departamento |
+| `municipio` | Texto | Municipio |
+| `comunidad` | Texto | Comunidad o zona específica |
+| `zona` | Texto | Clasificación territorial |
+| `nivel_prioridad` | Texto | Prioridad programática |
 
-### Clave primaria
+## Claves y restricciones
 
-La clave primaria será:
+Clave primaria:
 
 ```text
 id_territorio
 ```
 
-Esta columna permitirá identificar de manera única cada comunidad o zona de
-intervención.
-
-### Valores posibles
-
-El campo `zona` podrá contener:
+Restricción única:
 
 ```text
-Urbana
-Rural
-Rural dispersa
+UNIQUE (departamento, municipio, comunidad)
 ```
 
-El campo `nivel_prioridad` podrá contener:
+Esta combinación evita registrar dos veces la misma comunidad dentro del mismo municipio y departamento.
+
+## Relaciones
 
 ```text
-Alta
-Media
-Baja
+1 territorio → muchas actividades
+1 territorio → muchos participantes
+1 territorio → muchas mediciones_indicadores
+1 territorio → muchos casos de retroalimentacion
 ```
 
-### Relaciones
-
-La tabla `territorios` se relacionará con la tabla `actividades` mediante
-`id_territorio`.
+Relaciones físicas:
 
 ```text
 territorios.id_territorio
-          ↓
-actividades.id_territorio
+→ actividades.id_territorio
+
+territorios.id_territorio
+→ participantes.id_territorio
+
+territorios.id_territorio
+→ mediciones_indicadores.id_territorio
+
+territorios.id_territorio
+→ retroalimentacion.id_territorio
 ```
 
-Esto significa que un territorio podrá tener muchas actividades, pero cada
-actividad se realizará en un solo territorio.
+## Información que no se almacena directamente
+
+No se almacenan:
+
+- número de participantes;
+- número de actividades;
+- tasa de asistencia;
+- cumplimiento de indicadores;
+- número de casos de retroalimentación.
+
+Todos pueden calcularse mediante consultas.
+
+## Idea clave
+
+`territorios` responde:
 
 ```text
-Un territorio → muchas actividades
+¿Dónde ocurre la intervención?
 ```
 
+---
 
-También se relacionará posteriormente con las mediciones de indicadores y
-con los registros de retroalimentación comunitaria.
+# Tabla 3: `actividades`
 
-### Preguntas que podremos responder
+## ¿Qué representa?
 
-Esta tabla permitirá responder preguntas como:
+La tabla `actividades` almacena las acciones concretas realizadas o planificadas dentro de los proyectos.
 
-- ¿Cuántas actividades se realizaron en cada municipio?
-- ¿Qué territorios todavía no han recibido actividades?
-- ¿Qué zonas rurales presentan menor participación?
-- ¿Qué municipio alcanzó mejores resultados?
-- ¿Qué territorios fueron clasificados con prioridad alta?
-- ¿En qué comunidades se superó el presupuesto previsto?
+Cada actividad pertenece a un proyecto y se asocia con un territorio.
 
-### Información que no se almacenará directamente
+## Granularidad
 
-No guardaremos en esta tabla:
+```text
+1 fila = 1 actividad concreta
+```
 
-- el número de actividades realizadas;
-- el número de participantes;
-- el presupuesto ejecutado;
-- el porcentaje de cumplimiento de indicadores.
+Dos actividades del mismo tipo realizadas en fechas distintas son registros diferentes.
 
-Estos datos se obtendrán relacionando `territorios` con otras tablas mediante
-consultas SQL.
+## Campos
 
-### Idea clave
-
-## Tabla 3: `actividades`
-
-### ¿Qué representa?
-
-La tabla `actividades` almacenará las acciones realizadas durante la
-implementación del programa **Territorios que Dialogan**.
-
-Cada fila representará una actividad concreta desarrollada en un territorio
-y vinculada a uno de los proyectos o componentes del programa.
-
-Ejemplos:
-
-- Taller de mediación comunitaria.
-- Encuentro juvenil por la convivencia.
-- Mesa de diálogo entre comunidad e instituciones.
-- Formación en liderazgo para mujeres.
-- Jornada de aprendizaje y revisión de resultados.
-
-### Nivel de detalle de la tabla
-
-Una fila representa una actividad específica.
-
-Por ejemplo, dos talleres de mediación realizados en fechas o comunidades
-diferentes deberán aparecer como dos registros independientes.
-
-| id_actividad | actividad | fecha_realizacion | comunidad |
-|---:|---|---|---|
-| 1 | Taller de mediación | 2024-03-15 | Comunidad Río Verde |
-| 2 | Taller de mediación | 2024-04-10 | Comunidad La Esperanza |
-
-Aunque tengan el mismo tipo de actividad, no representan el mismo evento.
-
-### Campos necesarios
-
-| Campo | Descripción | Función |
+| Campo | Tipo lógico | Descripción |
 |---|---|---|
-| `id_actividad` | Identificador interno de la actividad | Clave primaria |
-| `codigo_actividad` | Código legible como ACT-0001 | Identificación |
-| `id_proyecto` | Proyecto al que pertenece la actividad | Clave foránea |
-| `id_territorio` | Territorio donde se desarrolla | Clave foránea |
-| `nombre_actividad` | Nombre específico de la actividad | Descripción |
-| `tipo_actividad` | Categoría general de la actividad | Clasificación |
-| `fecha_planificada` | Fecha prevista para su realización | Planificación |
-| `fecha_realizacion` | Fecha en la que realmente se ejecutó | Seguimiento |
-| `modalidad` | Presencial, virtual o híbrida | Clasificación |
-| `meta_participantes` | Número previsto de participantes | Meta |
-| `duracion_horas` | Duración total de la actividad | Seguimiento |
-| `costo_planificado` | Presupuesto previsto para la actividad | Planificación financiera |
-| `costo_real` | Gasto finalmente ejecutado | Seguimiento financiero |
-| `estado_actividad` | Estado de ejecución de la actividad | Clasificación |
+| `id_actividad` | Identificador | Clave primaria |
+| `codigo_actividad` | Código | Código único y legible |
+| `id_proyecto` | Identificador | Proyecto al que pertenece |
+| `id_territorio` | Identificador | Territorio asociado |
+| `nombre_actividad` | Texto | Nombre específico |
+| `tipo_actividad` | Texto | Categoría de actividad |
+| `fecha_planificada` | Fecha | Fecha prevista |
+| `fecha_realizacion` | Fecha / NULL | Fecha real |
+| `modalidad` | Texto | Modalidad |
+| `meta_participantes` | Entero | Meta prevista de participantes |
+| `duracion_horas` | Decimal | Duración |
+| `costo_planificado` | Decimal | Costo previsto |
+| `costo_real` | Decimal / NULL | Costo real |
+| `estado_actividad` | Texto | Estado de ejecución |
 
-### Clave primaria
+## Claves y restricciones
 
-La clave primaria será:
+Clave primaria:
 
 ```text
 id_actividad
 ```
 
-Esta columna identificará de manera única cada actividad.
+Código único:
 
-### Claves foráneas
+```text
+codigo_actividad
+```
 
-La tabla tendrá dos claves foráneas principales:
+Claves foráneas:
 
 ```text
 id_proyecto
 id_territorio
 ```
 
-La relación con `proyectos` será:
+## Relaciones
 
 ```text
 proyectos.id_proyecto
-        ↓
-actividades.id_proyecto
-```
+→ actividades.id_proyecto
 
-La relación con `territorios` será:
-
-```text
 territorios.id_territorio
-          ↓
-actividades.id_territorio
+→ actividades.id_territorio
+
+actividades.id_actividad
+→ asistencias.id_actividad
 ```
 
-Esto permitirá conocer qué actividad se realizó, a qué proyecto perteneció
-y dónde se desarrolló.
-
-### Relaciones
-
-Un proyecto podrá tener muchas actividades:
+Por tanto:
 
 ```text
-Un proyecto → muchas actividades
+1 proyecto → muchas actividades
+1 territorio → muchas actividades
+1 actividad → muchos registros de asistencia
 ```
 
-Un territorio también podrá recibir muchas actividades:
+## Meta frente a participación real
+
+`meta_participantes` representa una meta.
+
+No representa necesariamente una capacidad máxima.
+
+La participación real se obtiene desde `asistencias`.
 
 ```text
-Un territorio → muchas actividades
+meta_participantes ≠ participación real
 ```
 
-Sin embargo, en este modelo cada actividad pertenecerá a un único proyecto
-y se registrará en un único territorio.
+## Modalidad
 
-### Valores posibles
-
-El campo `tipo_actividad` podrá contener valores como:
-
-```text
-Taller de mediación
-Diálogo comunitario
-Formación en liderazgo
-Campaña de convivencia
-Mesa institucional
-Jornada de aprendizaje
-```
-
-El campo `modalidad` podrá contener:
+En el dataset sintético actual se utilizan actividades:
 
 ```text
 Presencial
 Virtual
-Híbrida
 ```
 
-El campo `estado_actividad` podrá contener:
+La modalidad forma parte de las reglas de elegibilidad utilizadas durante la generación de asistencias.
+
+## Fechas y costos
+
+Se diferencia entre:
 
 ```text
-Planificada
-Realizada
-Cancelada
-Reprogramada
+fecha_planificada
+fecha_realizacion
 ```
 
-### Diferencia entre meta y resultado
-
-La columna `meta_participantes` almacenará el número de personas que se
-esperaba que asistieran.
-
-No almacenaremos en esta tabla el número real de asistentes.
-
-La asistencia real se calculará mediante la tabla `asistencias`.
+y entre:
 
 ```text
-meta_participantes = cantidad prevista
-asistencias = participación realmente registrada
+costo_planificado
+costo_real
 ```
 
-Por ejemplo:
+Esto permite comparar planificación y ejecución.
+
+## Información que no se almacena directamente
+
+No se guardan:
+
+- asistentes reales;
+- tasa de asistencia;
+- porcentaje de cumplimiento de la meta;
+- costo por participante;
+- distribución demográfica de asistentes.
+
+Estos resultados se obtienen mediante SQL.
+
+## Idea clave
+
+`actividades` responde:
 
 ```text
-Meta de participantes: 30
-Personas que asistieron: 24
-Cumplimiento de la meta: 80 %
+¿Qué acción concreta se realizó o planificó?
 ```
 
-El porcentaje se calculará posteriormente mediante SQL.
+---
 
-### Diferencia entre fecha planificada y fecha real
+# Tabla 4: `participantes`
 
-Las columnas `fecha_planificada` y `fecha_realizacion` permitirán analizar
-si una actividad se ejecutó dentro del calendario previsto.
+## ¿Qué representa?
 
-Ejemplo:
+La tabla `participantes` almacena la información básica de las personas ficticias incluidas en el sistema.
 
-| fecha_planificada | fecha_realizacion | interpretación |
+## Granularidad
+
+```text
+1 fila = 1 persona participante
+```
+
+Una persona puede participar en varios proyectos y asistir a muchas actividades, pero solo aparece una vez en esta tabla.
+
+## Campos
+
+| Campo | Tipo lógico | Descripción |
 |---|---|---|
-| 2024-05-10 | 2024-05-10 | Realizada a tiempo |
-| 2024-05-10 | 2024-05-18 | Realizada con retraso |
-| 2024-05-10 | NULL | No realizada todavía |
+| `id_participante` | Identificador | Clave primaria |
+| `codigo_participante` | Código | Código único no nominal |
+| `id_territorio` | Identificador | Territorio principal |
+| `sexo` | Texto | Variable de desagregación |
+| `rango_edad` | Texto | Rango de edad |
+| `grupo_poblacional` | Texto | Grupo poblacional |
+| `fecha_registro` | Fecha | Fecha de registro |
 
-El valor `NULL` indicará que no existe una fecha real registrada.
+## Claves y restricciones
 
-### Preguntas que podremos responder
-
-La tabla `actividades` permitirá responder preguntas como:
-
-- ¿Cuántas actividades realizó cada proyecto?
-- ¿Qué actividades fueron canceladas o reprogramadas?
-- ¿Qué territorios recibieron más actividades?
-- ¿Qué actividades superaron el costo planificado?
-- ¿Cuáles se realizaron después de la fecha prevista?
-- ¿Qué actividades no alcanzaron su meta de participación?
-- ¿Cuál fue el costo promedio por tipo de actividad?
-- ¿Cuáles fueron las actividades más costosas dentro de cada proyecto?
-
-### Información que no se almacenará directamente
-
-No guardaremos en esta tabla:
-
-- el número real de asistentes;
-- el porcentaje de cumplimiento de participación;
-- el costo por participante;
-- el retraso en días;
-- el número de mujeres o jóvenes asistentes.
-
-Estos resultados se calcularán mediante consultas SQL y relaciones con
-otras tablas.
-
-### Idea clave
-
-La tabla `actividades` registra **qué ocurrió, dónde ocurrió, cuándo ocurrió
-y cuánto costó**.
-
-```text
-proyectos = qué intervención se gestiona
-territorios = dónde se implementa
-actividades = qué acciones se realizan
-```
-
-La tabla `territorios` describe **dónde** se implementa el programa.
-
-```text
-proyectos = qué intervención se ejecuta
-territorios = dónde se ejecuta
-```
-
-## Tabla 4: `participantes`
-
-### ¿Qué representa?
-
-La tabla `participantes` almacenará la información básica de las personas
-que participan directamente en las actividades del programa
-**Territorios que Dialogan**.
-
-Cada fila representará una persona participante.
-
-El proyecto trabajará únicamente con datos sintéticos generados con Faker.
-Además, se utilizarán códigos en lugar de nombres completos para simular una
-buena práctica de protección de datos.
-
-### Nivel de detalle de la tabla
-
-Una fila representa una persona participante.
-
-Ejemplo:
-
-| id_participante | codigo_participante | sexo | rango_edad | grupo_poblacional |
-|---:|---|---|---|---|
-| 1 | PAR-0001 | Mujer | 18-29 | Jóvenes |
-| 2 | PAR-0002 | Hombre | 30-44 | Líderes comunitarios |
-| 3 | PAR-0003 | Mujer | 45-59 | Mujeres lideresas |
-
-Una misma persona podrá participar en varias actividades, pero solo tendrá
-un registro dentro de la tabla `participantes`.
-
-### Campos necesarios
-
-| Campo | Descripción | Función |
-|---|---|---|
-| `id_participante` | Identificador interno de la persona | Clave primaria |
-| `codigo_participante` | Código ficticio como PAR-0001 | Identificación no nominal |
-| `id_territorio` | Comunidad o territorio de residencia | Clave foránea |
-| `sexo` | Sexo registrado para el análisis de participación | Desagregación |
-| `rango_edad` | Grupo de edad de la persona | Desagregación |
-| `grupo_poblacional` | Grupo principal con el que se vincula | Clasificación |
-| `fecha_registro` | Fecha de ingreso al programa | Seguimiento temporal |
-| `estado_participante` | Situación de la persona dentro del programa | Seguimiento |
-
-### Clave primaria
-
-La clave primaria será:
+Clave primaria:
 
 ```text
 id_participante
 ```
 
-Esta columna identificará de manera única cada persona participante.
-
-### Código del participante
-
-El campo `codigo_participante` contendrá valores como:
+Código único:
 
 ```text
-PAR-0001
-PAR-0002
-PAR-0003
+codigo_participante
 ```
 
-Este código será más apropiado que utilizar nombres, documentos de identidad,
-direcciones o números de teléfono.
-
-La base de datos se publicará en GitHub, por lo que no debe contener
-información personal real.
-
-### Clave foránea
-
-La tabla tendrá una clave foránea:
+Clave foránea:
 
 ```text
 id_territorio
 ```
 
-La relación será:
+## Relación con territorios
 
 ```text
 territorios.id_territorio
-          ↓
-participantes.id_territorio
+→ participantes.id_territorio
 ```
 
-Esto permitirá conocer en qué comunidad reside o está registrado cada
-participante.
+Un territorio puede tener muchas personas participantes.
 
-Un territorio podrá tener muchas personas participantes:
+## Participante no significa inscripción
+
+`participantes` responde:
 
 ```text
-Un territorio → muchos participantes
+¿Quién es la persona dentro del sistema?
 ```
 
-Sin embargo, para simplificar este modelo, cada participante estará asociado
-a un territorio principal.
-
-### Valores posibles
-
-El campo `sexo` podrá contener:
+No responde:
 
 ```text
-Mujer
-Hombre
-Otro
-Prefiere no responder
+¿En qué proyecto participa?
 ```
 
-El campo `rango_edad` podrá contener:
+Eso corresponde a `participaciones_proyecto`.
 
-```text
-18-29
-30-44
-45-59
-60 o más
-```
+## Estado de participación
 
-El campo `grupo_poblacional` podrá contener valores como:
+La tabla `participantes` no contiene un campo `estado_participante`.
 
-```text
-Jóvenes
-Mujeres lideresas
-Líderes comunitarios
-Docentes
-Funcionariado local
-Población general
-```
+Esto es intencional.
 
-El campo `estado_participante` podrá contener:
-
-```text
-Activo
-Finalizó
-Retirado
-```
-
-### Diferencia entre participante y asistencia
-
-La tabla `participantes` indica quién está registrado en el programa.
-
-No indica todavía a qué actividades asistió.
-
-La participación en actividades se almacenará en la tabla `asistencias`.
-
-```text
-participantes = quiénes forman parte del programa
-asistencias = a qué actividades asistió cada persona
-```
-
-Una persona podrá aparecer una sola vez en `participantes`, pero podrá tener
-muchos registros en `asistencias`.
+Una misma persona puede tener estados diferentes según el proyecto.
 
 Ejemplo:
 
-| participante | actividad |
-|---|---|
-| PAR-0001 | Taller de mediación |
-| PAR-0001 | Encuentro juvenil |
-| PAR-0001 | Diálogo comunitario |
-
-### Relación de muchos a muchos
-
-Una actividad puede tener muchas personas participantes.
-
-Una persona también puede asistir a muchas actividades.
-
-Por tanto, entre `actividades` y `participantes` existe una relación de
-muchos a muchos.
-
 ```text
-Muchas actividades ↔ muchos participantes
+PAR-010 + P01 → Finalizada
+PAR-010 + P04 → Retirada
 ```
 
-Esta relación se resolverá mediante la tabla intermedia `asistencias`.
+El estado pertenece a `participaciones_proyecto`.
+
+## Relación con actividades
+
+La relación conceptual es:
 
 ```text
-actividades
-     ↓
-asistencias
-     ↓
-participantes
+PARTICIPANTES N:M ACTIVIDADES
 ```
 
-### Preguntas que podremos responder
+y se resuelve mediante `asistencias`.
 
-La tabla `participantes` permitirá responder preguntas como:
+## Privacidad y minimización
 
-- ¿Cuántas personas están registradas en cada territorio?
-- ¿Qué porcentaje de participantes son mujeres?
-- ¿Cuántas personas jóvenes participan en el programa?
-- ¿Qué grupos poblacionales tienen menor representación?
-- ¿Cuántas personas finalizaron o abandonaron el programa?
-- ¿Qué territorios tienen más participantes activos?
-- ¿Cuántas personas asistieron a actividades en más de un proyecto?
+El modelo no almacena:
 
-### Información que no se almacenará directamente
-
-No guardaremos en esta tabla:
-
-- el número de actividades a las que asistió cada persona;
-- el total de horas de participación;
-- el porcentaje de asistencia;
-- el cambio entre línea base y medición final;
-- el número de proyectos en los que participó.
-
-Estos resultados se calcularán relacionando `participantes` con
-`asistencias`, `actividades` y `evaluaciones`.
-
-### Protección y minimización de datos
-
-El modelo no incluirá:
-
-- nombres completos;
+- nombres;
 - documentos de identidad;
+- teléfonos;
+- correos personales;
 - direcciones particulares;
-- números de teléfono;
-- correos electrónicos personales.
+- edades exactas.
 
-Aunque los datos serán ficticios, el proyecto simulará una práctica
-responsable de gobernanza del dato.
-
-### Idea clave
-
-La tabla `participantes` responde a la pregunta:
+Los participantes se identifican mediante códigos como:
 
 ```text
-¿Quiénes forman parte del programa?
+PAR-001
+PAR-002
+PAR-003
 ```
 
-La tabla `asistencias` responderá después:
+## Información que no se almacena directamente
 
-```text
-¿En cuáles actividades participó cada persona?
-```
+No se guardan:
 
-## Tabla 5: `participaciones_proyecto`
+- número de proyectos por persona;
+- número de actividades;
+- horas acumuladas;
+- tasa de asistencia;
+- estado dentro de cada proyecto;
+- cambio Baseline–Endline.
 
-### ¿Qué representa?
-
-La tabla `participaciones_proyecto` registrará en qué proyectos está inscrita
-cada persona participante.
-
-Cada fila representará:
-
-```text
-una persona + un proyecto
-```
-
-Su granularidad será una inscripción de una persona en un proyecto.
-
-### Campos principales
-
-| Campo | Descripción | Función |
-|---|---|---|
-| `id_participacion` | Identificador interno del registro | Clave primaria |
-| `id_participante` | Persona inscrita | Clave foránea |
-| `id_proyecto` | Proyecto en el que está inscrita | Clave foránea |
-| `fecha_inscripcion` | Fecha de vinculación | Seguimiento |
-| `estado_participacion` | Estado dentro de ese proyecto | Clasificación |
-| `fecha_salida` | Fecha de salida, cuando corresponda | Seguimiento |
-| `motivo_salida` | Motivo general de la salida | Análisis |
-
-### Relaciones
+## Idea clave
 
 ```text
 participantes
-      ↓
+→ quién
+
 participaciones_proyecto
-      ↓
-proyectos
-```
-
-Una persona puede participar en varios proyectos y un proyecto puede tener
-muchas personas participantes.
-
-La tabla `participaciones_proyecto` resuelve esta relación de muchos a muchos.
-
-### Restricción única
-
-La combinación:
-
-```text
-id_participante + id_proyecto
-```
-
-será única para evitar que una persona sea inscrita dos veces en el mismo
-proyecto.
-
-### Diferencia frente a `asistencias`
-
-```text
-participaciones_proyecto
-→ indica en qué proyecto está inscrita una persona
+→ en qué proyecto
 
 asistencias
-→ indica a qué actividad concreta asistió
+→ qué ocurrió en cada actividad
+
+evaluaciones
+→ cómo cambia dentro de una intervención
 ```
 
-### Idea clave
+---
 
-El estado de participación pertenece a la relación entre una persona y un
-proyecto, no a la persona por sí sola.
+# Tabla 5: `participaciones_proyecto`
 
-## Tabla 6: `asistencias`
+## ¿Qué representa?
 
-### ¿Qué representa?
+La tabla `participaciones_proyecto` registra la relación entre una persona y un proyecto.
 
-La tabla `asistencias` registrará la relación entre las personas participantes
-y las actividades del programa **Territorios que Dialogan**.
+Es una tabla puente.
 
-Cada fila representará la inscripción o participación de una persona en una
-actividad específica.
+## Granularidad
+
+```text
+1 fila = 1 participante + 1 proyecto
+```
 
 Ejemplo:
 
-| id_asistencia | participante | actividad | estado_asistencia |
-|---:|---|---|---|
-| 1 | PAR-0001 | Taller de mediación | Asistió |
-| 2 | PAR-0001 | Diálogo comunitario | Asistió |
-| 3 | PAR-0002 | Taller de mediación | No asistió |
-
-Una misma persona podrá aparecer varias veces porque puede estar vinculada
-a diferentes actividades.
-
-### Nivel de detalle de la tabla
-
-Una fila representa la relación entre:
-
 ```text
-una persona + una actividad
+PAR-010 + P01
+PAR-010 + P04
 ```
 
-Por ejemplo:
+son dos participaciones diferentes de la misma persona.
 
-```text
-PAR-0001 + Taller de mediación del 15 de marzo de 2024
-```
+## Campos
 
-No representa a la persona por sí sola ni a la actividad completa.
-
-### Campos necesarios
-
-| Campo | Descripción | Función |
+| Campo | Tipo lógico | Descripción |
 |---|---|---|
-| `id_asistencia` | Identificador interno del registro | Clave primaria |
-| `id_actividad` | Actividad en la que se registró la persona | Clave foránea |
-| `id_participante` | Persona vinculada a la actividad | Clave foránea |
-| `estado_asistencia` | Indica si asistió o no | Seguimiento |
-| `completo_actividad` | Indica si completó la actividad | Seguimiento |
-| `horas_participacion` | Número de horas en las que participó | Medición |
-| `fecha_registro` | Fecha en la que se registró la asistencia | Control del dato |
+| `id_participacion` | Identificador | Clave primaria |
+| `id_participante` | Identificador | Persona participante |
+| `id_proyecto` | Identificador | Proyecto |
+| `fecha_inscripcion` | Fecha | Fecha de inscripción |
+| `estado_participacion` | Texto | Estado dentro del proyecto |
+| `fecha_salida` | Fecha / NULL | Fecha de salida |
+| `motivo_salida` | Texto / NULL | Motivo de salida |
 
-### Clave primaria
+## Claves y restricciones
 
-La clave primaria será:
+Clave primaria:
+
+```text
+id_participacion
+```
+
+Claves foráneas:
+
+```text
+id_participante
+id_proyecto
+```
+
+Restricción única:
+
+```text
+UNIQUE (id_participante, id_proyecto)
+```
+
+Esto evita inscribir dos veces a la misma persona en el mismo proyecto.
+
+## Relación muchos-a-muchos
+
+Conceptualmente:
+
+```text
+PARTICIPANTES N:M PROYECTOS
+```
+
+Físicamente:
+
+```text
+PARTICIPANTES 1:N PARTICIPACIONES_PROYECTO
+PROYECTOS     1:N PARTICIPACIONES_PROYECTO
+```
+
+## Información propia de la relación
+
+La tabla puente no contiene únicamente claves.
+
+También guarda atributos propios de la relación persona–proyecto:
+
+```text
+fecha_inscripcion
+estado_participacion
+fecha_salida
+motivo_salida
+```
+
+Por eso la participación tiene significado analítico propio.
+
+## Permanencia y salida
+
+En el dataset actual las participaciones pueden terminar como:
+
+```text
+Finalizada
+Retirada
+```
+
+Cuando existe una salida registrada, `fecha_salida` y `motivo_salida` permiten analizar permanencia y abandono.
+
+## Relación con evaluaciones
+
+```text
+participaciones_proyecto.id_participacion
+→ evaluaciones.id_participacion
+```
+
+Esta decisión evita mezclar los resultados de una misma persona cuando participa en proyectos distintos.
+
+## Importancia longitudinal
+
+Para comparar Baseline y Endline debe mantenerse constante:
+
+```text
+id_participacion
+```
+
+La comparación se realiza sobre la misma relación persona–proyecto.
+
+## Diferencia frente a asistencias
+
+```text
+participaciones_proyecto
+→ en qué proyecto está vinculada una persona
+
+asistencias
+→ qué ocurrió respecto a una actividad concreta
+```
+
+## Idea clave
+
+La tabla puente convierte:
+
+```text
+PARTICIPANTES N:M PROYECTOS
+```
+
+en dos relaciones 1:N y, además, almacena información propia de la participación.
+
+---
+
+# Tabla 6: `asistencias`
+
+## ¿Qué representa?
+
+La tabla `asistencias` registra la relación entre una persona y una actividad concreta.
+
+Es la segunda tabla puente principal del modelo.
+
+## Granularidad
+
+```text
+1 fila = 1 participante + 1 actividad
+```
+
+## Campos
+
+| Campo | Tipo lógico | Descripción |
+|---|---|---|
+| `id_asistencia` | Identificador | Clave primaria |
+| `id_actividad` | Identificador | Actividad |
+| `id_participante` | Identificador | Persona |
+| `estado_asistencia` | Texto | Resultado de asistencia |
+| `completo_actividad` | Booleano | Indica si completó la actividad |
+| `horas_participacion` | Decimal | Horas realmente participadas |
+| `fecha_registro` | Fecha | Fecha del registro |
+
+## Claves y restricciones
+
+Clave primaria:
 
 ```text
 id_asistencia
 ```
 
-Esta columna identificará de manera única cada registro de asistencia.
-
-### Claves foráneas
-
-La tabla tendrá dos claves foráneas:
+Claves foráneas:
 
 ```text
 id_actividad
 id_participante
 ```
 
-La relación con `actividades` será:
-
-```text
-actividades.id_actividad
-          ↓
-asistencias.id_actividad
-```
-
-La relación con `participantes` será:
-
-```text
-participantes.id_participante
-            ↓
-asistencias.id_participante
-```
-
-Estas relaciones permitirán saber quién participó en cada actividad.
-
-### Tabla intermedia
-
-La tabla `asistencias` funcionará como una tabla intermedia entre
-`actividades` y `participantes`.
-
-```text
-actividades
-     ↓
-asistencias
-     ↓
-participantes
-```
-
-Una actividad puede tener muchas personas participantes.
-
-Una persona puede participar en muchas actividades.
-
-```text
-Muchas actividades ↔ muchos participantes
-```
-
-La tabla `asistencias` transforma esta relación de muchos a muchos en dos
-relaciones de uno a muchos:
-
-```text
-Una actividad → muchos registros de asistencia
-
-Una persona → muchos registros de asistencia
-```
-
-### Valores posibles
-
-El campo `estado_asistencia` podrá contener:
-
-```text
-Inscrito
-Asistió
-No asistió
-Ausencia justificada
-```
-
-El campo `completo_actividad` almacenará valores booleanos:
-
-```text
-TRUE
-FALSE
-```
-
-Ejemplo:
-
-| estado_asistencia | completo_actividad | interpretación |
-|---|---|---|
-| Asistió | TRUE | Asistió y completó la actividad |
-| Asistió | FALSE | Asistió, pero no la completó |
-| No asistió | FALSE | Estaba registrado, pero no asistió |
-| Ausencia justificada | FALSE | No asistió y justificó la ausencia |
-
-### Horas de participación
-
-El campo `horas_participacion` permitirá registrar cuánto tiempo participó
-realmente una persona.
-
-Ejemplo:
-
-| duración de la actividad | horas_participacion | interpretación |
-|---:|---:|---|
-| 8 horas | 8 horas | Participación completa |
-| 8 horas | 4 horas | Participación parcial |
-| 8 horas | 0 horas | No asistió |
-
-Esto permitirá calcular posteriormente tasas de permanencia y finalización.
-
-### Evitar registros duplicados
-
-Una persona no debería aparecer dos veces en la misma actividad.
-
-Por ejemplo, este registro no debe repetirse:
-
-```text
-PAR-0001 + ACT-0001
-```
-
-Posteriormente estableceremos una restricción para que la combinación de
-`id_actividad` e `id_participante` sea única.
+Restricción única:
 
 ```text
 UNIQUE (id_actividad, id_participante)
 ```
 
-Esta restricción no reemplaza la clave primaria.
+Una persona puede participar en muchas actividades, pero no puede aparecer dos veces en la misma actividad.
 
-Su función será evitar que la misma persona sea registrada dos veces en una
-misma actividad.
+## Relación muchos-a-muchos
 
-### Diferencia entre clave primaria y combinación única
-
-La clave primaria identificará el registro:
+Conceptualmente:
 
 ```text
-id_asistencia
+PARTICIPANTES N:M ACTIVIDADES
 ```
 
-La combinación única protegerá la calidad del dato:
+Físicamente:
 
 ```text
-id_actividad + id_participante
+PARTICIPANTES 1:N ASISTENCIAS
+ACTIVIDADES    1:N ASISTENCIAS
 ```
+
+## Estados de asistencia
+
+El dataset actual utiliza:
+
+```text
+Presente
+Ausente
+Retiro temprano
+```
+
+### Presente
+
+La persona participó.
+
+Puede haber completado o no la actividad.
+
+### Ausente
+
+Regla de coherencia:
+
+```text
+estado_asistencia = Ausente
+→ completo_actividad = FALSE
+→ horas_participacion = 0
+```
+
+### Retiro temprano
+
+Regla de coherencia:
+
+```text
+estado_asistencia = Retiro temprano
+→ completo_actividad = FALSE
+→ horas_participacion > 0
+```
+
+## Presencia y finalización no son iguales
 
 Ejemplo:
 
-| id_asistencia | id_actividad | id_participante |
-|---:|---:|---:|
-| 1 | 10 | 25 |
-| 2 | 10 | 26 |
-| 3 | 11 | 25 |
+| Estado | Completa | Interpretación |
+|---|---|---|
+| Presente | TRUE | Participó y completó |
+| Presente | FALSE | Participó, pero no completó |
+| Retiro temprano | FALSE | Participación parcial |
+| Ausente | FALSE | No participó |
 
-El participante 25 puede asistir a las actividades 10 y 11.
+## Elegibilidad
 
-Sin embargo, no puede aparecer dos veces en la actividad 10.
+La generación de asistencias considera:
 
-### Preguntas que podremos responder
+- proyecto;
+- territorio;
+- modalidad;
+- fecha de inscripción;
+- fecha de salida;
+- tipo de actividad;
+- perfil de compromiso.
 
-La tabla `asistencias` permitirá responder preguntas como:
+Una persona no puede aparecer en una actividad realizada antes de su inscripción ni después de su salida.
 
-- ¿Cuántas personas asistieron realmente a cada actividad?
-- ¿Qué actividades no alcanzaron su meta de participantes?
-- ¿Qué personas asistieron a más actividades?
-- ¿Cuál fue el porcentaje de asistencia por territorio?
-- ¿Cuántas personas completaron una formación?
-- ¿Qué actividades tuvieron más ausencias?
-- ¿Cuántas horas de participación acumuló cada persona?
-- ¿Qué grupos poblacionales presentan menor permanencia?
-- ¿Qué participantes asistieron a actividades de varios proyectos?
-- ¿Qué personas estaban inscritas, pero nunca asistieron?
+## Actividades CORE y abiertas
 
-### Ejemplo de cálculo posterior
-
-Una actividad tenía una meta de 30 participantes y asistieron 24 personas.
+Durante la simulación se diferencia entre:
 
 ```text
-porcentaje de cumplimiento =
-24 / 30 × 100
+CORE
+ABIERTA
 ```
+
+Las actividades CORE forman parte del itinerario principal utilizado para estudiar continuidad, exposición y seguimiento longitudinal.
+
+Las actividades abiertas permiten una participación más flexible.
+
+Esta clasificación es una regla del generador y no un campo almacenado directamente en la tabla `actividades`.
+
+## Meta frente a participación real
+
+La meta se encuentra en:
 
 ```text
-porcentaje de cumplimiento = 80 %
+actividades.meta_participantes
 ```
 
-El número 24 no se almacenará directamente en `actividades`.
+La participación real se deriva de `asistencias`.
 
-Se obtendrá contando los registros de `asistencias` cuyo estado sea
-`Asistió`.
+En el análisis del proyecto, la participación real se considera a partir de registros cuyo estado no es `Ausente`.
 
-### Información que no se almacenará directamente
+## Información que no se almacena directamente
 
-No guardaremos en esta tabla:
+No se guardan:
 
-- el nombre del participante;
-- el nombre de la actividad;
-- el municipio donde se realizó;
-- el proyecto al que pertenece;
-- el porcentaje de asistencia;
-- el total de actividades completadas por una persona.
+- tasa de asistencia;
+- porcentaje de exposición CORE;
+- actividades completadas acumuladas;
+- criterio final de completitud;
+- nombre del participante;
+- nombre del proyecto.
 
-Estos datos ya existen en otras tablas o pueden calcularse mediante SQL.
+## Idea clave
 
-Para obtenerlos será necesario encadenar varias tablas:
+`asistencias` responde:
 
 ```text
-participantes
-      ↓
-asistencias
-      ↓
-actividades
-      ↓
-proyectos y territorios
+¿Qué ocurrió entre una persona y una actividad concreta?
 ```
 
-### Idea clave
+---
 
-La tabla `asistencias` responde a la pregunta:
+# Tabla 7: `evaluaciones`
 
-```text
-¿Qué relación tuvo cada participante con cada actividad?
-```
+## ¿Qué representa?
 
-También es la tabla que resuelve la relación de muchos a muchos entre
-`participantes` y `actividades`.
+La tabla `evaluaciones` almacena mediciones realizadas sobre una participación concreta dentro de un proyecto.
 
-## Tabla 6: `evaluaciones`
-
-### ¿Qué representa?
-
-La tabla `evaluaciones` almacenará los resultados obtenidos por las personas
-participantes en las mediciones realizadas antes y después de la intervención.
-
-Cada fila representará una medición aplicada a una persona dentro de un
-proyecto específico.
-
-Los dos tipos principales de medición serán:
+Los dos tipos principales son:
 
 ```text
 Baseline
 Endline
 ```
 
-- `Baseline`: medición realizada antes de la intervención.
-- `Endline`: medición realizada al finalizar la intervención.
-
-### Nivel de detalle de la tabla
-
-Una fila representa:
+## Granularidad
 
 ```text
-una persona + un proyecto + un tipo de medición
+1 fila = 1 medición de 1 participación
 ```
 
-Ejemplo:
+Una misma participación puede tener como máximo una medición de cada tipo.
 
-| participante | proyecto | tipo_medicion | conocimientos | confianza | convivencia |
-|---|---|---|---:|---:|---:|
-| PAR-0001 | P01 | Baseline | 42 | 50 | 47 |
-| PAR-0001 | P01 | Endline | 74 | 69 | 66 |
+## Campos
 
-En este ejemplo, la misma persona aparece dos veces porque tiene una medición
-inicial y una medición final.
-
-### Campos necesarios
-
-| Campo | Descripción | Función |
+| Campo | Tipo lógico | Descripción |
 |---|---|---|
-| `id_evaluacion` | Identificador interno de la evaluación | Clave primaria |
-| `id_participante` | Persona evaluada | Clave foránea |
-| `id_proyecto` | Proyecto en el que se realiza la evaluación | Clave foránea |
-| `tipo_medicion` | Baseline o Endline | Clasificación |
-| `fecha_medicion` | Fecha de aplicación de la evaluación | Seguimiento temporal |
-| `puntaje_conocimientos` | Resultado sobre conocimientos de mediación y conflicto | Medición de resultado |
-| `puntaje_confianza` | Nivel de confianza para gestionar conflictos | Medición de resultado |
-| `puntaje_convivencia` | Percepción sobre convivencia comunitaria | Medición de resultado |
-| `formulario_completo` | Indica si la evaluación fue completada | Control de calidad |
+| `id_evaluacion` | Identificador | Clave primaria |
+| `id_participacion` | Identificador | Participación evaluada |
+| `tipo_medicion` | Texto | Baseline o Endline |
+| `fecha_medicion` | Fecha | Fecha |
+| `puntaje_conocimientos` | Entero | Puntaje |
+| `puntaje_confianza` | Entero | Puntaje |
+| `puntaje_convivencia` | Entero | Puntaje |
+| `formulario_completo` | Booleano | Estado del formulario |
 
-### Clave primaria
+## Claves y restricciones
 
-La clave primaria será:
+Clave primaria:
 
 ```text
 id_evaluacion
 ```
 
-Esta columna identificará de manera única cada evaluación registrada.
-
-### Claves foráneas
-
-La tabla tendrá dos claves foráneas:
+Clave foránea:
 
 ```text
-id_participante
-id_proyecto
+id_participacion
 ```
 
-La relación con `participantes` será:
+Restricción única:
 
 ```text
-participantes.id_participante
-            ↓
-evaluaciones.id_participante
+UNIQUE (id_participacion, tipo_medicion)
 ```
 
-La relación con `proyectos` será:
+Esto impide registrar dos Baseline o dos Endline para la misma participación.
+
+## Relación correcta
 
 ```text
-proyectos.id_proyecto
-        ↓
-evaluaciones.id_proyecto
+PARTICIPANTES
+      ↓
+PARTICIPACIONES_PROYECTO
+      ↓
+EVALUACIONES
 ```
 
-Esto permitirá saber quién fue evaluado y dentro de qué proyecto se produjo
-la medición.
+No existe una clave foránea directa desde `evaluaciones` hacia `participantes`.
 
-### Valores posibles
+## Baseline y Endline
 
-El campo `tipo_medicion` podrá contener:
+`Baseline` representa la medición inicial.
+
+`Endline` representa una medición posterior.
+
+El cambio se calcula mediante SQL:
 
 ```text
-Baseline
-Endline
+Endline - Baseline
 ```
 
-El campo `formulario_completo` almacenará valores booleanos:
+y puede analizarse para:
 
 ```text
-TRUE
-FALSE
+puntaje_conocimientos
+puntaje_confianza
+puntaje_convivencia
 ```
 
-Los campos de puntuación utilizarán una escala de 0 a 100:
+## Cohorte longitudinal
+
+El proyecto utiliza una cohorte longitudinal para estudiar a las mismas participaciones a lo largo del tiempo.
+
+La cobertura de Endline es distinta del criterio de finalización del programa.
+
+Son conceptos diferentes:
 
 ```text
-0 = puntuación mínima
-100 = puntuación máxima
+cobertura Endline
+≠
+programa completado
 ```
 
-### Comparación entre Baseline y Endline
+## Información que no se almacena directamente
 
-El objetivo de esta tabla será comparar la situación inicial y final de cada
-persona.
+No se guarda:
 
-Ejemplo:
+- diferencia Baseline–Endline;
+- porcentaje de mejora;
+- promedio del proyecto;
+- comparación territorial;
+- clasificación de cambio.
 
-| tipo_medicion | puntaje_conocimientos |
-|---|---:|
-| Baseline | 45 |
-| Endline | 72 |
+Todos esos resultados se calculan mediante SQL.
 
-La mejora será:
+## Idea clave
+
+La unidad analítica longitudinal es:
 
 ```text
-mejora en conocimientos =
-puntaje Endline - puntaje Baseline
+id_participacion
 ```
+
+no simplemente `id_participante`.
+
+---
+
+# Tabla 8: `indicadores`
+
+## ¿Qué representa?
+
+La tabla `indicadores` contiene la definición de los indicadores utilizados para hacer seguimiento a los proyectos.
+
+## Granularidad
 
 ```text
-mejora en conocimientos =
-72 - 45 = 27 puntos
+1 fila = 1 indicador
 ```
 
-La mejora no se almacenará directamente en la tabla.
+## Campos
 
-Se calculará mediante consultas SQL.
-
-### ¿Por qué no guardamos la mejora?
-
-La mejora depende de dos registros distintos:
-
-```text
-registro Baseline
-registro Endline
-```
-
-Si uno de esos valores cambia, el resultado debe calcularse nuevamente.
-
-Guardar la mejora directamente podría provocar inconsistencias.
-
-Por eso almacenamos los puntajes originales y calculamos la diferencia con
-SQL.
-
-### Evitar mediciones duplicadas
-
-Una persona no debería tener dos mediciones `Baseline` para el mismo
-proyecto.
-
-Tampoco debería tener dos mediciones `Endline` para el mismo proyecto.
-
-Posteriormente crearemos una restricción única:
-
-```text
-UNIQUE (id_participante, id_proyecto, tipo_medicion)
-```
-
-Esto permitirá que una persona tenga:
-
-```text
-PAR-0001 + P01 + Baseline
-PAR-0001 + P01 + Endline
-```
-
-Pero impedirá repetir:
-
-```text
-PAR-0001 + P01 + Baseline
-PAR-0001 + P01 + Baseline
-```
-
-### Diferencia entre evaluación completa e incompleta
-
-Una persona puede comenzar una evaluación y no terminarla.
-
-Ejemplo:
-
-| tipo_medicion | formulario_completo | interpretación |
+| Campo | Tipo lógico | Descripción |
 |---|---|---|
-| Baseline | TRUE | Evaluación inicial válida |
-| Endline | TRUE | Evaluación final válida |
-| Endline | FALSE | Evaluación iniciada, pero incompleta |
+| `id_indicador` | Identificador | Clave primaria |
+| `codigo_indicador` | Código | Código único |
+| `id_proyecto` | Identificador | Proyecto |
+| `nombre_indicador` | Texto | Nombre |
+| `tipo_indicador` | Texto | Clasificación |
+| `unidad_medida` | Texto | Unidad |
+| `meta_total` | Decimal | Meta total |
+| `frecuencia_medicion` | Texto | Frecuencia |
+| `fuente_verificacion` | Texto | Fuente prevista |
+| `desagregacion_requerida` | Texto / NULL | Desagregación |
+| `estado_indicador` | Texto | Estado |
 
-Para algunos análisis utilizaremos solamente los registros donde:
+## Claves y restricciones
 
-```text
-formulario_completo = TRUE
-```
-
-Esto representa una regla de calidad del dato.
-
-### Preguntas que podremos responder
-
-La tabla `evaluaciones` permitirá responder preguntas como:
-
-- ¿Cuántas personas tienen Baseline y Endline?
-- ¿Cuántas personas no completaron la evaluación final?
-- ¿Cuál fue la mejora promedio en conocimientos?
-- ¿Qué proyecto produjo una mayor mejora en confianza?
-- ¿Qué territorios presentaron mejores resultados?
-- ¿Qué participantes redujeron su puntuación final?
-- ¿Qué porcentaje mejoró al menos 15 puntos?
-- ¿Qué proyecto tiene más de 100 personas con evaluaciones completas?
-- ¿Cuáles fueron los tres territorios con mayor mejora promedio?
-- ¿Qué grupos poblacionales mostraron menor cambio?
-
-### Consultas que requerirán varias tablas
-
-Para analizar los resultados por territorio será necesario relacionar:
-
-```text
-evaluaciones
-      ↓
-participantes
-      ↓
-territorios
-```
-
-Para analizar los resultados por proyecto será necesario relacionar:
-
-```text
-evaluaciones
-      ↓
-proyectos
-```
-
-Para conocer si una persona asistió realmente a actividades antes de ser
-evaluada será necesario relacionar:
-
-```text
-evaluaciones
-      ↓
-participantes
-      ↓
-asistencias
-      ↓
-actividades
-```
-
-### Casos sin Endline
-
-No todas las personas tendrán necesariamente una medición final.
-
-Por ejemplo:
-
-| participante | Baseline | Endline |
-|---|---|---|
-| PAR-0001 | Sí | Sí |
-| PAR-0002 | Sí | No |
-| PAR-0003 | Sí | Sí |
-
-Esto nos permitirá practicar `LEFT JOIN`.
-
-La consulta podrá conservar a todas las personas con Baseline, aunque no
-tengan Endline.
-
-### Diferencia entre producto y resultado
-
-La asistencia a una actividad representa principalmente un dato de
-seguimiento operativo.
-
-```text
-Asistencia = participación en una actividad
-```
-
-La mejora entre Baseline y Endline representa un resultado.
-
-```text
-Cambio en puntajes = posible resultado de la intervención
-```
-
-Por tanto:
-
-```text
-asistencias = Monitoring
-evaluaciones = Evaluation
-```
-
-### Información que no se almacenará directamente
-
-No guardaremos en esta tabla:
-
-- la mejora entre Baseline y Endline;
-- el promedio del proyecto;
-- el porcentaje de personas que mejoraron;
-- el ranking de territorios;
-- la clasificación de una persona como mejoró o no mejoró.
-
-Estos resultados se calcularán mediante consultas SQL.
-
-### Idea clave
-
-La tabla `evaluaciones` responde a la pregunta:
-
-```text
-¿Qué cambió entre la situación inicial y la situación final?
-```
-
-Cada fila almacena una medición.
-
-La comparación entre mediciones se realizará posteriormente con SQL.
-
-## Tabla 7: `indicadores`
-
-### ¿Qué representa?
-
-La tabla `indicadores` almacenará la definición de los indicadores utilizados
-para realizar el seguimiento y la evaluación del programa
-**Territorios que Dialogan**.
-
-Cada fila representará un indicador específico vinculado a uno de los
-proyectos o componentes del programa.
-
-Ejemplos:
-
-- Número de personas que completaron una formación en mediación.
-- Porcentaje de participantes que mejoraron sus conocimientos.
-- Número de espacios de diálogo comunitario realizados.
-- Porcentaje de mujeres entre las personas participantes.
-- Porcentaje de actividades ejecutadas dentro del presupuesto previsto.
-
-### Nivel de detalle de la tabla
-
-Una fila representa un indicador.
-
-Ejemplo:
-
-| codigo_indicador | nombre_indicador | tipo_indicador | meta_total |
-|---|---|---|---:|
-| IND-01 | Número de actividades realizadas | Producto | 160 |
-| IND-05 | Participantes que mejoraron sus conocimientos | Resultado | 70 |
-| IND-09 | Mujeres entre las personas participantes | Participación | 55 |
-
-Aunque dos indicadores estén vinculados al mismo proyecto, cada uno tendrá
-su propio registro.
-
-### Campos necesarios
-
-| Campo | Descripción | Función |
-|---|---|---|
-| `id_indicador` | Identificador interno del indicador | Clave primaria |
-| `codigo_indicador` | Código legible como IND-01 | Identificación |
-| `id_proyecto` | Proyecto al que pertenece el indicador | Clave foránea |
-| `nombre_indicador` | Nombre completo del indicador | Descripción |
-| `tipo_indicador` | Producto, resultado, impacto u otra categoría | Clasificación |
-| `unidad_medida` | Forma en la que se expresa el indicador | Interpretación |
-| `meta_total` | Valor que se espera alcanzar | Planificación |
-| `frecuencia_medicion` | Periodicidad con la que se mide | Seguimiento |
-| `fuente_verificacion` | Documento o sistema que respalda el resultado | Calidad del dato |
-| `desagregacion_requerida` | Indica si debe analizarse por sexo, edad o territorio | Análisis |
-| `estado_indicador` | Indica si el indicador está activo o inactivo | Control |
-
-### Clave primaria
-
-La clave primaria será:
+Clave primaria:
 
 ```text
 id_indicador
 ```
 
-Esta columna identificará de manera única cada indicador.
-
-### Código del indicador
-
-El campo `codigo_indicador` contendrá valores como:
+Código único:
 
 ```text
-IND-01
-IND-02
-IND-03
+codigo_indicador
 ```
 
-El código permitirá identificar el indicador de forma breve dentro de los
-informes y consultas.
-
-Posteriormente estableceremos una restricción para evitar códigos repetidos:
-
-```text
-UNIQUE (codigo_indicador)
-```
-
-### Clave foránea
-
-La tabla tendrá una clave foránea:
+Clave foránea:
 
 ```text
 id_proyecto
 ```
 
-La relación será:
+## Relación con proyectos
 
 ```text
 proyectos.id_proyecto
-        ↓
-indicadores.id_proyecto
+→ indicadores.id_proyecto
 ```
 
-Esto significa que un proyecto podrá tener varios indicadores, pero cada
-indicador estará vinculado a un proyecto principal.
+Un proyecto puede tener varios indicadores.
 
-```text
-Un proyecto → muchos indicadores
-```
+Cada indicador pertenece a un proyecto.
 
+## Definición frente a resultado
 
-### Tipos de indicadores
+`indicadores` almacena la definición y la meta.
 
-El campo `tipo_indicador` podrá contener valores como:
+No almacena cada resultado territorial o periódico.
 
-```text
-Producto
-Resultado
-Impacto
-Participación
-Eficiencia
-Rendición de cuentas
-```
-
-### Diferencia entre producto y resultado
-
-Un indicador de producto mide lo que el programa realizó o entregó.
-
-Ejemplo:
-
-```text
-Número de talleres realizados
-```
-
-Un indicador de resultado mide un cambio producido en las personas,
-organizaciones o comunidades.
-
-Ejemplo:
-
-```text
-Porcentaje de participantes que mejoraron sus conocimientos
-```
-
-Por tanto:
-
-```text
-Producto = qué entregó el programa
-Resultado = qué cambió gracias a la intervención
-```
-
-
-### Unidades de medida
-
-El campo `unidad_medida` podrá contener valores como:
-
-```text
-Número
-Porcentaje
-Puntos
-Días
-Euros
-Horas
-```
-
-Ejemplos:
-
-| indicador | unidad_medida | meta_total |
-|---|---|---:|
-| Actividades realizadas | Número | 160 |
-| Mujeres participantes | Porcentaje | 55 |
-| Mejora promedio en confianza | Puntos | 15 |
-| Respuestas dentro del plazo | Porcentaje | 90 |
-
-La unidad de medida es necesaria para interpretar correctamente la meta.
-
-Por ejemplo:
-
-```text
-Meta = 70
-Unidad = Porcentaje
-```
-
-significa:
-
-```text
-Meta = 70 %
-```
-
-No significa 70 personas.
-
-### Frecuencia de medición
-
-El campo `frecuencia_medicion` podrá contener:
-
-```text
-Mensual
-Trimestral
-Semestral
-Anual
-Baseline y Endline
-Al cierre de la actividad
-```
-
-La frecuencia indicará cada cuánto tiempo debe actualizarse el indicador.
-
-Ejemplo:
-
-| indicador | frecuencia_medicion |
-|---|---|
-| Número de actividades realizadas | Trimestral |
-| Personas que mejoraron conocimientos | Baseline y Endline |
-| Quejas respondidas dentro del plazo | Mensual |
-
-### Fuente de verificación
-
-La fuente de verificación indica de dónde procede la evidencia utilizada para
-calcular el indicador.
-
-Podrá contener valores como:
-
-```text
-Listas de asistencia
-Formularios de evaluación
-Informes de actividad
-Registros financieros
-Actas comunitarias
-Sistema de retroalimentación
-```
-
-Ejemplo:
-
-```text
-Indicador: Número de personas que completaron una formación
-Fuente de verificación: Listas de asistencia
-```
-
-La fuente de verificación no es el resultado.
-
-Es la evidencia que permite comprobarlo.
-
-### Desagregación requerida
-
-Algunos indicadores deberán analizarse separando los resultados por
-características relevantes.
-
-Por ejemplo:
-
-```text
-Sexo
-Rango de edad
-Grupo poblacional
-Territorio
-```
-
-El campo `desagregacion_requerida` permitirá indicar si el análisis necesita
-alguna de estas divisiones.
-
-Ejemplo:
-
-| indicador | desagregacion_requerida |
-|---|---|
-| Número de participantes | Sexo y rango de edad |
-| Número de actividades realizadas | Territorio |
-| Ejecución presupuestaria | No aplica |
-
-### Diferencia entre meta y valor alcanzado
-
-La tabla `indicadores` almacenará la meta prevista.
-
-```text
-meta_total = lo que se espera alcanzar
-```
-
-No almacenará los resultados obtenidos en cada territorio o periodo.
-
-Los valores alcanzados se guardarán en la tabla:
+Los resultados se guardan en:
 
 ```text
 mediciones_indicadores
 ```
 
-Ejemplo:
+Por tanto:
 
 ```text
-Indicador: Número de espacios de diálogo
-Meta total: 36
+indicadores
+→ qué se mide y cuál es la meta
+
+mediciones_indicadores
+→ cuánto se alcanzó en un territorio y periodo
 ```
 
-Los resultados podrían registrarse así:
+## Información que no se almacena directamente
 
-| periodo | territorio | valor_alcanzado |
-|---|---|---:|
-| 2024-T1 | Guapi | 2 |
-| 2024-T1 | Tumaco | 3 |
-| 2024-T2 | Guapi | 1 |
+No se guarda:
 
-La suma de las mediciones permitirá calcular el avance acumulado.
+- porcentaje de cumplimiento;
+- brecha frente a meta;
+- promedio territorial;
+- tendencia temporal.
 
-### ¿Por qué separamos indicadores y mediciones?
+Estos resultados se calculan posteriormente.
 
-La definición del indicador suele mantenerse relativamente estable:
+## Idea clave
+
+`indicadores` responde:
 
 ```text
-Nombre
-Tipo
-Unidad
-Meta
-Frecuencia
-Fuente de verificación
+¿Qué queremos medir?
 ```
 
-Los resultados cambian con el tiempo y el territorio:
+---
+
+# Tabla 9: `mediciones_indicadores`
+
+## ¿Qué representa?
+
+La tabla `mediciones_indicadores` almacena los valores alcanzados por los indicadores en territorios y periodos concretos.
+
+## Granularidad
 
 ```text
-Periodo
-Territorio
-Valor alcanzado
+1 fila = 1 indicador + 1 territorio + 1 periodo
 ```
 
-Por eso utilizaremos dos tablas:
+## Campos
 
-```text
-indicadores = qué se mide y cuál es la meta
-mediciones_indicadores = cuánto se alcanzó, dónde y cuándo
-```
-
-### Preguntas que podremos responder
-
-La tabla `indicadores` permitirá responder preguntas como:
-
-- ¿Cuántos indicadores tiene cada proyecto?
-- ¿Qué proyectos tienen más indicadores de resultado?
-- ¿Qué indicadores se miden trimestralmente?
-- ¿Qué indicadores requieren desagregación por sexo?
-- ¿Cuáles tienen metas expresadas en porcentaje?
-- ¿Qué proyectos tienen más de tres indicadores activos?
-- ¿Qué indicadores utilizan formularios de evaluación como fuente?
-- ¿Qué indicadores están vinculados a rendición de cuentas?
-
-Al relacionarla con `mediciones_indicadores`, podremos responder:
-
-- ¿Qué indicadores alcanzaron su meta?
-- ¿Cuáles están por debajo del 80 % de cumplimiento?
-- ¿Qué territorios presentan mayor avance?
-- ¿Qué proyectos tienen más de un indicador incumplido?
-- ¿Cómo evolucionó un indicador entre 2024 y 2025?
-
-### Información que no se almacenará directamente
-
-No guardaremos en esta tabla:
-
-- el valor alcanzado durante cada trimestre;
-- el porcentaje de cumplimiento;
-- el resultado acumulado;
-- el ranking de territorios;
-- la diferencia entre la meta y el resultado;
-- la clasificación del indicador como cumplido o incumplido.
-
-Estos resultados se calcularán utilizando la tabla
-`mediciones_indicadores` y consultas SQL.
-
-### Idea clave
-
-La tabla `indicadores` responde a las preguntas:
-
-```text
-¿Qué vamos a medir?
-¿Cómo lo vamos a medir?
-¿Cuál es la meta?
-```
-
-La tabla `mediciones_indicadores` responderá después:
-
-```text
-¿Cuánto se alcanzó?
-¿Dónde se alcanzó?
-¿Cuándo se alcanzó?
-```
-
-## Tabla 9: `mediciones_indicadores`
-
-### ¿Qué representa?
-
-La tabla `mediciones_indicadores` almacenará los resultados alcanzados por
-los indicadores del programa **Territorios que Dialogan** en diferentes
-territorios y periodos.
-
-Cada fila representará una medición concreta de un indicador.
-
-Ejemplo:
-
-| indicador | territorio | periodo | valor_alcanzado |
-|---|---|---|---:|
-| Actividades realizadas | Comunidad Río Verde | 2024-T1 | 4 |
-| Actividades realizadas | Comunidad Río Verde | 2024-T2 | 6 |
-| Actividades realizadas | Comunidad La Esperanza | 2024-T1 | 3 |
-
-Aunque se trate del mismo indicador, cada territorio y periodo tendrá un
-registro independiente.
-
-### Nivel de detalle de la tabla
-
-Una fila representa:
-
-```text
-un indicador + un territorio + un periodo
-```
-
-Ejemplo:
-
-```text
-IND-01 + Comunidad Río Verde + 2024-T1
-```
-
-Esto significa que la fila no representa la meta general del indicador.
-
-Representa el resultado registrado en un territorio y periodo específicos.
-
-### Campos necesarios
-
-| Campo | Descripción | Función |
+| Campo | Tipo lógico | Descripción |
 |---|---|---|
-| `id_medicion` | Identificador interno de la medición | Clave primaria |
-| `id_indicador` | Indicador que se está midiendo | Clave foránea |
-| `id_territorio` | Territorio al que corresponde el resultado | Clave foránea |
-| `periodo` | Trimestre o periodo de reporte | Seguimiento temporal |
-| `fecha_medicion` | Fecha en la que se registró el resultado | Control |
-| `valor_alcanzado` | Resultado obtenido durante el periodo | Medición |
-| `fuente_verificacion_registrada` | Evidencia utilizada para respaldar el dato | Calidad |
-| `estado_validacion` | Situación de revisión del dato | Control de calidad |
-| `observaciones` | Información adicional sobre la medición | Contexto |
+| `id_medicion` | Identificador | Clave primaria |
+| `id_indicador` | Identificador | Indicador |
+| `id_territorio` | Identificador | Territorio |
+| `periodo` | Texto | Periodo de medición |
+| `fecha_medicion` | Fecha | Fecha |
+| `valor_alcanzado` | Decimal | Resultado |
+| `fuente_verificacion_registrada` | Texto | Fuente utilizada |
+| `estado_validacion` | Texto | Estado de validación |
+| `observaciones` | Texto / NULL | Observaciones |
 
-### Clave primaria
+## Claves y restricciones
 
-La clave primaria será:
+Clave primaria:
 
 ```text
 id_medicion
 ```
 
-Esta columna identificará de manera única cada resultado registrado.
-
-### Claves foráneas
-
-La tabla tendrá dos claves foráneas:
+Claves foráneas:
 
 ```text
 id_indicador
 id_territorio
 ```
 
-La relación con `indicadores` será:
-
-```text
-indicadores.id_indicador
-          ↓
-mediciones_indicadores.id_indicador
-```
-
-La relación con `territorios` será:
-
-```text
-territorios.id_territorio
-          ↓
-mediciones_indicadores.id_territorio
-```
-
-Esto permitirá saber qué se midió y en qué territorio se obtuvo el resultado.
-
-### Relaciones
-
-Un indicador podrá tener muchas mediciones:
-
-```text
-Un indicador → muchas mediciones
-```
-
-Un territorio también podrá tener muchas mediciones:
-
-```text
-Un territorio → muchas mediciones
-```
-
-Cada medición estará asociada a un único indicador y a un único territorio.
-
-### Periodos de medición
-
-El campo `periodo` podrá contener valores como:
-
-```text
-2024-T1
-2024-T2
-2024-T3
-2024-T4
-2025-T1
-2025-T2
-2025-T3
-2025-T4
-```
-
-La letra `T` significa trimestre.
-
-En inglés:
-
-```text
-Q1 = First quarter
-Q2 = Second quarter
-Q3 = Third quarter
-Q4 = Fourth quarter
-```
-
-Ejemplo:
-
-```text
-2024-T1 = primer trimestre de 2024
-```
-
-### Valor alcanzado
-
-El campo `valor_alcanzado` almacenará el resultado obtenido durante el
-periodo correspondiente.
-
-Ejemplo:
-
-| indicador | unidad | valor_alcanzado |
-|---|---|---:|
-| Actividades realizadas | Número | 8 |
-| Mujeres participantes | Porcentaje | 58 |
-| Mejora promedio en confianza | Puntos | 17 |
-
-El valor debe interpretarse utilizando la unidad de medida definida en la
-tabla `indicadores`.
-
-Por ejemplo:
-
-```text
-valor_alcanzado = 58
-unidad_medida = Porcentaje
-```
-
-significa:
-
-```text
-58 %
-```
-
-### Diferencia entre meta y medición
-
-La meta se almacenará en:
-
-```text
-indicadores.meta_total
-```
-
-El resultado alcanzado se almacenará en:
-
-```text
-mediciones_indicadores.valor_alcanzado
-```
-
-Ejemplo:
-
-```text
-Meta total: 36 espacios de diálogo
-Resultado acumulado: 30 espacios de diálogo
-```
-
-El porcentaje de cumplimiento será:
-
-```text
-porcentaje de cumplimiento =
-resultado alcanzado / meta total × 100
-```
-
-```text
-porcentaje de cumplimiento =
-30 / 36 × 100
-```
-
-```text
-porcentaje de cumplimiento = 83,33 %
-```
-
-Este porcentaje no se almacenará directamente.
-
-Se calculará mediante SQL.
-
-### Resultados periódicos y acumulados
-
-Para los indicadores expresados como número, cada registro representará el
-resultado alcanzado durante un periodo específico.
-
-Ejemplo:
-
-| periodo | valor_alcanzado |
-|---|---:|
-| 2024-T1 | 4 |
-| 2024-T2 | 6 |
-| 2024-T3 | 5 |
-
-El resultado acumulado será:
-
-```text
-4 + 6 + 5 = 15
-```
-
-Este total se calculará con:
-
-```text
-SUM(valor_alcanzado)
-```
-
-No guardaremos otra fila con el valor acumulado, porque podría provocar una
-doble contabilización.
-
-### Cuidado con los porcentajes
-
-Los porcentajes no siempre deben sumarse.
-
-Ejemplo:
-
-| periodo | porcentaje de mujeres |
-|---|---:|
-| 2024-T1 | 55 |
-| 2024-T2 | 60 |
-
-No sería correcto calcular:
-
-```text
-55 + 60 = 115 %
-```
-
-Para analizar porcentajes será necesario calcular un promedio o volver a
-calcular el indicador utilizando los datos de participantes y asistencias.
-
-Esta diferencia será importante durante las consultas SQL:
-
-```text
-Números absolutos → pueden sumarse
-Porcentajes → normalmente no deben sumarse
-```
-
-### Fuente de verificación registrada
-
-El campo `fuente_verificacion_registrada` indicará la evidencia concreta
-utilizada para respaldar cada medición.
-
-Ejemplos:
-
-```text
-Informe de actividad 2024-T1
-Lista de asistencia ACT-0025
-Formulario Endline 2025
-Acta de diálogo comunitario
-Registro financiero trimestral
-```
-
-En `indicadores` se define el tipo general de fuente esperada.
-
-En `mediciones_indicadores` se registra la evidencia utilizada para una
-medición concreta.
-
-Ejemplo:
-
-```text
-indicadores.fuente_verificacion
-= Listas de asistencia
-```
-
-```text
-mediciones_indicadores.fuente_verificacion_registrada
-= Lista de asistencia ACT-0025
-```
-
-### Estado de validación
-
-El campo `estado_validacion` podrá contener:
-
-```text
-Pendiente
-Revisado
-Validado
-Rechazado
-```
-
-Ejemplo:
-
-| estado_validacion | interpretación |
-|---|---|
-| Pendiente | El dato todavía no ha sido revisado |
-| Revisado | Se realizó una primera comprobación |
-| Validado | El dato puede utilizarse en el análisis |
-| Rechazado | El dato presenta errores o no tiene evidencia suficiente |
-
-Para los informes finales podremos utilizar únicamente los registros donde:
-
-```text
-estado_validacion = 'Validado'
-```
-
-Esto representa una práctica de calidad del dato.
-
-### Evitar mediciones duplicadas
-
-No debería existir más de una medición del mismo indicador para el mismo
-territorio y periodo.
-
-Posteriormente crearemos una restricción única:
+Restricción única:
 
 ```text
 UNIQUE (id_indicador, id_territorio, periodo)
 ```
 
-Esto permitirá registrar:
+Esto evita registrar dos veces el mismo indicador para el mismo territorio y periodo.
+
+## Relaciones
 
 ```text
-IND-01 + Territorio 1 + 2024-T1
-IND-01 + Territorio 1 + 2024-T2
-IND-01 + Territorio 2 + 2024-T1
+indicadores.id_indicador
+→ mediciones_indicadores.id_indicador
+
+territorios.id_territorio
+→ mediciones_indicadores.id_territorio
 ```
 
-Pero impedirá repetir:
+## Meta frente a resultado
+
+La meta total se encuentra en:
 
 ```text
-IND-01 + Territorio 1 + 2024-T1
-IND-01 + Territorio 1 + 2024-T1
+indicadores.meta_total
 ```
 
-### Diferencia entre clave primaria y restricción única
-
-La clave primaria identificará cada registro:
+El valor observado se encuentra en:
 
 ```text
-id_medicion
+mediciones_indicadores.valor_alcanzado
 ```
 
-La combinación única evitará duplicados lógicos:
+La comparación se calcula mediante SQL.
 
-```text
-id_indicador + id_territorio + periodo
-```
+## Información que no se almacena directamente
 
-### Preguntas que podremos responder
+No se guardan:
 
-La tabla `mediciones_indicadores` permitirá responder preguntas como:
+- porcentaje de cumplimiento;
+- brecha;
+- variación entre periodos;
+- ranking territorial;
+- tendencia.
 
-- ¿Cuál es el avance acumulado de cada indicador?
-- ¿Qué indicadores alcanzaron su meta?
-- ¿Cuáles tienen menos del 80 % de cumplimiento?
-- ¿Qué territorios presentan mejores resultados?
-- ¿Cómo evolucionó cada indicador entre 2024 y 2025?
-- ¿Qué indicadores tienen mediciones pendientes de validación?
-- ¿Qué territorios no tienen resultados registrados?
-- ¿Qué proyectos tienen más de un indicador incumplido?
-- ¿Cuál es el ranking de territorios según su nivel de cumplimiento?
-- ¿Qué indicadores no fueron medidos durante algún trimestre?
-
-### Consultas con varias tablas
-
-Para comparar resultados y metas será necesario relacionar:
+## Idea clave
 
 ```text
 indicadores
-      ↓
+= definición y meta
+
 mediciones_indicadores
+= resultado observado
 ```
 
-Para analizar los resultados por territorio será necesario relacionar:
+---
+
+# Tabla 10: `retroalimentacion`
+
+## ¿Qué representa?
+
+La tabla `retroalimentacion` almacena casos recibidos mediante los mecanismos de escucha y accountability del programa.
+
+Los casos pueden representar, entre otros:
+
+- consultas;
+- sugerencias;
+- quejas;
+- reconocimientos;
+- solicitudes.
+
+## Granularidad
 
 ```text
-mediciones_indicadores
-          ↓
-territorios
+1 fila = 1 caso de retroalimentación
 ```
 
-Para conocer el proyecto al que pertenece cada indicador será necesario
-encadenar:
+## Campos
 
-```text
-proyectos
-     ↓
-indicadores
-     ↓
-mediciones_indicadores
-     ↓
-territorios
-```
-
-Este encadenamiento permitirá practicar varios `JOIN`.
-
-### Uso de `GROUP BY` y `HAVING`
-
-Podremos agrupar las mediciones por indicador:
-
-```text
-GROUP BY id_indicador
-```
-
-Y filtrar los indicadores que tengan más de cuatro mediciones:
-
-```text
-HAVING COUNT(*) > 4
-```
-
-También podremos encontrar proyectos con más de un indicador por debajo de
-la meta.
-
-### Uso de funciones de ventana
-
-Podremos crear un ranking de territorios según el resultado alcanzado:
-
-```text
-RANK() OVER (
-    PARTITION BY id_indicador
-    ORDER BY valor_alcanzado DESC
-)
-```
-
-La función dividirá los resultados por indicador y clasificará los
-territorios dentro de cada grupo.
-
-### Información que no se almacenará directamente
-
-No guardaremos en esta tabla:
-
-- el porcentaje de cumplimiento;
-- el valor acumulado;
-- la diferencia frente a la meta;
-- el ranking del territorio;
-- la clasificación como cumplido o incumplido;
-- el promedio general del proyecto.
-
-Estos resultados se calcularán mediante consultas SQL.
-
-### Idea clave
-
-La tabla `indicadores` responde:
-
-```text
-¿Qué se pretende medir y cuál es la meta?
-```
-
-La tabla `mediciones_indicadores` responde:
-
-```text
-¿Cuánto se alcanzó, dónde y cuándo?
-```
-
-```text
-indicadores = definición y meta
-mediciones_indicadores = resultados periódicos
-```
-## Tabla 10: `retroalimentacion`
-
-### ¿Qué representa?
-
-La tabla `retroalimentacion` almacenará las consultas, sugerencias, quejas,
-reconocimientos y solicitudes recibidas durante la implementación del
-programa **Territorios que Dialogan**.
-
-Cada fila representará un caso de retroalimentación recibido mediante alguno
-de los canales habilitados por el programa.
-
-Ejemplos:
-
-- Una sugerencia para cambiar el horario de una actividad.
-- Una consulta sobre los requisitos de participación.
-- Una queja relacionada con el trato recibido.
-- Una solicitud de información sobre el programa.
-- Un reconocimiento al equipo facilitador.
-- Una alerta que requiere revisión o derivación.
-
-### Nivel de detalle de la tabla
-
-Una fila representa un caso de retroalimentación.
-
-Ejemplo:
-
-| codigo_caso | tipo_retroalimentacion | canal | estado_caso |
-|---|---|---|---|
-| RET-0001 | Sugerencia | Buzón comunitario | Cerrado |
-| RET-0002 | Queja | Línea telefónica | En revisión |
-| RET-0003 | Consulta | Formulario web | Respondido |
-
-Una misma persona podrá presentar varios casos.
-
-También podrán existir casos anónimos que no estén asociados con una persona
-participante identificada.
-
-### Campos necesarios
-
-| Campo | Descripción | Función |
+| Campo | Tipo lógico | Descripción |
 |---|---|---|
-| `id_retroalimentacion` | Identificador interno del caso | Clave primaria |
-| `codigo_caso` | Código legible como RET-0001 | Identificación |
-| `id_proyecto` | Proyecto relacionado con el caso | Clave foránea |
-| `id_territorio` | Territorio donde se recibió o al que se refiere | Clave foránea |
-| `id_participante` | Persona que presentó el caso, cuando sea identificable | Clave foránea opcional |
-| `fecha_recepcion` | Fecha en la que se recibió la retroalimentación | Seguimiento temporal |
-| `canal_recepcion` | Medio por el que se recibió | Clasificación |
-| `tipo_retroalimentacion` | Consulta, sugerencia, queja u otra categoría | Clasificación |
-| `categoria` | Tema principal del caso | Análisis |
-| `es_anonima` | Indica si la persona decidió permanecer anónima | Protección del dato |
-| `nivel_prioridad` | Prioridad asignada al caso | Gestión |
-| `estado_caso` | Estado actual de la gestión | Seguimiento |
-| `fecha_limite_respuesta` | Fecha máxima prevista para responder | Control |
-| `fecha_respuesta` | Fecha en la que se proporcionó una respuesta | Seguimiento |
-| `satisfaccion_respuesta` | Valoración de la respuesta recibida | Calidad |
-| `observaciones` | Información adicional no sensible | Contexto |
+| `id_retroalimentacion` | Identificador | Clave primaria |
+| `codigo_caso` | Código | Código único |
+| `id_proyecto` | Identificador | Proyecto relacionado |
+| `id_territorio` | Identificador | Territorio |
+| `id_participante` | Identificador / NULL | Participante, cuando aplica |
+| `fecha_recepcion` | Fecha | Fecha de recepción |
+| `canal_recepcion` | Texto | Canal |
+| `tipo_retroalimentacion` | Texto | Tipo de caso |
+| `categoria` | Texto | Categoría |
+| `es_anonima` | Booleano | Indica anonimato |
+| `nivel_prioridad` | Texto | Prioridad |
+| `estado_caso` | Texto | Estado |
+| `fecha_limite_respuesta` | Fecha | Plazo |
+| `fecha_respuesta` | Fecha / NULL | Fecha real de respuesta |
+| `satisfaccion_respuesta` | Entero / NULL | Satisfacción |
+| `observaciones` | Texto / NULL | Observaciones |
 
-### Clave primaria
+## Claves y restricciones
 
-La clave primaria será:
+Clave primaria:
 
 ```text
 id_retroalimentacion
 ```
 
-Esta columna identificará de manera única cada caso.
-
-### Código del caso
-
-El campo `codigo_caso` contendrá valores como:
+Código único:
 
 ```text
-RET-0001
-RET-0002
-RET-0003
+codigo_caso
 ```
 
-Posteriormente estableceremos una restricción para impedir códigos repetidos:
-
-```text
-UNIQUE (codigo_caso)
-```
-
-El código permitirá hacer seguimiento al caso sin utilizar nombres o datos
-personales en informes y consultas.
-
-### Claves foráneas
-
-La tabla tendrá tres claves foráneas:
+Claves foráneas:
 
 ```text
 id_proyecto
@@ -2350,118 +1350,22 @@ id_territorio
 id_participante
 ```
 
-La relación con `proyectos` será:
+`id_participante` puede ser `NULL`.
+
+## Relaciones
 
 ```text
 proyectos.id_proyecto
-        ↓
-retroalimentacion.id_proyecto
-```
+→ retroalimentacion.id_proyecto
 
-La relación con `territorios` será:
-
-```text
 territorios.id_territorio
-          ↓
-retroalimentacion.id_territorio
-```
+→ retroalimentacion.id_territorio
 
-La relación opcional con `participantes` será:
-
-```text
 participantes.id_participante
-            ↓
-retroalimentacion.id_participante
+→ retroalimentacion.id_participante
 ```
 
-Esto permitirá conocer con qué proyecto y territorio está relacionado cada
-caso.
-
-### Clave foránea opcional
-
-El campo `id_participante` podrá contener `NULL`.
-
-Esto será necesario cuando:
-
-- el caso sea anónimo;
-- la persona no esté registrada como participante;
-- no sea apropiado conservar su identificación.
-
-Ejemplo:
-
-| codigo_caso | es_anonima | id_participante |
-|---|---|---:|
-| RET-0001 | FALSE | 25 |
-| RET-0002 | TRUE | NULL |
-| RET-0003 | FALSE | NULL |
-
-El tercer caso podría corresponder a una persona de la comunidad que no está
-registrada como participante del programa.
-
-### Valores posibles
-
-El campo `canal_recepcion` podrá contener:
-
-```text
-Buzón comunitario
-Línea telefónica
-Correo electrónico
-Formulario web
-Reunión comunitaria
-Atención presencial
-```
-
-El campo `tipo_retroalimentacion` podrá contener:
-
-```text
-Consulta
-Sugerencia
-Queja
-Reconocimiento
-Solicitud
-Alerta
-```
-
-El campo `categoria` podrá contener valores como:
-
-```text
-Información del programa
-Acceso y participación
-Horario o ubicación
-Trato recibido
-Calidad de la actividad
-Protección y seguridad
-Uso de recursos
-Otro
-```
-
-El campo `nivel_prioridad` podrá contener:
-
-```text
-Baja
-Media
-Alta
-Urgente
-```
-
-El campo `estado_caso` podrá contener:
-
-```text
-Recibido
-En revisión
-Respondido
-Cerrado
-Derivado
-```
-
-### Casos anónimos
-
-El campo `es_anonima` almacenará valores booleanos:
-
-```text
-TRUE
-FALSE
-```
+## Regla de anonimato
 
 Cuando:
 
@@ -2469,424 +1373,383 @@ Cuando:
 es_anonima = TRUE
 ```
 
-el campo `id_participante` deberá permanecer vacío:
+el proyecto exige:
 
 ```text
 id_participante = NULL
 ```
 
-Esto permitirá practicar el tratamiento de valores `NULL` y consultas con
-`LEFT JOIN`.
+Esta regla se valida en el pipeline de generación y carga.
 
-### Fecha límite y fecha de respuesta
+## Casos identificados
 
-La tabla almacenará:
+Cuando un caso no es anónimo, el participante debe ser compatible con el proyecto asociado.
 
-```text
-fecha_limite_respuesta
-fecha_respuesta
-```
+Esta coherencia se controla durante la generación y prevalidación de los datos.
 
-Estas columnas permitirán determinar si el caso fue respondido dentro del
-plazo establecido.
+## Respuesta y satisfacción
 
-Ejemplo:
+`fecha_respuesta` puede ser `NULL` si el caso todavía no tiene respuesta registrada.
 
-| fecha_limite_respuesta | fecha_respuesta | interpretación |
-|---|---|---|
-| 2024-06-15 | 2024-06-13 | Respondido dentro del plazo |
-| 2024-06-15 | 2024-06-20 | Respondido con retraso |
-| 2024-06-15 | NULL | Sin respuesta registrada |
+`satisfaccion_respuesta` también puede ser `NULL` cuando no existe una valoración.
 
-No guardaremos una columna llamada `respuesta_en_plazo`.
+## Información que no se almacena directamente
 
-Este resultado se calculará comparando las fechas mediante SQL.
+No se guardan:
 
-```text
-fecha_respuesta <= fecha_limite_respuesta
-```
+- días de respuesta;
+- porcentaje respondido dentro del plazo;
+- tasa de satisfacción;
+- distribución por categoría;
+- porcentaje de casos anónimos.
 
-### Indicador de rendición de cuentas
+Estos resultados se calculan mediante SQL.
 
-Uno de los indicadores del programa será:
+## Idea clave
+
+`retroalimentacion` representa la dimensión de **Accountability** del modelo:
 
 ```text
-Porcentaje de casos respondidos dentro del plazo establecido
+¿Qué comunica la comunidad al programa y cómo responde el programa?
 ```
 
-El cálculo será:
+---
 
-```text
-casos respondidos dentro del plazo
----------------------------------- × 100
-total de casos que requerían respuesta
-```
+# Resumen de claves primarias
 
-Ejemplo:
-
-```text
-Casos que requerían respuesta: 50
-Casos respondidos dentro del plazo: 45
-```
-
-```text
-45 / 50 × 100 = 90 %
-```
-
-Este porcentaje se calculará con SQL y no se almacenará directamente en la
-tabla.
-
-### Satisfacción con la respuesta
-
-El campo `satisfaccion_respuesta` podrá utilizar una escala de 1 a 5:
-
-```text
-1 = Muy insatisfecha
-2 = Insatisfecha
-3 = Neutral
-4 = Satisfecha
-5 = Muy satisfecha
-```
-
-Este campo podrá contener `NULL` cuando:
-
-- el caso todavía no haya sido respondido;
-- la persona no haya valorado la respuesta;
-- el caso sea anónimo y no sea posible realizar seguimiento.
-
-### Protección de información
-
-La tabla no almacenará descripciones detalladas de situaciones sensibles ni
-datos personales innecesarios.
-
-El campo `observaciones` se utilizará únicamente para información sintética,
-general y no identificable.
-
-En un sistema real, los casos especialmente sensibles deberían gestionarse
-con acceso restringido y protocolos específicos de protección.
-
-### Preguntas que podremos responder
-
-La tabla `retroalimentacion` permitirá responder preguntas como:
-
-- ¿Cuántos casos se recibieron en cada territorio?
-- ¿Cuál fue el canal de recepción más utilizado?
-- ¿Qué tipo de retroalimentación fue más frecuente?
-- ¿Cuántas quejas siguen abiertas?
-- ¿Qué proyectos recibieron más sugerencias?
-- ¿Qué porcentaje de casos fue respondido dentro del plazo?
-- ¿Cuántos casos anónimos se recibieron?
-- ¿Qué territorios tienen más de cinco casos pendientes?
-- ¿Cuál fue el tiempo promedio de respuesta?
-- ¿Qué categorías presentan una satisfacción más baja?
-- ¿Qué casos urgentes todavía no tienen respuesta?
-- ¿Qué territorios no registraron ningún mecanismo de retroalimentación?
-
-### Consultas con `LEFT JOIN`
-
-Para conservar todos los casos, incluso los anónimos o presentados por
-personas no registradas, podremos utilizar:
-
-```text
-retroalimentacion
-        ↓ LEFT JOIN
-participantes
-```
-
-Un `INNER JOIN` eliminaría los casos cuyo `id_participante` sea `NULL`.
-
-El `LEFT JOIN` permitirá mantenerlos en el resultado.
-
-### Uso de `GROUP BY` y `HAVING`
-
-Podremos agrupar los casos por territorio:
-
-```text
-GROUP BY id_territorio
-```
-
-Y mostrar únicamente los territorios con más de cinco casos pendientes:
-
-```text
-HAVING COUNT(*) > 5
-```
-
-También podremos agrupar por proyecto, categoría, canal o estado.
-
-### Uso de funciones de ventana
-
-Podremos numerar los casos recibidos dentro de cada territorio:
-
-```text
-ROW_NUMBER() OVER (
-    PARTITION BY id_territorio
-    ORDER BY fecha_recepcion
-)
-```
-
-También podremos crear un ranking de proyectos según el número de casos
-respondidos fuera del plazo.
-
-### Información que no se almacenará directamente
-
-No guardaremos en esta tabla:
-
-- el número de días utilizados para responder;
-- la clasificación automática como respuesta puntual o tardía;
-- el porcentaje de casos respondidos dentro del plazo;
-- el total de casos por territorio;
-- el promedio de satisfacción;
-- el ranking de proyectos;
-- el número de casos pendientes.
-
-Estos resultados se calcularán mediante consultas SQL.
-
-### Relación con MEAL
-
-La tabla `retroalimentacion` representa principalmente la dimensión de:
-
-```text
-Accountability
-```
-
-En español:
-
-```text
-Rendición de cuentas
-```
-
-Permite comprobar si el programa:
-
-- escucha a las comunidades;
-- ofrece canales accesibles;
-- registra las preocupaciones recibidas;
-- responde oportunamente;
-- utiliza la retroalimentación para mejorar.
-
-### Idea clave
-
-La tabla `retroalimentacion` responde a las preguntas:
-
-```text
-¿Qué expresó la comunidad?
-¿Cómo gestionó el programa esa información?
-¿La respuesta fue proporcionada dentro del plazo?
-```
-
-```text
-Monitoring = seguimiento de actividades y asistencia
-Evaluation = comparación de resultados
-Accountability = retroalimentación y respuesta
-Learning = análisis y uso de los hallazgos
-```
-
-# Revisión general del modelo
-
-## Tablas definitivas
-
-El modelo inicial estará compuesto por nueve tablas:
-
-| Tabla | ¿Qué representa cada fila? |
+| Tabla | Clave primaria |
 |---|---|
-| `proyectos` | Un proyecto o componente del programa |
-| `territorios` | Una comunidad o zona de intervención |
-| `actividades` | Una actividad concreta |
-| `participantes` | Una persona participante |
-| `participaciones_proyecto` | La inscripción de una persona en un proyecto |
-| `asistencias` | La relación entre una persona y una actividad |
-| `evaluaciones` | Una medición Baseline o Endline |
-| `indicadores` | La definición y meta de un indicador |
-| `mediciones_indicadores` | El resultado de un indicador en un territorio y periodo |
-| `retroalimentacion` | Un caso de consulta, sugerencia, queja u otra retroalimentación |
+| `proyectos` | `id_proyecto` |
+| `territorios` | `id_territorio` |
+| `actividades` | `id_actividad` |
+| `participantes` | `id_participante` |
+| `participaciones_proyecto` | `id_participacion` |
+| `asistencias` | `id_asistencia` |
+| `evaluaciones` | `id_evaluacion` |
+| `indicadores` | `id_indicador` |
+| `mediciones_indicadores` | `id_medicion` |
+| `retroalimentacion` | `id_retroalimentacion` |
 
-## Claves primarias
+---
 
-Cada tabla tendrá una clave primaria propia:
+# Resumen de restricciones UNIQUE
+
+| Tabla | Restricción |
+|---|---|
+| `proyectos` | `codigo_proyecto` |
+| `territorios` | `(departamento, municipio, comunidad)` |
+| `actividades` | `codigo_actividad` |
+| `participantes` | `codigo_participante` |
+| `participaciones_proyecto` | `(id_participante, id_proyecto)` |
+| `asistencias` | `(id_actividad, id_participante)` |
+| `evaluaciones` | `(id_participacion, tipo_medicion)` |
+| `indicadores` | `codigo_indicador` |
+| `mediciones_indicadores` | `(id_indicador, id_territorio, periodo)` |
+| `retroalimentacion` | `codigo_caso` |
+
+---
+
+# Resumen de claves foráneas
 
 ```text
-proyectos                   → id_proyecto
-territorios                 → id_territorio
-actividades                 → id_actividad
-participantes               → id_participante
-participaciones_proyecto     → id_participacion
-asistencias                 → id_asistencia
-evaluaciones                → id_evaluacion
-indicadores                 → id_indicador
-mediciones_indicadores      → id_medicion
-retroalimentacion           → id_retroalimentacion
+actividades.id_proyecto
+→ proyectos.id_proyecto
+
+actividades.id_territorio
+→ territorios.id_territorio
+
+participantes.id_territorio
+→ territorios.id_territorio
+
+participaciones_proyecto.id_participante
+→ participantes.id_participante
+
+participaciones_proyecto.id_proyecto
+→ proyectos.id_proyecto
+
+asistencias.id_actividad
+→ actividades.id_actividad
+
+asistencias.id_participante
+→ participantes.id_participante
+
+evaluaciones.id_participacion
+→ participaciones_proyecto.id_participacion
+
+indicadores.id_proyecto
+→ proyectos.id_proyecto
+
+mediciones_indicadores.id_indicador
+→ indicadores.id_indicador
+
+mediciones_indicadores.id_territorio
+→ territorios.id_territorio
+
+retroalimentacion.id_proyecto
+→ proyectos.id_proyecto
+
+retroalimentacion.id_territorio
+→ territorios.id_territorio
+
+retroalimentacion.id_participante
+→ participantes.id_participante
 ```
 
-Una clave primaria identifica de manera única cada fila.
+---
 
-## Claves foráneas
+# Relaciones muchos-a-muchos resueltas
 
-Las claves foráneas conectarán las tablas:
-
-| Tabla | Clave foránea | Tabla relacionada |
-|---|---|---|
-| `actividades` | `id_proyecto` | `proyectos` |
-| `actividades` | `id_territorio` | `territorios` |
-| `participantes` | `id_territorio` | `territorios` |
-| `asistencias` | `id_actividad` | `actividades` |
-| `asistencias` | `id_participante` | `participantes` |
-| `evaluaciones` | `id_participante` | `participantes` |
-| `evaluaciones` | `id_proyecto` | `proyectos` |
-| `indicadores` | `id_proyecto` | `proyectos` |
-| `mediciones_indicadores` | `id_indicador` | `indicadores` |
-| `mediciones_indicadores` | `id_territorio` | `territorios` |
-| `retroalimentacion` | `id_proyecto` | `proyectos` |
-| `retroalimentacion` | `id_territorio` | `territorios` |
-| `retroalimentacion` | `id_participante` | `participantes` |
-
-## Relaciones de uno a muchos
-
-Las relaciones principales serán:
+## Participantes ↔ Proyectos
 
 ```text
-Un proyecto → muchas actividades
-Un proyecto → muchas evaluaciones
-Un proyecto → muchos indicadores
-Un proyecto → muchos casos de retroalimentación
-
-Un territorio → muchas actividades
-Un territorio → muchos participantes
-Un territorio → muchas mediciones
-Un territorio → muchos casos de retroalimentación
-
-Una actividad → muchos registros de asistencia
-Una persona → muchos registros de asistencia
-Una persona → muchas evaluaciones
-Un indicador → muchas mediciones
+PARTICIPANTES N:M PROYECTOS
+        ↓
+participaciones_proyecto
 ```
 
-## Relación de muchos a muchos
+La tabla puente almacena además información propia de la relación:
 
-Entre `actividades` y `participantes` existe una relación de muchos a muchos:
+- fecha de inscripción;
+- estado;
+- fecha de salida;
+- motivo de salida.
 
-```text
-Una actividad puede tener muchas personas.
-Una persona puede asistir a muchas actividades.
-```
-
-La tabla `asistencias` resolverá esta relación:
+## Participantes ↔ Actividades
 
 ```text
-actividades
-     ↓
+PARTICIPANTES N:M ACTIVIDADES
+        ↓
 asistencias
-     ↓
+```
+
+La tabla puente almacena además:
+
+- estado de asistencia;
+- completitud;
+- horas de participación;
+- fecha de registro.
+
+---
+
+# Diferencia entre las principales granularidades
+
+```text
+proyectos
+1 fila = 1 intervención
+
+territorios
+1 fila = 1 comunidad
+
+actividades
+1 fila = 1 evento o acción
+
 participantes
+1 fila = 1 persona
+
+participaciones_proyecto
+1 fila = 1 persona + 1 proyecto
+
+asistencias
+1 fila = 1 persona + 1 actividad
+
+evaluaciones
+1 fila = 1 participación + 1 tipo de medición
+
+indicadores
+1 fila = 1 indicador
+
+mediciones_indicadores
+1 fila = 1 indicador + 1 territorio + 1 periodo
+
+retroalimentacion
+1 fila = 1 caso
 ```
 
-## Restricciones únicas
+---
 
-Además de las claves primarias, necesitaremos restricciones para evitar
-duplicados lógicos.
+# Reglas de integridad y coherencia
+
+Además de las restricciones físicas de la base, el proyecto aplica reglas de negocio durante la generación y carga de datos.
+
+Entre ellas:
+
+- una persona no puede registrarse dos veces en el mismo proyecto;
+- una persona no puede aparecer dos veces en la misma actividad;
+- una participación no puede tener dos Baseline ni dos Endline;
+- una persona no debe asistir a una actividad anterior a su inscripción;
+- una persona retirada no debe asistir después de su fecha de salida;
+- una ausencia debe tener cero horas y actividad no completada;
+- un retiro temprano no puede aparecer como actividad completada;
+- un caso anónimo no debe contener `id_participante`;
+- un caso identificado debe ser coherente con el proyecto asociado.
+
+Estas reglas complementan las claves primarias, claves foráneas y restricciones `UNIQUE`.
+
+---
+
+# Uso de `NULL`
+
+`NULL` no significa cero ni cadena vacía.
+
+Significa que el valor no existe, no aplica o todavía no ha sido registrado.
+
+Ejemplos del modelo:
 
 ```text
-proyectos.codigo_proyecto
-territorios: departamento + municipio + comunidad
-actividades.codigo_actividad
-participantes.codigo_participante
-participaciones_proyecto: id_participante + id_proyecto
-asistencias: id_actividad + id_participante
-evaluaciones: id_participante + id_proyecto + tipo_medicion
-indicadores.codigo_indicador
-mediciones_indicadores: id_indicador + id_territorio + periodo
-retroalimentacion.codigo_caso
+actividades.fecha_realizacion
+→ NULL si todavía no existe fecha real
+
+actividades.costo_real
+→ NULL si no existe costo ejecutado
+
+participaciones_proyecto.fecha_salida
+→ NULL si no hay salida registrada
+
+participaciones_proyecto.motivo_salida
+→ NULL si no aplica
+
+retroalimentacion.id_participante
+→ NULL cuando el caso es anónimo
+
+retroalimentacion.fecha_respuesta
+→ NULL si todavía no existe respuesta
+
+retroalimentacion.satisfaccion_respuesta
+→ NULL si no existe valoración
 ```
 
-Estas restricciones se crearán posteriormente mediante `UNIQUE`.
+---
 
-## Reglas de calidad del dato
+# Identificadores internos y códigos estables
 
-El modelo deberá respetar reglas como:
+Las claves primarias utilizan `AUTO_INCREMENT`.
 
-- las fechas finales no pueden ser anteriores a las fechas iniciales;
-- los presupuestos y costos no pueden ser negativos;
-- los puntajes de evaluación deben estar entre 0 y 100;
-- las horas de participación no pueden ser negativas;
-- una persona no puede registrarse dos veces en la misma actividad;
-- una persona no puede tener dos Baseline del mismo proyecto;
-- una medición no puede repetirse para el mismo indicador, territorio y periodo;
-- la fecha de respuesta no puede ser anterior a la fecha de recepción;
-- un caso anónimo no debe estar asociado a una persona identificada.
-
-Estas reglas se implementarán mediante tipos de datos, restricciones y
-validaciones durante la generación de datos.
-
-## Valores calculados
-
-No almacenaremos directamente valores que puedan obtenerse con SQL, como:
-
-- número real de asistentes;
-- porcentaje de cumplimiento de participación;
-- ejecución presupuestaria;
-- costo por participante;
-- retraso en días;
-- mejora entre Baseline y Endline;
-- porcentaje de cumplimiento de indicadores;
-- tiempo de respuesta;
-- rankings de proyectos o territorios.
-
-Ejemplo:
+Por tanto, no debe asumirse que:
 
 ```text
-ejecución presupuestaria =
-costo real / costo planificado × 100
+P01 = id_proyecto 1
+PAR-001 = id_participante 1
+ACT-001 = id_actividad 1
 ```
 
-Estos valores se calcularán para evitar información duplicada o
-inconsistente.
+Los IDs pueden contener saltos.
 
-## Decisiones de simplificación
-
-Para mantener un proyecto comprensible y ejecutable se adoptan las siguientes
-decisiones:
-
-1. La base de datos representa un solo programa: `Territorios que Dialogan`.
-2. Los cuatro componentes se almacenarán como registros de `proyectos`.
-3. Cada actividad estará vinculada a un único territorio.
-4. Cada participante tendrá un territorio principal.
-5. No se almacenarán datos personales reales.
-6. Las personas beneficiarias indirectas no tendrán registros individuales.
-7. Los resultados serán completamente sintéticos y se generarán con Faker.
-
-## Modelo relacional resumido
+Para la carga reproducible se utilizan códigos estables como:
 
 ```text
-PROYECTOS
-   ├── ACTIVIDADES
-   │      ├── TERRITORIOS
-   │      └── ASISTENCIAS ── PARTICIPANTES
-   │
-   ├── EVALUACIONES ── PARTICIPANTES
-   │
-   ├── INDICADORES
-   │      └── MEDICIONES_INDICADORES ── TERRITORIOS
-   │
-   └── RETROALIMENTACION
-          ├── TERRITORIOS
-          └── PARTICIPANTES (opcional)
+codigo_proyecto
+codigo_participante
+codigo_actividad
+codigo_indicador
+codigo_caso
 ```
 
-## Conclusión de la revisión
+y después se reconstruyen los identificadores internos necesarios para insertar las relaciones.
 
-El modelo permite representar las cuatro dimensiones principales de MEAL:
+---
+
+# Datos almacenados frente a métricas calculadas
+
+El modelo evita almacenar resultados que pueden derivarse de los datos existentes.
+
+Ejemplos de métricas calculadas:
+
+```text
+número de participantes por proyecto
+tasa de asistencia
+cumplimiento de meta de una actividad
+horas acumuladas por participante
+porcentaje de exposición CORE
+cambio Baseline–Endline
+cumplimiento de indicadores
+brecha frente a meta
+tiempo de respuesta de un caso
+porcentaje de retroalimentación anónima
+```
+
+Estas métricas se obtienen mediante consultas SQL.
+
+---
+
+# Lectura analítica del modelo
+
+Antes de escribir una consulta es necesario responder:
+
+1. ¿Qué representa una fila en cada tabla?
+2. ¿Qué entidad quiero contar?
+3. ¿Qué relación conecta las tablas?
+4. ¿El `JOIN` puede multiplicar registros?
+5. ¿Necesito una fila por persona, participación, actividad, territorio o proyecto?
+6. ¿Estoy midiendo un dato almacenado o un resultado calculado?
+
+Esta lectura de la granularidad ayuda a evitar errores de conteo y conclusiones incorrectas.
+
+---
+
+# Estado actual del modelo
+
+La estructura relacional definitiva contiene:
+
+```text
+10 tablas
+```
+
+y permite trabajar de forma integrada con las cuatro dimensiones de MEAL:
 
 ```text
 Monitoring
-→ actividades, asistencias, presupuestos e indicadores
+→ proyectos, territorios, actividades, participantes y asistencias
 
 Evaluation
-→ evaluaciones Baseline y Endline
+→ participaciones_proyecto, evaluaciones, indicadores y mediciones
 
 Accountability
-→ retroalimentación y gestión de respuestas
+→ retroalimentacion
 
 Learning
-→ consultas y análisis comparativos realizados con SQL
+→ análisis derivado mediante SQL a partir de todas las relaciones
 ```
 
-El modelo queda aprobado para comenzar la creación física de la base de
-datos mediante sentencias `CREATE TABLE`.
+El modelo físico se implementa en **TiDB Cloud**, compatible con sintaxis MySQL.
+
+La generación reproducible de datos se realiza con **Python** y **Faker**, mientras que las consultas analíticas se documentan en SQL.
+
+---
+
+# Idea central del modelo
+
+La lógica completa puede resumirse así:
+
+```text
+PROYECTOS
+   │
+   ├── ACTIVIDADES ── TERRITORIOS
+   │        │              │
+   │        ↓              ├── PARTICIPANTES
+   │   ASISTENCIAS         │        │
+   │        ↑              │        ↓
+   │        └──────── PARTICIPANTES │
+   │                               │
+   ├── PARTICIPACIONES_PROYECTO ←──┘
+   │        │
+   │        ↓
+   │   EVALUACIONES
+   │
+   ├── INDICADORES
+   │        │
+   │        ↓
+   │   MEDICIONES_INDICADORES ── TERRITORIOS
+   │
+   └── RETROALIMENTACION
+            │
+            ├── TERRITORIOS
+            └── PARTICIPANTES (opcional)
+```
+
+La pregunta fundamental para interpretar cualquier tabla sigue siendo:
+
+```text
+¿Qué representa exactamente una fila?
+```
+
+Esa respuesta determina cómo deben construirse los `JOIN`, los conteos, las agregaciones y las comparaciones posteriores.

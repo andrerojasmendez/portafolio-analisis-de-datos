@@ -6,12 +6,13 @@ CREATE DATABASE IF NOT EXISTS territorios_que_dialogan;
 
 USE territorios_que_dialogan;
 
+SELECT DATABASE();
+
+-- =====================================================
 -- Tabla: proyectos
 -- Granularidad: una fila representa un proyecto
+-- =====================================================
 
-CREATE DATABASE IF NOT EXISTS territorios_que_dialogan;
-USE territorios_que_dialogan;
-SELECT DATABASE();
 CREATE TABLE proyectos (
   id_proyecto INT AUTO_INCREMENT PRIMARY KEY,
   codigo_proyecto VARCHAR(10) NOT NULL UNIQUE KEY, 
@@ -71,6 +72,25 @@ CREATE TABLE actividades (
 );
 
 -- =====================================================
+-- Tabla: participantes
+-- Granularidad: una fila representa una persona participante
+-- =====================================================
+
+CREATE TABLE participantes (
+  id_participante INT AUTO_INCREMENT PRIMARY KEY,
+  codigo_participante VARCHAR(15) NOT NULL UNIQUE,
+  id_territorio INT NOT NULL,
+  sexo VARCHAR(30) NOT NULL,
+  rango_edad VARCHAR(20) NOT NULL,
+  grupo_poblacional VARCHAR(60) NOT NULL,
+  fecha_registro DATE NOT NULL,
+
+  CONSTRAINT fk_participantes_territorio
+  FOREIGN KEY (id_territorio)
+  REFERENCES territorios(id_territorio)
+);
+
+-- =====================================================
 -- Tabla: participaciones_proyecto
 -- Granularidad: una fila representa la inscripción
 -- de una persona participante en un proyecto
@@ -102,7 +122,7 @@ CREATE TABLE participaciones_proyecto (
 -- entre una persona participante y una actividad
 -- =====================================================
 
-CREATE TABLE asistencia (
+CREATE TABLE asistencias (
   id_asistencia INT AUTO_INCREMENT PRIMARY KEY,
   id_actividad INT NOT NULL,
   id_participante INT NOT NULL,
