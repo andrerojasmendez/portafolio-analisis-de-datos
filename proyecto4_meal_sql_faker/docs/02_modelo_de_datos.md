@@ -1597,10 +1597,14 @@ Ejemplos del modelo:
 
 ```text
 actividades.fecha_realizacion
-→ NULL si todavía no existe fecha real
+→ el esquema permite NULL para representar una actividad planificada
+  que todavía no se haya ejecutado; en el dataset actual todas las
+  actividades cargadas fueron realizadas y tienen fecha real
 
 actividades.costo_real
-→ NULL si no existe costo ejecutado
+→ el esquema permite NULL mientras una actividad no tenga un costo
+  ejecutado registrado; en el dataset actual todas las actividades
+  realizadas tienen costo real
 
 participaciones_proyecto.fecha_salida
 → NULL si no hay salida registrada
