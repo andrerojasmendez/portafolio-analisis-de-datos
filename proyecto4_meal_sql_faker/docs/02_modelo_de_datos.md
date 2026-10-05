@@ -1722,33 +1722,139 @@ La generación reproducible de datos se realiza con **Python** y **Faker**, mien
 
 # Idea central del modelo
 
-La lógica completa puede resumirse así:
+El modelo puede entenderse mediante cuatro recorridos principales.
+
+## 1. Implementación y asistencia
 
 ```text
 PROYECTOS
-   │
-   ├── ACTIVIDADES ── TERRITORIOS
-   │        │              │
-   │        ↓              ├── PARTICIPANTES
-   │   ASISTENCIAS         │        │
-   │        ↑              │        ↓
-   │        └──────── PARTICIPANTES │
-   │                               │
-   ├── PARTICIPACIONES_PROYECTO ←──┘
-   │        │
-   │        ↓
-   │   EVALUACIONES
-   │
-   ├── INDICADORES
-   │        │
-   │        ↓
-   │   MEDICIONES_INDICADORES ── TERRITORIOS
-   │
-   └── RETROALIMENTACION
-            │
-            ├── TERRITORIOS
-            └── PARTICIPANTES (opcional)
+    ↓
+ACTIVIDADES
+    ↓
+ASISTENCIAS
+    ↑
+PARTICIPANTES
 ```
+
+`asistencias` conecta a las personas con las actividades concretas.
+
+---
+
+## 2. Participación y evaluación longitudinal
+
+```text
+PARTICIPANTES
+      ↓
+PARTICIPACIONES_PROYECTO
+      ↓
+EVALUACIONES
+```
+
+`participaciones_proyecto` permite identificar en qué proyecto participa una persona, mientras que `evaluaciones` permite comparar sus mediciones Baseline y Endline dentro de esa participación concreta.
+
+---
+
+## 3. Indicadores territoriales
+
+```text
+PROYECTOS
+    ↓
+INDICADORES
+    ↓
+MEDICIONES_INDICADORES
+    ↑
+TERRITORIOS
+```
+
+Los indicadores se definen para un proyecto y sus resultados se registran por territorio y periodo.
+
+---
+
+## 4. Accountability
+
+```text
+PROYECTOS ─────────────┐
+TERRITORIOS ───────────┼→ RETROALIMENTACION
+PARTICIPANTES ─────────┘
+                    opcional
+```
+
+Cada caso de retroalimentación pertenece a un proyecto y un territorio.
+
+La relación con un participante es opcional porque el caso puede ser anónimo.
+
+---
+
+La pregunta fundamental para interpretar cualquier tabla sigue siendo:
+
+```text
+¿Qué representa exactamente una fila?
+```
+
+Esa respuesta determina cómo deben construirse los `JOIN`, los conteos, las agregaciones y las comparaciones posteriores.# Idea central del modelo
+
+El modelo puede entenderse mediante cuatro recorridos principales.
+
+## 1. Implementación y asistencia
+
+```text
+PROYECTOS
+    ↓
+ACTIVIDADES
+    ↓
+ASISTENCIAS
+    ↑
+PARTICIPANTES
+```
+
+`asistencias` conecta a las personas con las actividades concretas.
+
+---
+
+## 2. Participación y evaluación longitudinal
+
+```text
+PARTICIPANTES
+      ↓
+PARTICIPACIONES_PROYECTO
+      ↓
+EVALUACIONES
+```
+
+`participaciones_proyecto` permite identificar en qué proyecto participa una persona, mientras que `evaluaciones` permite comparar sus mediciones Baseline y Endline dentro de esa participación concreta.
+
+---
+
+## 3. Indicadores territoriales
+
+```text
+PROYECTOS
+    ↓
+INDICADORES
+    ↓
+MEDICIONES_INDICADORES
+    ↑
+TERRITORIOS
+```
+
+Los indicadores se definen para un proyecto y sus resultados se registran por territorio y periodo.
+
+---
+
+## 4. Accountability
+
+```text
+PROYECTOS ─────────────┐
+TERRITORIOS ───────────┼→ RETROALIMENTACION
+PARTICIPANTES ─────────┘
+                    opcional
+```
+
+Cada caso de retroalimentación pertenece a un proyecto y un territorio.
+
+La relación con un participante es opcional porque el caso puede ser anónimo.
+
+---
 
 La pregunta fundamental para interpretar cualquier tabla sigue siendo:
 
