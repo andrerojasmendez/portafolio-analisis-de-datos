@@ -26,7 +26,10 @@ Disfruto transformar datos en información útil y accionable, aplicando rigor t
 ![Markdown](https://img.shields.io/badge/Markdown-000000?logo=markdown&style=flat)
 
 
-📍 **Ubicación:** Terrassa, España  
+📍 Ubicación: Terrassa, España · Disponibilidad para cambiar de residencia por trabajo.
+
+Me apasiona conocer nuevas culturas y lugares. Disfruto afrontar cambios y adaptarme a nuevos entornos, especialmente cuando me permiten seguir aprendiendo y asumir nuevos retos profesionales.
+
 🔗 [Mi LinkedIn](https://www.linkedin.com/in/andrea-rojas-mendez)
 
 ---
