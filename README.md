@@ -72,14 +72,11 @@ Mi forma de trabajar se basa en:
 
 ## 🌿 Objetivo del portafolio
 
-Este portafolio reúne los proyectos de mi transición hacia el **Análisis de Datos y Business Intelligence**.  
-Mi objetivo es seguir desarrollando análisis y dashboards que demuestren mi capacidad para:
+Demostrar cómo aplico el análisis de datos y la inteligencia de negocio para responder preguntas concretas, construir indicadores y comunicar resultados que apoyen la toma de decisiones.
 
-- entender datos  
-- construir métricas  
-- sintetizar información  
-- comunicar resultados  
-- aportar valor a equipos y organizaciones  
+Los proyectos reúnen preparación y modelado de datos, análisis con SQL y Python, trabajo con BigQuery y visualización en Power BI, aplicados a preguntas de negocio y de investigación social.
+
+Este portafolio documenta mi trabajo y mi aprendizaje continuo, y refleja las capacidades que quiero aportar a un equipo: rigor analítico, curiosidad investigadora, pensamiento crítico y claridad para comunicar hallazgos.
 
 ---
 
