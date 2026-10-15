@@ -26,9 +26,18 @@ Disfruto transformar datos en información útil y accionable, aplicando rigor t
 
 ## 📁 Proyectos destacados
 
-### 🔹 1. **Análisis de comportamiento digital**
-📊 *Exploración del uso, actividad e interacción en distintas plataformas de redes sociales.*  
-Incluye exploración en Excel, construcción de KPIs en DAX y dashboard en Power BI.
+## 📁 Proyectos destacados
+
+| Proyecto | Enfoque | Herramientas |
+|---|---|---|
+| [1. Análisis de comportamiento digital](./proyecto1_redes_rendimiento/README.md) | Exploración de actividad e interacción en redes sociales y construcción de indicadores. | Excel, Power BI y DAX |
+| [2. Análisis de ventas con SQL](./proyecto2_ventas_sql/README.md) | Análisis de ventas por región, categoría y cliente mediante consultas, CTEs y funciones de ventana. | SQL |
+| [3. Delitos informáticos en España](./proyecto3_delitos_informaticos_bigquery/README.md) | Preparación y análisis de datos públicos de 2023, diferenciando niveles territoriales. | Python, SQL, BigQuery y DBeaver |
+| [4. Territorios que Dialogan](./proyecto4_meal_sql_faker/README.md) | Construcción de un sistema relacional MEAL para un programa ficticio de construcción de paz. | SQL, Python, Faker y TiDB Cloud |
+| [5. Dashboard financiero](./proyecto5_dashboard_financiero_powerbi/README.md) | Seguimiento de ingresos, gastos, resultado neto y previsiones con datos anonimizados. | Power BI, Power Query y DAX |
+
+---
+
 
 🔧 **Herramientas:**  
 ![Excel](https://img.shields.io/badge/Excel-217346?logo=microsoft-excel&logoColor=white&style=flat)
