@@ -12,12 +12,19 @@ Me caracteriza una combinación de pensamiento analítico, atención al detalle 
 
 Disfruto transformar datos en información útil y accionable, aplicando rigor técnico y narrativa clara.
 
-🔧 **Herramientas principales:**  
+🔧 **Herramientas y tecnologías:**  
 ![Excel](https://img.shields.io/badge/Excel-217346?logo=microsoft-excel&logoColor=white&style=flat)
 ![Power BI](https://img.shields.io/badge/Power_BI-F2C811?logo=powerbi&logoColor=black&style=flat)
+![Power Query](https://img.shields.io/badge/Power_Query-217346?style=flat)
+![DAX](https://img.shields.io/badge/DAX-7B2CBF?style=flat)
 ![SQL](https://img.shields.io/badge/SQL-025E8C?logo=sqlite&logoColor=white&style=flat)
 ![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white&style=flat)
+![BigQuery](https://img.shields.io/badge/BigQuery-4285F4?style=flat)
+![DBeaver](https://img.shields.io/badge/DBeaver-382923?style=flat)
+![TiDB Cloud](https://img.shields.io/badge/TiDB_Cloud-D94432?style=flat)
+![Faker](https://img.shields.io/badge/Faker-3776AB?style=flat)
 ![Markdown](https://img.shields.io/badge/Markdown-000000?logo=markdown&style=flat)
+
 
 📍 **Ubicación:** Terrassa, España  
 🔗 [Mi LinkedIn](https://www.linkedin.com/in/andrea-rojas-mendez)
